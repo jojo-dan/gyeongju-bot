@@ -32,7 +32,14 @@ gyeongju-bot/
 ├── jsonbin_client.py      # jsonbin.io GET/PUT 클라이언트
 ├── prompts.py             # Claude 시스템 프롬프트 템플릿
 ├── webapp/
-│   └── index.html         # 가족용 모바일 웹앱 (단일 파일)
+│   ├── index.html         # 가족용 모바일 웹앱
+│   └── api/
+│       ├── data.js        # jsonbin GET 프록시 (Vercel serverless)
+│       └── save.js        # jsonbin PUT 프록시 (Vercel serverless)
+├── ref-image/             # UI 디자인 레퍼런스 이미지
+│   ├── takt1.png          # 메인 플레이어: 디바이스 하우징, LED 디스플레이, 컨트롤
+│   ├── takt2.png          # 설정 패널: 컬러 스와치, 토글 그룹, 라이선스
+│   └── takt3.png          # 전체 구성: 타이머 + 설정 나란히, 가격/접근 레이아웃
 ├── tests/
 │   ├── test_claude_handler.py
 │   ├── test_jsonbin_client.py
@@ -150,3 +157,35 @@ Day 3: d3_bulguksa, d3_lunch, d3_cafe, d3_dinner, d3_prep
 Day 4: d4_depart, d4_marathon, d4_family_wait, d4_dinner
 Day 5: d5_bomun, d5_lunch, d5_cafe, d5_donggungwon, d5_dinner
 Day 6: d6_checkout, d6_museum, d6_lunch, d6_return
+
+## UI/UX Design System
+
+### Design Reference
+All UI design references are stored in `/ref-image/`.
+These images define the visual language for this project.
+
+### Core Design Principles
+- **Hardware Skeuomorphism**: UI should feel like a premium physical device (think Braun/Dieter Rams)
+- **Dot-Matrix LED Display**: Primary data readouts use pixel/monospace font on dark backgrounds
+- **Warm Neutral Palette**: Base is light gray (#E5E5E5), device housing is white with soft shadows
+- **Accent Color**: Orange (#E85D2A) for active indicators only — use very sparingly
+- **Control Metaphors**: Buttons look like physical toggles (embossed), sliders look like VU meters
+- **Typography Split**: Serif (Didone family) for hero headlines, monospace/pixel font for device UI
+- **Color Swatches**: Muted palette — cream, olive, lavender, charcoal, white
+- **Active State**: Black fill with white text. Inactive: white/light fill with dark text
+- **Minimal Color**: Almost monochrome. Color only appears in swatches and the orange accent
+
+### Component Patterns
+1. **Device Card**: White rounded container with dark screen area + control buttons below
+2. **Settings Panel**: White card with labeled sections in SMALL CAPS monospace
+3. **Toggle Group**: Row of 2-3 buttons, one black (active), rest white (inactive)
+4. **Level Meter**: Horizontal bar with fine tick marks and orange position indicator
+5. **Circular Knob**: Small volume-style control with label below
+6. **Status Badge**: Small colored text (e.g., green "ACTIVATED", orange "RE/DY")
+
+### Reference Images
+Before making any UI changes, always review the images in `/ref-image/` directory.
+Each image shows a different aspect of the target design:
+- takt1.png: Main player interface, device housing, LED display, controls
+- takt2.png: Settings/maintenance panel, color swatches, toggle groups
+- takt3.png: Full composition with timer + settings side by side, pricing/access layout
