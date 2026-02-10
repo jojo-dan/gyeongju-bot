@@ -13,13 +13,17 @@
   --bg: #E5E5E5;
   --housing: #FFFFFF;
   --display: #2A2A2A;
-  --display-text: rgba(255,255,255,0.85);
-  --display-dim: rgba(255,255,255,0.35);
+  --display-text: #FFFFFF;
+  --display-dim: rgba(255,255,255,0.65);
   --accent: #E85D2A;
   --text: #1A1A1A;
-  --text-mid: #666;
-  --text-light: #999;
+  --text-mid: #555;
+  --text-light: #666;
   --border: #D5D5D5;
+  --item-bg: #F5F3F0;
+  --item-text: #1A1A1A;
+  --item-text-mid: #444;
+  --item-text-dim: #666;
   --serif: 'Playfair Display', Georgia, 'Noto Serif KR', serif;
   --mono: 'IBM Plex Mono', 'SF Mono', monospace;
   --system: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
@@ -53,7 +57,7 @@ body {
 }
 .header .sub-info {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--text-mid);
   letter-spacing: 0.5px;
@@ -61,7 +65,7 @@ body {
 }
 .header .update-time {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-light);
   margin-top: 6px;
   letter-spacing: 0.3px;
@@ -77,19 +81,23 @@ body {
 /* ═══ DAY TABS (Toggle Group) ═══ */
 .day-tabs {
   display: flex;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   gap: 0;
   max-width: 420px;
   margin: 0 auto 16px;
   padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg);
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 .day-tabs::-webkit-scrollbar { display: none; }
 .day-tab {
-  flex: 0 0 auto;
-  padding: 10px 14px;
+  flex: 1 1 0;
+  padding: 12px 0;
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-mid);
   background: var(--housing);
@@ -97,8 +105,8 @@ body {
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  text-align: center;
+  min-height: 44px;
 }
 .day-tab:first-child { border-radius: var(--radius-btn) 0 0 var(--radius-btn); }
 .day-tab:last-child { border-radius: 0 var(--radius-btn) var(--radius-btn) 0; }
@@ -110,12 +118,12 @@ body {
 }
 .day-tab .tab-date {
   display: block;
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 400;
-  opacity: 0.6;
+  color: var(--text-light);
   margin-top: 2px;
 }
-.day-tab.active .tab-date { opacity: 0.7; }
+.day-tab.active .tab-date { color: rgba(255,255,255,0.7); }
 
 /* ═══ DISPLAY CARD (Main Device) ═══ */
 .display-card {
@@ -154,37 +162,35 @@ body {
 }
 .display-label {
   font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--accent);
   letter-spacing: 1px;
-  text-transform: uppercase;
 }
 .display-indicator {
   display: flex;
-  gap: 3px;
+  gap: 4px;
 }
 .display-indicator span {
-  width: 4px;
-  height: 4px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--display-dim);
+  background: rgba(255,255,255,0.3);
 }
 .display-indicator span.on { background: var(--display-text); }
 
 .day-title-display {
   font-family: var(--mono);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
   color: var(--display-text);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   letter-spacing: 1px;
 }
 .day-subtitle {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 14px;
   color: var(--display-dim);
-  letter-spacing: 0.5px;
 }
 
 /* ═══ CONTROL ROW ═══ */
@@ -199,15 +205,14 @@ body {
   background: var(--bg);
   border: none;
   border-radius: var(--radius-btn);
-  font-family: var(--mono);
-  font-size: 11px;
+  font-family: var(--system);
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-mid);
   cursor: pointer;
   box-shadow: var(--shadow-btn);
   transition: all 0.1s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  min-height: 44px;
 }
 .ctrl-btn:active {
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
@@ -243,9 +248,8 @@ body {
 }
 .meter-tick {
   font-family: var(--mono);
-  font-size: 8px;
+  font-size: 11px;
   color: var(--text-light);
-  letter-spacing: 0.3px;
 }
 
 /* ═══ ITEM CARDS ═══ */
@@ -261,10 +265,10 @@ body {
   overflow: hidden;
 }
 .item-display {
-  background: var(--display);
+  background: var(--item-bg);
   margin: 10px;
   border-radius: var(--radius-display);
-  padding: 14px;
+  padding: 16px;
 }
 .item-top-row {
   display: flex;
@@ -278,100 +282,94 @@ body {
   border-radius: 50%;
   flex-shrink: 0;
 }
-.item-status-dot.planned { background: var(--display-dim); }
-.item-status-dot.done { background: #4ADE80; }
-.item-status-dot.skipped { background: #F87171; }
+.item-status-dot.planned { background: #BBBBBB; }
+.item-status-dot.done { background: #22C55E; }
+.item-status-dot.skipped { background: #EF4444; }
 
 .item-time {
   font-family: var(--mono);
-  font-size: 10px;
-  color: var(--display-dim);
+  font-size: 13px;
+  color: var(--item-text-dim);
   letter-spacing: 0.5px;
+  font-weight: 500;
 }
 .item-cat-label {
-  font-family: var(--mono);
-  font-size: 9px;
+  font-family: var(--system);
+  font-size: 12px;
   color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 1px;
   margin-left: auto;
+  font-weight: 600;
 }
 
 .item-title {
-  font-family: var(--mono);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--display-text);
-  letter-spacing: 0.5px;
+  font-family: var(--system);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--item-text);
+  letter-spacing: -0.2px;
 }
 .item-title.skipped {
   text-decoration: line-through;
-  color: var(--display-dim);
+  color: var(--item-text-dim);
 }
 
 /* ═══ OPTIONS (in display) ═══ */
 .options-list {
   margin-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(0,0,0,0.06);
   padding-top: 10px;
 }
 .option-item {
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-radius: 6px;
-  margin-bottom: 4px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--display-dim);
-  background: rgba(255,255,255,0.04);
+  margin-bottom: 8px;
+  font-family: var(--system);
+  font-size: 14px;
+  color: var(--item-text-mid);
+  background: rgba(255,255,255,0.6);
   transition: all 0.15s;
 }
 .option-item.chosen {
-  background: rgba(74, 222, 128, 0.1);
-  color: #4ADE80;
-  border: 1px solid rgba(74, 222, 128, 0.2);
+  background: rgba(34, 139, 34, 0.08);
+  color: #1A6B1A;
+  border: 1px solid rgba(34, 139, 34, 0.2);
 }
-.option-name { font-weight: 600; color: var(--display-text); }
-.option-item.chosen .option-name { color: #4ADE80; }
-.option-menu { opacity: 0.6; font-size: 11px; }
-.option-badges { margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
+.option-name { font-weight: 700; color: var(--item-text); }
+.option-item.chosen .option-name { color: #1A6B1A; }
+.option-menu { color: var(--item-text-mid); font-size: 13px; }
+.option-badges { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
 .badge {
   display: inline-block;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-family: var(--mono);
-  font-size: 9px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: var(--system);
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
 }
-.badge-dad-good { background: rgba(74,222,128,0.15); color: #4ADE80; }
-.badge-dad-caution { background: rgba(232,93,42,0.15); color: var(--accent); }
-.badge-hiro-good { background: rgba(96,165,250,0.15); color: #60A5FA; }
-.badge-hiro-caution { background: rgba(248,113,113,0.15); color: #F87171; }
+.badge-dad-good { background: #DEF7E5; color: #1A6B1A; }
+.badge-dad-caution { background: #FDE8E0; color: #C04A1A; }
+.badge-hiro-good { background: #DBEAFE; color: #1D4ED8; }
+.badge-hiro-caution { background: #FEE2E2; color: #C53030; }
 
 .chosen-tag {
-  font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 600;
-  color: #4ADE80;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-family: var(--system);
+  font-size: 12px;
+  font-weight: 700;
+  color: #1A6B1A;
 }
 
 /* ═══ ITEM NOTE ═══ */
 .item-note-row {
-  padding: 8px 12px 10px;
-  font-family: var(--mono);
-  font-size: 11px;
+  padding: 10px 14px 12px;
+  font-family: var(--system);
+  font-size: 14px;
   color: var(--text-mid);
 }
 .item-note-label {
-  font-size: 9px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--text-light);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
 }
 
 /* ═══ ADMIN BAR ═══ */
@@ -390,19 +388,18 @@ body {
   z-index: 200;
 }
 .admin-bar button {
-  padding: 10px 24px;
+  padding: 12px 24px;
   background: var(--bg);
   color: var(--text-mid);
   border: 1px solid var(--border);
   border-radius: var(--radius-btn);
-  font-family: var(--mono);
-  font-size: 11px;
+  font-family: var(--system);
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: var(--shadow-btn);
-  text-transform: uppercase;
-  letter-spacing: 1px;
   transition: all 0.1s;
+  min-height: 44px;
 }
 .admin-bar button:active {
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
@@ -413,12 +410,10 @@ body {
   border-color: var(--text);
 }
 .admin-bar .admin-status {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: #4ADE80;
+  font-family: var(--system);
+  font-size: 13px;
+  color: #16A34A;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
 /* ═══ EDIT CONTROLS (Admin) ═══ */
@@ -433,23 +428,22 @@ body {
   margin-bottom: 8px;
 }
 .edit-row label {
-  font-family: var(--mono);
-  font-size: 10px;
+  font-family: var(--system);
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-light);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
   min-width: 44px;
 }
 .edit-row select, .edit-row input {
-  padding: 8px 10px;
+  padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius-btn);
-  font-family: var(--mono);
-  font-size: 12px;
+  font-family: var(--system);
+  font-size: 14px;
   flex: 1;
   min-width: 0;
   background: var(--bg);
+  min-height: 44px;
 }
 .edit-row select:focus, .edit-row input:focus {
   border-color: var(--text);
@@ -457,18 +451,17 @@ body {
 }
 .save-btn {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background: var(--text);
   color: #fff;
   border: none;
   border-radius: var(--radius-btn);
-  font-family: var(--mono);
-  font-size: 11px;
+  font-family: var(--system);
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
   margin-top: 4px;
+  min-height: 44px;
 }
 .save-btn:active { opacity: 0.8; }
 
@@ -493,11 +486,9 @@ body {
   box-shadow: 0 8px 40px rgba(0,0,0,0.15);
 }
 .modal h3 {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-family: var(--system);
+  font-size: 16px;
+  font-weight: 700;
   margin-bottom: 20px;
   color: var(--text);
 }
@@ -517,29 +508,26 @@ body {
 .modal .modal-buttons { display: flex; gap: 8px; }
 .modal .modal-buttons button {
   flex: 1;
-  padding: 12px;
+  padding: 14px;
   border: none;
   border-radius: var(--radius-btn);
-  font-family: var(--mono);
-  font-size: 12px;
+  font-family: var(--system);
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  min-height: 44px;
 }
 .modal .btn-cancel { background: var(--bg); color: var(--text-mid); }
 .modal .btn-confirm { background: var(--text); color: #fff; }
-.modal .error-msg { color: #F87171; font-family: var(--mono); font-size: 11px; margin-top: 4px; }
+.modal .error-msg { color: #DC2626; font-family: var(--system); font-size: 13px; margin-top: 4px; }
 
 /* ═══ LOADING ═══ */
 .loading {
   text-align: center;
   padding: 60px 20px;
   color: var(--text-light);
-  font-family: var(--mono);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-family: var(--system);
+  font-size: 14px;
 }
 .loading .spinner {
   display: inline-block;
@@ -556,11 +544,11 @@ body {
 .error-banner {
   max-width: 420px;
   margin: 0 auto;
-  padding: 10px 16px;
-  font-family: var(--mono);
-  font-size: 11px;
+  padding: 12px 16px;
+  font-family: var(--system);
+  font-size: 14px;
   text-align: center;
-  color: var(--accent);
+  color: #C04A1A;
   background: rgba(232,93,42,0.08);
   border-radius: var(--radius-btn);
   display: none;
@@ -575,15 +563,13 @@ body {
   transform: translateX(-50%) translateY(-100px);
   background: var(--text);
   color: #fff;
-  padding: 12px 24px;
+  padding: 14px 28px;
   border-radius: var(--radius-btn);
-  font-family: var(--mono);
-  font-size: 12px;
+  font-family: var(--system);
+  font-size: 15px;
   font-weight: 600;
   z-index: 400;
   transition: transform 0.3s;
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
@@ -592,12 +578,10 @@ body {
   margin-top: 8px;
 }
 .reference-section h3 {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-light);
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  font-family: var(--system);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-mid);
   margin-bottom: 12px;
 }
 .ref-card {
@@ -608,19 +592,17 @@ body {
   margin-bottom: 10px;
 }
 .ref-card h4 {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-family: var(--system);
+  font-size: 13px;
+  font-weight: 700;
   color: var(--text-mid);
   margin-bottom: 8px;
 }
 .ref-card ul { list-style: none; }
 .ref-card li {
-  font-family: var(--mono);
-  font-size: 12px;
-  padding: 3px 0;
+  font-family: var(--system);
+  font-size: 14px;
+  padding: 4px 0;
   color: var(--text-mid);
 }
 
@@ -644,7 +626,7 @@ body {
 <!-- 메인 앱 -->
 <div id="mainApp">
   <div class="header">
-    <h1>Gyeongju Family Trip.</h1>
+    <h1>경주 가족여행</h1>
     <div class="sub-info">
       <span id="tripStatus">2026.02.19 — 02.24</span>
     </div>
@@ -659,13 +641,13 @@ body {
     <div id="contentArea">
       <div class="loading">
         <div class="spinner"></div>
-        <div>Loading schedule...</div>
+        <div>일정 불러오는 중...</div>
       </div>
     </div>
   </div>
 
   <div class="admin-bar">
-    <button id="adminBtn" onclick="toggleAdmin()">Maintenance</button>
+    <button id="adminBtn" onclick="toggleAdmin()">관리</button>
     <span id="adminStatus"></span>
   </div>
 </div>
@@ -673,12 +655,12 @@ body {
 <!-- PIN 모달 -->
 <div class="modal-overlay" id="pinModal">
   <div class="modal">
-    <h3>Enter PIN</h3>
+    <h3>비밀번호 입력</h3>
     <input type="password" id="pinInput" maxlength="4" inputmode="numeric" pattern="[0-9]*">
     <div class="error-msg" id="pinError"></div>
     <div class="modal-buttons">
-      <button class="btn-cancel" onclick="closePinModal()">Cancel</button>
-      <button class="btn-confirm" onclick="checkPin()">Confirm</button>
+      <button class="btn-cancel" onclick="closePinModal()">취소</button>
+      <button class="btn-confirm" onclick="checkPin()">확인</button>
     </div>
   </div>
 </div>
@@ -712,7 +694,7 @@ async function fetchData() {
     hideError();
     render();
   } catch (e) {
-    showError('Connection lost. Retrying...');
+    showError('연결 끊김. 다시 시도 중...');
     console.error('fetch error:', e);
   }
 }
@@ -726,10 +708,10 @@ async function saveData() {
       body: JSON.stringify(travelData)
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    showToast('Saved');
+    showToast('저장 완료');
     render();
   } catch (e) {
-    showToast('Save failed');
+    showToast('저장 실패');
     console.error('save error:', e);
   }
 }
@@ -746,7 +728,7 @@ function updateHeader() {
   if (meta && meta.lastUpdated) {
     const d = new Date(meta.lastUpdated);
     document.getElementById('updateTime').textContent =
-      `Last update: ${formatDateTime(d)}`;
+      `마지막 업데이트: ${formatDateTime(d)}`;
   }
   const now = new Date();
   const tripStart = new Date('2026-02-19T00:00:00+09:00');
@@ -756,10 +738,10 @@ function updateHeader() {
     const diff = Math.ceil((tripStart - now) / 86400000);
     status = `D-${diff} / 2026.02.19 — 02.24`;
   } else if (now > tripEnd) {
-    status = 'Trip Complete';
+    status = '여행 완료';
   } else {
     const dayNum = Math.floor((now - tripStart) / 86400000) + 1;
-    status = `Day ${dayNum} Active`;
+    status = `${dayNum}일차 진행 중`;
     if (activeDay === 0) activeDay = dayNum - 1;
   }
   document.getElementById('tripStatus').textContent = status;
@@ -772,7 +754,7 @@ function renderTabs() {
   days.forEach((day, idx) => {
     const tab = document.createElement('div');
     tab.className = 'day-tab' + (idx === activeDay ? ' active' : '');
-    tab.innerHTML = `D${day.dayNum}<span class="tab-date">${formatTabDate(day.date, day.dow)}</span>`;
+    tab.innerHTML = `${day.dayNum}일차<span class="tab-date">${formatTabDate(day.date, day.dow)}</span>`;
     tab.onclick = () => { activeDay = idx; renderTabs(); renderDayContent(); };
     tabs.appendChild(tab);
   });
@@ -783,7 +765,7 @@ function renderTabs() {
 function renderDayContent() {
   const area = document.getElementById('contentArea');
   const day = travelData.days[activeDay];
-  if (!day) { area.innerHTML = '<div class="loading">No data</div>'; return; }
+  if (!day) { area.innerHTML = '<div class="loading">데이터 없음</div>'; return; }
 
   // 진행률 계산
   const totalItems = day.items.length;
@@ -796,14 +778,14 @@ function renderDayContent() {
   html += '<div class="display-card">';
   html += '<div class="display-screen">';
   html += '<div class="display-header">';
-  html += `<span class="display-label">RE/DY</span>`;
+  html += `<span class="display-label">일정</span>`;
   html += '<div class="display-indicator">';
   for (let i = 0; i < totalItems; i++) {
     html += `<span class="${i < doneItems ? 'on' : ''}"></span>`;
   }
   html += '</div></div>';
   html += `<div class="day-title-display">${day.title}</div>`;
-  html += `<div class="day-subtitle">Day ${day.dayNum} / ${doneItems}/${totalItems} complete</div>`;
+  html += `<div class="day-subtitle">${day.dayNum}일차 / ${doneItems}/${totalItems} 완료</div>`;
   html += '</div>';
 
   // 진행 레벨 미터
@@ -833,7 +815,7 @@ function renderDayContent() {
 }
 
 function renderItemCard(item, itemIdx) {
-  const catLabel = { meal: 'Meal', cafe: 'Cafe', activity: 'Activity' };
+  const catLabel = { meal: '식사', cafe: '카페', activity: '관광' };
   const titleClass = item.status === 'skipped' ? ' skipped' : '';
 
   let html = `<div class="item-card">`;
@@ -857,14 +839,14 @@ function renderItemCard(item, itemIdx) {
       html += `<div class="option-item${isChosen ? ' chosen' : ''}">`;
       html += `<span class="option-name">${opt.name}</span>`;
       if (opt.menu) html += ` <span class="option-menu">— ${opt.menu}</span>`;
-      if (isChosen) html += ` <span class="chosen-tag">Confirmed</span>`;
+      if (isChosen) html += ` <span class="chosen-tag">확정</span>`;
 
       const badges = [];
-      if (opt.dad === 'good') badges.push('<span class="badge badge-dad-good">Dad OK</span>');
-      if (opt.dad === 'caution') badges.push('<span class="badge badge-dad-caution">Dad Caution</span>');
-      if (opt.hiro === 'good') badges.push('<span class="badge badge-hiro-good">Hiro OK</span>');
+      if (opt.dad === 'good') badges.push('<span class="badge badge-dad-good">아빠 OK</span>');
+      if (opt.dad === 'caution') badges.push('<span class="badge badge-dad-caution">아빠 주의</span>');
+      if (opt.hiro === 'good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
       if (opt.hiro === 'caution') {
-        let hiroLabel = 'Hiro Caution';
+        let hiroLabel = '히로 주의';
         if (opt.hiroNote) hiroLabel += ` (${opt.hiroNote})`;
         badges.push(`<span class="badge badge-hiro-caution">${hiroLabel}</span>`);
       }
@@ -880,7 +862,7 @@ function renderItemCard(item, itemIdx) {
   // 메모
   if (item.note) {
     html += '<div class="item-note-row">';
-    html += '<div class="item-note-label">Memo</div>';
+    html += '<div class="item-note-label">메모</div>';
     html += escapeHtml(item.note);
     html += '</div>';
   }
@@ -898,16 +880,17 @@ function renderEditControls(item, itemIdx) {
   let html = '<div class="edit-controls">';
 
   html += '<div class="edit-row">';
-  html += '<label>Status</label>';
+  html += '<label>상태</label>';
   html += `<select onchange="updateItemField(${activeDay}, ${itemIdx}, 'status', this.value)">`;
+  const statusLabel = { planned: '예정', done: '완료', skipped: '건너뜀' };
   ['planned', 'done', 'skipped'].forEach(s => {
-    html += `<option value="${s}"${item.status === s ? ' selected' : ''}>${s}</option>`;
+    html += `<option value="${s}"${item.status === s ? ' selected' : ''}>${statusLabel[s]}</option>`;
   });
   html += '</select></div>';
 
   if (item.options && item.options.length > 0) {
     html += '<div class="edit-row">';
-    html += '<label>Pick</label>';
+    html += '<label>선택</label>';
     html += `<select onchange="updateItemField(${activeDay}, ${itemIdx}, 'chosen', this.value)">`;
     html += `<option value="">—</option>`;
     item.options.forEach(opt => {
@@ -917,11 +900,11 @@ function renderEditControls(item, itemIdx) {
   }
 
   html += '<div class="edit-row">';
-  html += '<label>Memo</label>';
-  html += `<input type="text" value="${escapeAttr(item.note || '')}" onchange="updateItemField(${activeDay}, ${itemIdx}, 'note', this.value)" placeholder="Add note...">`;
+  html += '<label>메모</label>';
+  html += `<input type="text" value="${escapeAttr(item.note || '')}" onchange="updateItemField(${activeDay}, ${itemIdx}, 'note', this.value)" placeholder="메모 입력...">`;
   html += '</div>';
 
-  html += `<button class="save-btn" onclick="saveData()">Save Changes</button>`;
+  html += `<button class="save-btn" onclick="saveData()">변경사항 저장</button>`;
   html += '</div>';
   return html;
 }
@@ -932,20 +915,20 @@ function updateItemField(dayIdx, itemIdx, field, value) {
 }
 
 function renderReference(ref) {
-  let html = '<div class="reference-section"><h3>Reference</h3>';
+  let html = '<div class="reference-section"><h3>참고 정보</h3>';
 
   if (ref.distances && ref.distances.length) {
-    html += '<div class="ref-card"><h4>Distance / Time</h4><ul>';
+    html += '<div class="ref-card"><h4>거리 / 소요시간</h4><ul>';
     ref.distances.forEach(d => { html += `<li>${typeof d === 'string' ? d : JSON.stringify(d)}</li>`; });
     html += '</ul></div>';
   }
   if (ref.contacts && ref.contacts.length) {
-    html += '<div class="ref-card"><h4>Contacts</h4><ul>';
+    html += '<div class="ref-card"><h4>연락처</h4><ul>';
     ref.contacts.forEach(c => { html += `<li>${typeof c === 'string' ? c : JSON.stringify(c)}</li>`; });
     html += '</ul></div>';
   }
   if (ref.shopping && ref.shopping.length) {
-    html += '<div class="ref-card"><h4>Shopping</h4><ul>';
+    html += '<div class="ref-card"><h4>쇼핑</h4><ul>';
     ref.shopping.forEach(s => { html += `<li>${typeof s === 'string' ? s : JSON.stringify(s)}</li>`; });
     html += '</ul></div>';
   }
@@ -983,10 +966,10 @@ function checkPin() {
     isAdmin = true;
     closePinModal();
     document.getElementById('adminBtn').classList.add('active-admin');
-    document.getElementById('adminStatus').textContent = 'Activated';
+    document.getElementById('adminStatus').textContent = '활성화';
     render();
   } else {
-    document.getElementById('pinError').textContent = 'Invalid PIN';
+    document.getElementById('pinError').textContent = '잘못된 비밀번호';
   }
 }
 
