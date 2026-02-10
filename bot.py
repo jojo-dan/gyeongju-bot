@@ -5,12 +5,14 @@
 jsonbin.io의 여행 데이터를 업데이트하거나 조회 결과를 응답한다.
 """
 
+import asyncio
 import os
 import logging
 from datetime import datetime, timezone, timedelta
 
 from dotenv import load_dotenv
 from telegram import Update
+from telegram.constants import ChatAction
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -126,6 +128,9 @@ async def _handle_user_message(update: Update, user_message: str) -> None:
     4. 텍스트 응답이면 그대로 전달
     """
     try:
+        # 0. 타이핑 표시
+        await update.message.chat.send_action(ChatAction.TYPING)
+
         # 1. 현재 데이터 가져오기
         try:
             json_data = jsonbin.get_data()
@@ -142,8 +147,27 @@ async def _handle_user_message(update: Update, user_message: str) -> None:
                 )
                 return
 
-        # 2. Claude CLI 호출
-        response = process_message(json_data, user_message)
+        # 2. Claude CLI 호출 (타이핑 표시를 4초마다 갱신)
+        typing_active = True
+
+        async def _keep_typing():
+            while typing_active:
+                await asyncio.sleep(4)
+                if typing_active:
+                    try:
+                        await update.message.chat.send_action(ChatAction.TYPING)
+                    except Exception:
+                        pass
+
+        typing_task = asyncio.create_task(_keep_typing())
+        try:
+            loop = asyncio.get_event_loop()
+            response = await loop.run_in_executor(
+                None, process_message, json_data, user_message
+            )
+        finally:
+            typing_active = False
+            typing_task.cancel()
 
         # 3. 응답 처리
         if response.response_type == "update" and response.updated_json:

@@ -365,16 +365,8 @@ body {
 </head>
 <body>
 
-<!-- API Key 입력 -->
-<div id="apiKeyScreen" class="api-key-screen">
-  <h2>경주 가족여행</h2>
-  <p>데이터를 불러오려면 API Key를 입력하세요.</p>
-  <input type="text" id="apiKeyInput" placeholder="jsonbin.io API Key">
-  <button onclick="submitApiKey()">시작하기</button>
-</div>
-
 <!-- 메인 앱 -->
-<div id="mainApp" style="display:none;">
+<div id="mainApp">
   <div class="header">
     <h1>경주 가족여행</h1>
     <div class="sub-info">
@@ -417,47 +409,23 @@ body {
 <div class="toast" id="toast"></div>
 
 <script>
-const BIN_ID = '698aa0ec43b1c97be973168e';
-const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 const ADMIN_PIN = '4545';
 const POLL_INTERVAL = 30000;
 
-let apiKey = '';
 let travelData = null;
 let activeDay = 0;
 let isAdmin = false;
 let pollTimer = null;
 
-// URL 파라미터에서 API Key 확인
+// 앱 시작
 (function init() {
-  const params = new URLSearchParams(window.location.search);
-  const keyFromUrl = params.get('key');
-  if (keyFromUrl) {
-    apiKey = keyFromUrl;
-    startApp();
-  }
-})();
-
-function submitApiKey() {
-  const input = document.getElementById('apiKeyInput');
-  const val = input.value.trim();
-  if (!val) { input.focus(); return; }
-  apiKey = val;
-  startApp();
-}
-
-function startApp() {
-  document.getElementById('apiKeyScreen').style.display = 'none';
-  document.getElementById('mainApp').style.display = 'block';
   fetchData();
   pollTimer = setInterval(fetchData, POLL_INTERVAL);
-}
+})();
 
 async function fetchData() {
   try {
-    const res = await fetch(`${BIN_URL}/latest`, {
-      headers: { 'X-Master-Key': apiKey }
-    });
+    const res = await fetch('/api/data');
     if (!res.ok) {
       throw new Error(`HTTP ${res.status}`);
     }
@@ -475,12 +443,9 @@ async function saveData() {
   try {
     // meta.lastUpdated 갱신
     travelData.meta.lastUpdated = new Date().toISOString();
-    const res = await fetch(BIN_URL, {
+    const res = await fetch('/api/save', {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': apiKey
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(travelData)
     });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
