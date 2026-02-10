@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>경주 가족여행</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  background: #FFF8F0;
+  color: #333;
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* 상단 헤더 */
+.header {
+  background: linear-gradient(135deg, #E8725A, #D4583C);
+  color: #fff;
+  padding: 20px 16px 16px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.header .sub-info {
+  font-size: 13px;
+  opacity: 0.9;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.header .update-time { font-size: 11px; opacity: 0.7; margin-top: 4px; }
+
+/* API Key 입력 화면 */
+.api-key-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 24px;
+  text-align: center;
+}
+.api-key-screen h2 { font-size: 20px; margin-bottom: 8px; color: #D4583C; }
+.api-key-screen p { font-size: 14px; color: #666; margin-bottom: 20px; }
+.api-key-screen input {
+  width: 100%;
+  max-width: 360px;
+  padding: 14px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.api-key-screen input:focus { border-color: #E8725A; outline: none; }
+.api-key-screen button {
+  padding: 14px 40px;
+  background: #E8725A;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.api-key-screen button:active { background: #D4583C; }
+
+/* 날짜 탭 */
+.day-tabs {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+.day-tabs::-webkit-scrollbar { display: none; }
+.day-tab {
+  flex: 0 0 auto;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #999;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+.day-tab.active {
+  color: #E8725A;
+  border-bottom-color: #E8725A;
+}
+.day-tab .tab-date { display: block; font-size: 11px; font-weight: 400; color: #bbb; }
+.day-tab.active .tab-date { color: #E8725A; }
+
+/* 일정 카드 목록 */
+.day-content { padding: 12px; }
+.day-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #D4583C;
+  margin: 8px 4px 12px;
+}
+
+/* 일정 카드 */
+.item-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  border-left: 4px solid #ddd;
+  transition: border-color 0.2s;
+}
+.item-card.status-done { border-left-color: #4CAF50; }
+.item-card.status-skipped { border-left-color: #EF5350; }
+.item-card.status-planned { border-left-color: #BDBDBD; }
+
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.item-status { font-size: 20px; line-height: 1; }
+.item-cat { font-size: 18px; line-height: 1; }
+.item-time { font-size: 13px; color: #999; font-weight: 500; }
+.item-title {
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1;
+}
+.item-title.skipped { text-decoration: line-through; color: #EF5350; }
+
+/* 옵션 목록 */
+.options-list { margin-top: 8px; }
+.option-item {
+  background: #F9F5F0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+.option-item.chosen {
+  background: #E8F5E9;
+  border: 2px solid #4CAF50;
+  font-weight: 600;
+}
+.option-name { font-weight: 600; }
+.option-menu { color: #666; font-size: 13px; }
+.option-badges { margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-dad-good { background: #E8F5E9; color: #2E7D32; }
+.badge-dad-caution { background: #FFF3E0; color: #E65100; }
+.badge-hiro-good { background: #E3F2FD; color: #1565C0; }
+.badge-hiro-caution { background: #FCE4EC; color: #C62828; }
+
+.item-note {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #FFFDE7;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #666;
+}
+.item-note::before { content: "memo "; font-weight: 600; }
+
+/* 관리자 모드 */
+.admin-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #eee;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 200;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+}
+.admin-bar button {
+  padding: 10px 20px;
+  background: #757575;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.admin-bar button:active { background: #616161; }
+.admin-bar button.active-admin {
+  background: #E8725A;
+}
+.admin-bar .admin-status {
+  font-size: 13px;
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+/* 관리자 편집 UI */
+.edit-controls { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ddd; }
+.edit-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.edit-row label { font-size: 13px; font-weight: 600; color: #666; min-width: 50px; }
+.edit-row select, .edit-row input {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  flex: 1;
+  min-width: 0;
+}
+.edit-row select:focus, .edit-row input:focus { border-color: #E8725A; outline: none; }
+.save-btn {
+  width: 100%;
+  padding: 10px;
+  background: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+}
+.save-btn:active { background: #388E3C; }
+.save-btn:disabled { background: #bbb; cursor: not-allowed; }
+
+/* PIN 모달 */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  width: 280px;
+  text-align: center;
+}
+.modal h3 { font-size: 18px; margin-bottom: 16px; }
+.modal input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 20px;
+  text-align: center;
+  letter-spacing: 8px;
+  margin-bottom: 12px;
+}
+.modal input:focus { border-color: #E8725A; outline: none; }
+.modal .modal-buttons { display: flex; gap: 8px; }
+.modal .modal-buttons button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.modal .btn-cancel { background: #eee; color: #666; }
+.modal .btn-confirm { background: #E8725A; color: #fff; }
+.modal .error-msg { color: #EF5350; font-size: 13px; margin-top: 4px; }
+
+/* 로딩 */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  font-size: 16px;
+}
+.loading .spinner {
+  display: inline-block;
+  width: 32px; height: 32px;
+  border: 3px solid #eee;
+  border-top-color: #E8725A;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 에러 */
+.error-banner {
+  background: #FFF3E0;
+  color: #E65100;
+  padding: 10px 16px;
+  font-size: 13px;
+  text-align: center;
+  display: none;
+}
+.error-banner.show { display: block; }
+
+/* 저장 알림 */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: #333;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 400;
+  transition: transform 0.3s;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* reference 섹션 */
+.reference-section {
+  padding: 12px;
+  margin-top: 8px;
+}
+.reference-section h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #D4583C;
+  margin-bottom: 12px;
+}
+.ref-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.ref-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #555; }
+.ref-card ul { list-style: none; }
+.ref-card li { font-size: 14px; padding: 3px 0; color: #666; }
+</style>
+</head>
+<body>
+
+<!-- API Key 입력 -->
+<div id="apiKeyScreen" class="api-key-screen">
+  <h2>경주 가족여행</h2>
+  <p>데이터를 불러오려면 API Key를 입력하세요.</p>
+  <input type="text" id="apiKeyInput" placeholder="jsonbin.io API Key">
+  <button onclick="submitApiKey()">시작하기</button>
+</div>
+
+<!-- 메인 앱 -->
+<div id="mainApp" style="display:none;">
+  <div class="header">
+    <h1>경주 가족여행</h1>
+    <div class="sub-info">
+      <span id="tripStatus">2/19(목) ~ 2/24(화)</span>
+    </div>
+    <div class="update-time" id="updateTime"></div>
+  </div>
+
+  <div class="error-banner" id="errorBanner"></div>
+
+  <div class="day-tabs" id="dayTabs"></div>
+
+  <div id="contentArea">
+    <div class="loading">
+      <div class="spinner"></div>
+      <div>일정을 불러오는 중...</div>
+    </div>
+  </div>
+
+  <div class="admin-bar">
+    <button id="adminBtn" onclick="toggleAdmin()">관리자</button>
+    <span id="adminStatus"></span>
+  </div>
+</div>
+
+<!-- PIN 모달 -->
+<div class="modal-overlay" id="pinModal">
+  <div class="modal">
+    <h3>관리자 PIN 입력</h3>
+    <input type="password" id="pinInput" maxlength="4" inputmode="numeric" pattern="[0-9]*">
+    <div class="error-msg" id="pinError"></div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" onclick="closePinModal()">취소</button>
+      <button class="btn-confirm" onclick="checkPin()">확인</button>
+    </div>
+  </div>
+</div>
+
+<!-- 토스트 -->
+<div class="toast" id="toast"></div>
+
+<script>
+const BIN_ID = '698aa0ec43b1c97be973168e';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const ADMIN_PIN = '4545';
+const POLL_INTERVAL = 30000;
+
+let apiKey = '';
+let travelData = null;
+let activeDay = 0;
+let isAdmin = false;
+let pollTimer = null;
+
+// URL 파라미터에서 API Key 확인
+(function init() {
+  const params = new URLSearchParams(window.location.search);
+  const keyFromUrl = params.get('key');
+  if (keyFromUrl) {
+    apiKey = keyFromUrl;
+    startApp();
+  }
+})();
+
+function submitApiKey() {
+  const input = document.getElementById('apiKeyInput');
+  const val = input.value.trim();
+  if (!val) { input.focus(); return; }
+  apiKey = val;
+  startApp();
+}
+
+function startApp() {
+  document.getElementById('apiKeyScreen').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  fetchData();
+  pollTimer = setInterval(fetchData, POLL_INTERVAL);
+}
+
+async function fetchData() {
+  try {
+    const res = await fetch(`${BIN_URL}/latest`, {
+      headers: { 'X-Master-Key': apiKey }
+    });
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+    const json = await res.json();
+    travelData = json.record;
+    hideError();
+    render();
+  } catch (e) {
+    showError('데이터를 불러오지 못했습니다. 연결을 확인해 주세요.');
+    console.error('fetch error:', e);
+  }
+}
+
+async function saveData() {
+  try {
+    // meta.lastUpdated 갱신
+    travelData.meta.lastUpdated = new Date().toISOString();
+    const res = await fetch(BIN_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': apiKey
+      },
+      body: JSON.stringify(travelData)
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    showToast('저장 완료');
+    render();
+  } catch (e) {
+    showToast('저장 실패! 다시 시도해 주세요.');
+    console.error('save error:', e);
+  }
+}
+
+function render() {
+  if (!travelData) return;
+  updateHeader();
+  renderTabs();
+  renderDayContent();
+}
+
+function updateHeader() {
+  const meta = travelData.meta;
+  if (meta && meta.lastUpdated) {
+    const d = new Date(meta.lastUpdated);
+    document.getElementById('updateTime').textContent =
+      `마지막 업데이트: ${formatDateTime(d)}`;
+  }
+  // 현재 Day 상태 계산
+  const now = new Date();
+  const tripStart = new Date('2026-02-19T00:00:00+09:00');
+  const tripEnd = new Date('2026-02-24T23:59:59+09:00');
+  let status = '2/19(목) ~ 2/24(화)';
+  if (now < tripStart) {
+    const diff = Math.ceil((tripStart - now) / 86400000);
+    status = `D-${diff} | 2/19(목) ~ 2/24(화)`;
+  } else if (now > tripEnd) {
+    status = '여행 완료!';
+  } else {
+    const dayNum = Math.floor((now - tripStart) / 86400000) + 1;
+    status = `Day ${dayNum} 진행 중`;
+    // 현재 Day로 자동 탭 전환 (첫 로딩 시)
+    if (activeDay === 0) activeDay = dayNum - 1;
+  }
+  document.getElementById('tripStatus').textContent = status;
+}
+
+function renderTabs() {
+  const tabs = document.getElementById('dayTabs');
+  const days = travelData.days;
+  tabs.innerHTML = '';
+  days.forEach((day, idx) => {
+    const tab = document.createElement('div');
+    tab.className = 'day-tab' + (idx === activeDay ? ' active' : '');
+    tab.innerHTML = `Day ${day.dayNum}<span class="tab-date">${formatTabDate(day.date, day.dow)}</span>`;
+    tab.onclick = () => { activeDay = idx; renderTabs(); renderDayContent(); };
+    tabs.appendChild(tab);
+  });
+  // 활성 탭이 보이도록 스크롤
+  const activeTab = tabs.querySelector('.active');
+  if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+}
+
+function renderDayContent() {
+  const area = document.getElementById('contentArea');
+  const day = travelData.days[activeDay];
+  if (!day) { area.innerHTML = '<div class="loading">데이터 없음</div>'; return; }
+
+  let html = '<div class="day-content">';
+  html += `<div class="day-title">${day.title}</div>`;
+
+  day.items.forEach((item, itemIdx) => {
+    html += renderItemCard(item, itemIdx);
+  });
+
+  html += '</div>';
+
+  // reference 섹션 (마지막 탭에 표시)
+  if (activeDay === travelData.days.length - 1 && travelData.reference) {
+    html += renderReference(travelData.reference);
+  }
+
+  area.innerHTML = html;
+}
+
+function renderItemCard(item, itemIdx) {
+  const statusIcon = { planned: '\u2B1C', done: '\u2705', skipped: '\u23ED\uFE0F' };
+  const catIcon = { meal: '\uD83C\uDF7D\uFE0F', cafe: '\u2615', activity: '\uD83C\uDFDB\uFE0F' };
+  const titleClass = item.status === 'skipped' ? ' skipped' : '';
+
+  let html = `<div class="item-card status-${item.status}">`;
+  html += '<div class="item-header">';
+  html += `<span class="item-status">${statusIcon[item.status] || '\u2B1C'}</span>`;
+  html += `<span class="item-cat">${catIcon[item.cat] || ''}</span>`;
+  html += `<span class="item-time">${item.time || ''}</span>`;
+  html += `<span class="item-title${titleClass}">${item.title}</span>`;
+  html += '</div>';
+
+  // 옵션 목록 (meal/cafe)
+  if (item.options && item.options.length > 0) {
+    html += '<div class="options-list">';
+    item.options.forEach(opt => {
+      const isChosen = item.chosen && item.chosen === opt.name;
+      html += `<div class="option-item${isChosen ? ' chosen' : ''}">`;
+      html += `<span class="option-name">${opt.name}</span>`;
+      if (opt.menu) html += ` <span class="option-menu">- ${opt.menu}</span>`;
+      if (isChosen) html += ' <strong>(확정)</strong>';
+
+      const badges = [];
+      if (opt.dad === 'good') badges.push('<span class="badge badge-dad-good">아버지 OK</span>');
+      if (opt.dad === 'caution') badges.push('<span class="badge badge-dad-caution">\u26A0\uFE0F 아버지 주의</span>');
+      if (opt.hiro === 'good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
+      if (opt.hiro === 'caution') {
+        let hiroLabel = '\u26A0\uFE0F 히로 주의';
+        if (opt.hiroNote) hiroLabel += ` (${opt.hiroNote})`;
+        badges.push(`<span class="badge badge-hiro-caution">${hiroLabel}</span>`);
+      }
+      if (badges.length) html += `<div class="option-badges">${badges.join('')}</div>`;
+
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  // 메모
+  if (item.note) {
+    html += `<div class="item-note">${escapeHtml(item.note)}</div>`;
+  }
+
+  // 관리자 편집 UI
+  if (isAdmin) {
+    html += renderEditControls(item, itemIdx);
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function renderEditControls(item, itemIdx) {
+  let html = '<div class="edit-controls">';
+
+  // 상태 변경
+  html += '<div class="edit-row">';
+  html += '<label>상태</label>';
+  html += `<select onchange="updateItemField(${activeDay}, ${itemIdx}, 'status', this.value)">`;
+  ['planned', 'done', 'skipped'].forEach(s => {
+    html += `<option value="${s}"${item.status === s ? ' selected' : ''}>${s}</option>`;
+  });
+  html += '</select>';
+  html += '</div>';
+
+  // 확정 (옵션이 있는 경우)
+  if (item.options && item.options.length > 0) {
+    html += '<div class="edit-row">';
+    html += '<label>확정</label>';
+    html += `<select onchange="updateItemField(${activeDay}, ${itemIdx}, 'chosen', this.value)">`;
+    html += `<option value="">미정</option>`;
+    item.options.forEach(opt => {
+      html += `<option value="${escapeAttr(opt.name)}"${item.chosen === opt.name ? ' selected' : ''}>${opt.name}</option>`;
+    });
+    html += '</select>';
+    html += '</div>';
+  }
+
+  // 메모
+  html += '<div class="edit-row">';
+  html += '<label>메모</label>';
+  html += `<input type="text" value="${escapeAttr(item.note || '')}" onchange="updateItemField(${activeDay}, ${itemIdx}, 'note', this.value)" placeholder="메모 입력">`;
+  html += '</div>';
+
+  html += `<button class="save-btn" onclick="saveData()">저장</button>`;
+  html += '</div>';
+  return html;
+}
+
+function updateItemField(dayIdx, itemIdx, field, value) {
+  if (!travelData) return;
+  travelData.days[dayIdx].items[itemIdx][field] = value;
+}
+
+function renderReference(ref) {
+  let html = '<div class="reference-section"><h3>참고 정보</h3>';
+
+  if (ref.distances && ref.distances.length) {
+    html += '<div class="ref-card"><h4>주요 거리/소요시간</h4><ul>';
+    ref.distances.forEach(d => { html += `<li>${typeof d === 'string' ? d : JSON.stringify(d)}</li>`; });
+    html += '</ul></div>';
+  }
+  if (ref.contacts && ref.contacts.length) {
+    html += '<div class="ref-card"><h4>연락처</h4><ul>';
+    ref.contacts.forEach(c => { html += `<li>${typeof c === 'string' ? c : JSON.stringify(c)}</li>`; });
+    html += '</ul></div>';
+  }
+  if (ref.shopping && ref.shopping.length) {
+    html += '<div class="ref-card"><h4>쇼핑/기념품</h4><ul>';
+    ref.shopping.forEach(s => { html += `<li>${typeof s === 'string' ? s : JSON.stringify(s)}</li>`; });
+    html += '</ul></div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+// 관리자 모드
+function toggleAdmin() {
+  if (isAdmin) {
+    isAdmin = false;
+    document.getElementById('adminBtn').classList.remove('active-admin');
+    document.getElementById('adminStatus').textContent = '';
+    render();
+  } else {
+    openPinModal();
+  }
+}
+
+function openPinModal() {
+  document.getElementById('pinModal').classList.add('show');
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').textContent = '';
+  setTimeout(() => document.getElementById('pinInput').focus(), 100);
+}
+
+function closePinModal() {
+  document.getElementById('pinModal').classList.remove('show');
+}
+
+function checkPin() {
+  const pin = document.getElementById('pinInput').value;
+  if (pin === ADMIN_PIN) {
+    isAdmin = true;
+    closePinModal();
+    document.getElementById('adminBtn').classList.add('active-admin');
+    document.getElementById('adminStatus').textContent = '편집 모드';
+    render();
+  } else {
+    document.getElementById('pinError').textContent = 'PIN이 올바르지 않습니다.';
+  }
+}
+
+// PIN 입력 시 Enter 키 지원
+document.getElementById('pinInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkPin();
+});
+
+// API Key 입력 시 Enter 키 지원
+document.getElementById('apiKeyInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') submitApiKey();
+});
+
+// 유틸
+function formatDateTime(d) {
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  return `${mm}/${dd} ${hh}:${mi}`;
+}
+
+function formatTabDate(dateStr, dow) {
+  const parts = dateStr.split('-');
+  return `${parseInt(parts[1])}/${parseInt(parts[2])}(${dow})`;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function escapeAttr(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showError(msg) {
+  const el = document.getElementById('errorBanner');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+function hideError() {
+  document.getElementById('errorBanner').classList.remove('show');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+</script>
+</body>
+</html>
