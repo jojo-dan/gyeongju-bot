@@ -6,6 +6,7 @@
 <title>경주 가족여행</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5612fbbe8c2401ba1497a119c2c44a7c&libraries=services"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -606,6 +607,95 @@ body {
   color: var(--text-mid);
 }
 
+/* ═══ MAP VIEW ═══ */
+.map-container {
+  background: var(--housing);
+  border-radius: var(--radius-device);
+  box-shadow: var(--shadow-device);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.map-screen {
+  background: var(--display);
+  margin: 12px;
+  border-radius: var(--radius-display);
+  position: relative;
+  overflow: hidden;
+}
+.map-screen #kakaoMap {
+  width: 100%;
+  height: 300px;
+}
+.map-screen::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: var(--radius-display);
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.02) 3px,
+    rgba(0,0,0,0.02) 6px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+.map-place-list {
+  padding: 8px 12px 12px;
+}
+.map-place-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--item-bg);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: var(--system);
+}
+.map-place-item:active {
+  background: var(--border);
+}
+.map-place-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.map-place-num.done { background: #22C55E; }
+.map-place-num.skipped { background: #EF4444; }
+.map-place-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--item-text);
+  flex: 1;
+}
+.map-place-time {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--item-text-dim);
+}
+.map-loading {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--display-dim);
+  font-family: var(--system);
+  font-size: 14px;
+}
+
 /* ═══ SPEAKER GRILLE (decorative) ═══ */
 .grille {
   display: inline-grid;
@@ -647,6 +737,7 @@ body {
   </div>
 
   <div class="admin-bar">
+    <button id="mapBtn" onclick="toggleMapView()">지도</button>
     <button id="adminBtn" onclick="toggleAdmin()">관리</button>
     <span id="adminStatus"></span>
   </div>
@@ -675,7 +766,14 @@ const POLL_INTERVAL = 30000;
 let travelData = null;
 let activeDay = 0;
 let isAdmin = false;
+let isMapView = false;
 let pollTimer = null;
+let kakaoMap = null;
+let mapMarkers = [];
+let mapPolyline = null;
+let mapInfoWindow = null;
+const coordsCache = {}; // 장소명 → {lat, lng} 캐시
+const GYEONGJU_CENTER = { lat: 35.8562, lng: 129.2247 };
 
 // 앱 시작
 (function init() {
@@ -720,7 +818,11 @@ function render() {
   if (!travelData) return;
   updateHeader();
   renderTabs();
-  renderDayContent();
+  if (isMapView) {
+    renderMapView();
+  } else {
+    renderDayContent();
+  }
 }
 
 function updateHeader() {
@@ -755,7 +857,7 @@ function renderTabs() {
     const tab = document.createElement('div');
     tab.className = 'day-tab' + (idx === activeDay ? ' active' : '');
     tab.innerHTML = `${day.dayNum}일차<span class="tab-date">${formatTabDate(day.date, day.dow)}</span>`;
-    tab.onclick = () => { activeDay = idx; renderTabs(); renderDayContent(); };
+    tab.onclick = () => { activeDay = idx; renderTabs(); if (isMapView) renderMapView(); else renderDayContent(); };
     tabs.appendChild(tab);
   });
   const activeTab = tabs.querySelector('.active');
@@ -1015,6 +1117,189 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ═══ 지도 기능 ═══
+
+function toggleMapView() {
+  isMapView = !isMapView;
+  const btn = document.getElementById('mapBtn');
+  if (isMapView) {
+    btn.classList.add('active-admin');
+  } else {
+    btn.classList.remove('active-admin');
+    kakaoMap = null;
+  }
+  render();
+}
+
+function renderMapView() {
+  const area = document.getElementById('contentArea');
+  const day = travelData.days[activeDay];
+  if (!day) return;
+
+  // 장소 목록 추출
+  const places = extractPlaces(day);
+
+  let html = '<div class="map-container">';
+  html += '<div class="map-screen"><div id="kakaoMap"><div class="map-loading">지도 불러오는 중...</div></div></div>';
+  html += '<div class="map-place-list">';
+  places.forEach((p, i) => {
+    const statusCls = p.status === 'done' ? ' done' : p.status === 'skipped' ? ' skipped' : '';
+    html += `<div class="map-place-item" onclick="panToPlace(${i})">`;
+    html += `<span class="map-place-num${statusCls}">${i + 1}</span>`;
+    html += `<span class="map-place-name">${escapeHtml(p.name)}</span>`;
+    html += `<span class="map-place-time">${p.time || ''}</span>`;
+    html += '</div>';
+  });
+  html += '</div></div>';
+
+  area.innerHTML = html;
+
+  // 카카오맵 초기화 (DOM 렌더링 후)
+  setTimeout(() => initKakaoMap(places), 100);
+}
+
+function extractPlaces(day) {
+  const places = [];
+  day.items.forEach(item => {
+    let name = '';
+    if (item.chosen && item.options) {
+      const opt = item.options.find(o => o.name === item.chosen);
+      if (opt) name = opt.name;
+    }
+    if (!name && item.options && item.options.length > 0) {
+      name = item.options[0].name;
+    }
+    if (!name) name = item.title;
+
+    places.push({
+      name: name,
+      title: item.title,
+      time: item.time || '',
+      status: item.status,
+      cat: item.cat,
+      searchQuery: '경주 ' + name
+    });
+  });
+  return places;
+}
+
+function initKakaoMap(places) {
+  const container = document.getElementById('kakaoMap');
+  if (!container || typeof kakao === 'undefined') return;
+
+  const center = new kakao.maps.LatLng(GYEONGJU_CENTER.lat, GYEONGJU_CENTER.lng);
+  kakaoMap = new kakao.maps.Map(container, { center: center, level: 7 });
+  mapMarkers = [];
+  mapInfoWindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+
+  // 장소별 좌표 검색 후 마커 표시
+  const ps = new kakao.maps.services.Places();
+  const coords = [];
+  let resolved = 0;
+
+  places.forEach((place, idx) => {
+    // 캐시 확인
+    if (coordsCache[place.searchQuery]) {
+      const c = coordsCache[place.searchQuery];
+      coords[idx] = c;
+      resolved++;
+      if (resolved === places.length) drawMarkers(places, coords);
+      return;
+    }
+
+    ps.keywordSearch(place.searchQuery, function(data, status) {
+      if (status === kakao.maps.services.Status.OK && data.length > 0) {
+        const result = data[0];
+        const c = { lat: parseFloat(result.y), lng: parseFloat(result.x), placeName: result.place_name };
+        coordsCache[place.searchQuery] = c;
+        coords[idx] = c;
+      } else {
+        coords[idx] = null;
+      }
+      resolved++;
+      if (resolved === places.length) drawMarkers(places, coords);
+    }, { location: center, radius: 30000, size: 1 });
+  });
+
+  if (places.length === 0) {
+    // 장소 없으면 경주 중심만 표시
+  }
+}
+
+function drawMarkers(places, coords) {
+  if (!kakaoMap) return;
+  const bounds = new kakao.maps.LatLngBounds();
+  const pathCoords = [];
+  mapMarkers = [];
+
+  places.forEach((place, idx) => {
+    const c = coords[idx];
+    if (!c) return;
+
+    const position = new kakao.maps.LatLng(c.lat, c.lng);
+    bounds.extend(position);
+    pathCoords.push(position);
+
+    // 마커 색상
+    let color = '#999';
+    if (place.status === 'done') color = '#22C55E';
+    else if (place.status === 'skipped') color = '#EF4444';
+    else color = '#E85D2A';
+
+    // 커스텀 마커 (번호 표시)
+    const markerContent = `<div style="
+      width:28px;height:28px;border-radius:50%;
+      background:${color};color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-family:monospace;font-size:13px;font-weight:700;
+      box-shadow:0 2px 6px rgba(0,0,0,0.3);
+      border:2px solid #fff;
+    ">${idx + 1}</div>`;
+
+    const overlay = new kakao.maps.CustomOverlay({
+      position: position,
+      content: markerContent,
+      yAnchor: 1
+    });
+    overlay.setMap(kakaoMap);
+    mapMarkers.push({ overlay, position, place, coord: c });
+  });
+
+  // 동선 라인
+  if (pathCoords.length >= 2) {
+    if (mapPolyline) mapPolyline.setMap(null);
+    mapPolyline = new kakao.maps.Polyline({
+      path: pathCoords,
+      strokeWeight: 3,
+      strokeColor: '#E85D2A',
+      strokeOpacity: 0.5,
+      strokeStyle: 'dashed'
+    });
+    mapPolyline.setMap(kakaoMap);
+  }
+
+  // 범위 조정
+  if (pathCoords.length > 0) {
+    kakaoMap.setBounds(bounds, 60, 60, 60, 60);
+  }
+}
+
+function panToPlace(idx) {
+  if (!kakaoMap || !mapMarkers[idx]) return;
+  const m = mapMarkers[idx];
+  kakaoMap.panTo(m.position);
+
+  // 인포윈도우 표시
+  if (mapInfoWindow) mapInfoWindow.close();
+  const content = `<div style="
+    padding:8px 12px;font-family:-apple-system,sans-serif;
+    font-size:13px;white-space:nowrap;font-weight:600;
+  ">${escapeHtml(m.place.name)}<br>
+  <span style="font-weight:400;color:#666;">${m.coord.placeName || ''}</span></div>`;
+  mapInfoWindow = new kakao.maps.InfoWindow({ content: content, position: m.position });
+  mapInfoWindow.open(kakaoMap);
 }
 </script>
 </body>
