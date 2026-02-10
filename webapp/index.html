@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>경주 가족여행</title>
+<meta property="og:title" content="경주 가족여행 2026">
+<meta property="og:description" content="2026.02.19~24 경주 가족여행 일정 · 식당 · 관광지 · 지도">
+<meta property="og:image" content="https://gyeongju-trip.vercel.app/og-image.png">
+<meta property="og:url" content="https://gyeongju-trip.vercel.app">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5612fbbe8c2401ba1497a119c2c44a7c&libraries=services"></script>
@@ -626,21 +632,7 @@ body {
   width: 100%;
   height: 300px;
 }
-.map-screen::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: var(--radius-display);
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 3px,
-    rgba(0,0,0,0.02) 3px,
-    rgba(0,0,0,0.02) 6px
-  );
-  pointer-events: none;
-  z-index: 1;
-}
+/* scanline 제거 - 지도 마커 가림 방지 */
 .map-place-list {
   padding: 8px 12px 12px;
 }
@@ -1144,11 +1136,13 @@ function renderMapView() {
   let html = '<div class="map-container">';
   html += '<div class="map-screen"><div id="kakaoMap"><div class="map-loading">지도 불러오는 중...</div></div></div>';
   html += '<div class="map-place-list">';
+  const catIcon = { meal: '🍽', cafe: '☕', activity: '📍' };
   places.forEach((p, i) => {
     const statusCls = p.status === 'done' ? ' done' : p.status === 'skipped' ? ' skipped' : '';
-    html += `<div class="map-place-item" onclick="panToPlace(${i})">`;
+    const dimStyle = p.isGeneric ? ' style="opacity:0.5"' : '';
+    html += `<div class="map-place-item"${dimStyle} onclick="panToPlace(${i})">`;
     html += `<span class="map-place-num${statusCls}">${i + 1}</span>`;
-    html += `<span class="map-place-name">${escapeHtml(p.name)}</span>`;
+    html += `<span class="map-place-name">${catIcon[p.cat] || ''} ${escapeHtml(p.name)}</span>`;
     html += `<span class="map-place-time">${p.time || ''}</span>`;
     html += '</div>';
   });
@@ -1160,18 +1154,30 @@ function renderMapView() {
   setTimeout(() => initKakaoMap(places), 100);
 }
 
+// 검색 불가능한 일반 활동 키워드
+const SKIP_KEYWORDS = ['이동', '출발', '도착', '체크인', '체크아웃', '정착', '준비', '마라톤', '대기', '복귀'];
+
 function extractPlaces(day) {
   const places = [];
   day.items.forEach(item => {
+    // 일반 활동(이동, 체크인 등)은 스킵
+    const isGeneric = SKIP_KEYWORDS.some(kw => item.title.includes(kw));
+
     let name = '';
+    let searchQuery = '';
+
     if (item.chosen && item.options) {
       const opt = item.options.find(o => o.name === item.chosen);
-      if (opt) name = opt.name;
+      if (opt) { name = opt.name; searchQuery = '경주 ' + opt.name; }
     }
     if (!name && item.options && item.options.length > 0) {
       name = item.options[0].name;
+      searchQuery = '경주 ' + item.options[0].name;
     }
-    if (!name) name = item.title;
+    if (!name) {
+      name = item.title;
+      if (!isGeneric) searchQuery = '경주 ' + item.title;
+    }
 
     places.push({
       name: name,
@@ -1179,84 +1185,135 @@ function extractPlaces(day) {
       time: item.time || '',
       status: item.status,
       cat: item.cat,
-      searchQuery: '경주 ' + name
+      searchQuery: searchQuery, // 빈 문자열이면 검색 스킵
+      isGeneric: isGeneric && !searchQuery
     });
   });
   return places;
 }
 
+// 숙소 고정 좌표
+const ACCOMMODATION = { lat: 35.8428, lng: 129.2155, name: '까사멜로우 (숙소)' };
+
 function initKakaoMap(places) {
   const container = document.getElementById('kakaoMap');
-  if (!container || typeof kakao === 'undefined') return;
+  if (!container || typeof kakao === 'undefined') {
+    console.error('카카오맵 SDK 로드 실패');
+    return;
+  }
 
   const center = new kakao.maps.LatLng(GYEONGJU_CENTER.lat, GYEONGJU_CENTER.lng);
   kakaoMap = new kakao.maps.Map(container, { center: center, level: 7 });
   mapMarkers = [];
-  mapInfoWindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+  mapInfoWindow = null;
 
-  // 장소별 좌표 검색 후 마커 표시
+  // 숙소 마커 (항상 표시)
+  addAccommodationMarker();
+
+  // 검색 가능한 장소만 필터
+  const searchablePlaces = places.map((p, i) => ({ ...p, originalIdx: i })).filter(p => p.searchQuery);
+
+  if (searchablePlaces.length === 0) {
+    // 검색할 장소 없으면 숙소 중심
+    kakaoMap.setCenter(new kakao.maps.LatLng(ACCOMMODATION.lat, ACCOMMODATION.lng));
+    kakaoMap.setLevel(5);
+    return;
+  }
+
   const ps = new kakao.maps.services.Places();
-  const coords = [];
+  const coords = new Array(places.length).fill(null);
   let resolved = 0;
+  const total = searchablePlaces.length;
 
-  places.forEach((place, idx) => {
+  searchablePlaces.forEach(place => {
+    const idx = place.originalIdx;
+
     // 캐시 확인
     if (coordsCache[place.searchQuery]) {
-      const c = coordsCache[place.searchQuery];
-      coords[idx] = c;
+      coords[idx] = coordsCache[place.searchQuery];
       resolved++;
-      if (resolved === places.length) drawMarkers(places, coords);
+      if (resolved === total) drawMarkers(places, coords);
       return;
     }
 
-    ps.keywordSearch(place.searchQuery, function(data, status) {
-      if (status === kakao.maps.services.Status.OK && data.length > 0) {
+    ps.keywordSearch(place.searchQuery, function(data, searchStatus) {
+      if (searchStatus === kakao.maps.services.Status.OK && data.length > 0) {
         const result = data[0];
         const c = { lat: parseFloat(result.y), lng: parseFloat(result.x), placeName: result.place_name };
         coordsCache[place.searchQuery] = c;
         coords[idx] = c;
+        console.log(`[지도] "${place.searchQuery}" → ${result.place_name}`);
       } else {
+        console.warn(`[지도] "${place.searchQuery}" 검색 실패`);
         coords[idx] = null;
       }
       resolved++;
-      if (resolved === places.length) drawMarkers(places, coords);
+      if (resolved === total) drawMarkers(places, coords);
     }, { location: center, radius: 30000, size: 1 });
   });
+}
 
-  if (places.length === 0) {
-    // 장소 없으면 경주 중심만 표시
-  }
+function addAccommodationMarker() {
+  const pos = new kakao.maps.LatLng(ACCOMMODATION.lat, ACCOMMODATION.lng);
+  const content = `<div style="
+    padding:4px 10px;border-radius:20px;
+    background:#1A1A1A;color:#fff;
+    font-family:-apple-system,sans-serif;font-size:12px;font-weight:600;
+    box-shadow:0 2px 8px rgba(0,0,0,0.3);
+    white-space:nowrap;
+  ">🏠 ${ACCOMMODATION.name}</div>`;
+  const overlay = new kakao.maps.CustomOverlay({
+    position: pos,
+    content: content,
+    yAnchor: 1.3
+  });
+  overlay.setMap(kakaoMap);
 }
 
 function drawMarkers(places, coords) {
   if (!kakaoMap) return;
   const bounds = new kakao.maps.LatLngBounds();
   const pathCoords = [];
-  mapMarkers = [];
+  mapMarkers = new Array(places.length).fill(null);
 
+  // 숙소도 bounds에 포함
+  bounds.extend(new kakao.maps.LatLng(ACCOMMODATION.lat, ACCOMMODATION.lng));
+
+  let foundCount = 0;
   places.forEach((place, idx) => {
     const c = coords[idx];
     if (!c) return;
+    foundCount++;
 
     const position = new kakao.maps.LatLng(c.lat, c.lng);
     bounds.extend(position);
     pathCoords.push(position);
 
     // 마커 색상
-    let color = '#999';
+    let color = '#E85D2A';
     if (place.status === 'done') color = '#22C55E';
     else if (place.status === 'skipped') color = '#EF4444';
-    else color = '#E85D2A';
 
-    // 커스텀 마커 (번호 표시)
-    const markerContent = `<div style="
-      width:28px;height:28px;border-radius:50%;
-      background:${color};color:#fff;
-      display:flex;align-items:center;justify-content:center;
-      font-family:monospace;font-size:13px;font-weight:700;
-      box-shadow:0 2px 6px rgba(0,0,0,0.3);
-      border:2px solid #fff;
-    ">${idx + 1}</div>`;
+    // 카테고리 아이콘
+    const catIcon = { meal: '🍽', cafe: '☕', activity: '📍' };
+    const icon = catIcon[place.cat] || '📍';
+
+    // 커스텀 마커 (번호 + 장소명)
+    const markerContent = `<div style="display:flex;flex-direction:column;align-items:center;">
+      <div style="
+        padding:4px 10px;border-radius:16px;
+        background:${color};color:#fff;
+        font-family:-apple-system,sans-serif;font-size:13px;font-weight:700;
+        box-shadow:0 2px 8px rgba(0,0,0,0.3);
+        white-space:nowrap;
+      ">${icon} ${escapeHtml(place.name)}</div>
+      <div style="
+        width:0;height:0;
+        border-left:6px solid transparent;
+        border-right:6px solid transparent;
+        border-top:8px solid ${color};
+      "></div>
+    </div>`;
 
     const overlay = new kakao.maps.CustomOverlay({
       position: position,
@@ -1264,7 +1321,7 @@ function drawMarkers(places, coords) {
       yAnchor: 1
     });
     overlay.setMap(kakaoMap);
-    mapMarkers.push({ overlay, position, place, coord: c });
+    mapMarkers[idx] = { overlay, position, place, coord: c };
   });
 
   // 동선 라인
@@ -1274,32 +1331,26 @@ function drawMarkers(places, coords) {
       path: pathCoords,
       strokeWeight: 3,
       strokeColor: '#E85D2A',
-      strokeOpacity: 0.5,
+      strokeOpacity: 0.6,
       strokeStyle: 'dashed'
     });
     mapPolyline.setMap(kakaoMap);
   }
 
   // 범위 조정
-  if (pathCoords.length > 0) {
-    kakaoMap.setBounds(bounds, 60, 60, 60, 60);
-  }
+  kakaoMap.setBounds(bounds, 50, 50, 50, 50);
+
+  console.log(`[지도] ${foundCount}/${places.length} 장소 표시 완료`);
 }
 
 function panToPlace(idx) {
-  if (!kakaoMap || !mapMarkers[idx]) return;
+  if (!kakaoMap || !mapMarkers[idx]) {
+    showToast('위치 정보 없음');
+    return;
+  }
   const m = mapMarkers[idx];
+  kakaoMap.setLevel(4);
   kakaoMap.panTo(m.position);
-
-  // 인포윈도우 표시
-  if (mapInfoWindow) mapInfoWindow.close();
-  const content = `<div style="
-    padding:8px 12px;font-family:-apple-system,sans-serif;
-    font-size:13px;white-space:nowrap;font-weight:600;
-  ">${escapeHtml(m.place.name)}<br>
-  <span style="font-weight:400;color:#666;">${m.coord.placeName || ''}</span></div>`;
-  mapInfoWindow = new kakao.maps.InfoWindow({ content: content, position: m.position });
-  mapInfoWindow.open(kakaoMap);
 }
 </script>
 </body>
