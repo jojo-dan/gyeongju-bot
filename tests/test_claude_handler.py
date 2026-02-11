@@ -4,12 +4,16 @@ claude_handler 모듈 테스트.
 mock subprocess를 사용하여 실제 Claude CLI를 호출하지 않고 테스트한다.
 """
 
+import os
+import sys
 import unittest
 import json
 from unittest.mock import patch, MagicMock
 from dataclasses import dataclass
 from typing import Optional
 
+# src/ 디렉토리를 모듈 경로에 추가
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), "src"))
 
 # claude_handler가 아직 작성되지 않았을 수 있으므로 임포트 시도
 try:

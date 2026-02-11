@@ -6,14 +6,19 @@ mock을 사용하여 텔레그램 API, jsonbin, claude_handler를 모킹한다.
 
 import asyncio
 import os
+import sys
 import unittest
 from unittest.mock import patch, MagicMock, AsyncMock
+
+# src/ 디렉토리를 모듈 경로에 추가
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), "src"))
 
 # 환경 변수 설정 (bot.py 임포트 시 필요)
 os.environ["TELEGRAM_BOT_TOKEN"] = "test_token"
 os.environ["JSONBIN_BIN_ID"] = "test_bin_id"
 os.environ["JSONBIN_API_KEY"] = "test_api_key"
 os.environ["ALLOWED_USER_IDS"] = "12345,67890"
+os.environ["USE_TOOL_API"] = "false"  # 테스트는 CLI 모드(레거시)로 실행
 
 # bot.py 임포트 시도
 bot_available = False

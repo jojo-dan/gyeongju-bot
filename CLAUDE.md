@@ -1,191 +1,95 @@
-# 경주 가족여행 텔레그램 봇
+# CLAUDE.md -- Gyeongju Bot
 
 ## 프로젝트 요약
+경주 가족여행(2026.02.19~24) 일정을 관리하는 텔레그램 봇 + 웹앱.
+Python 3.10+, Anthropic API + Tool Use 기반.
 
-가족 경주 여행(2026.02.19~24) 일정을 관리하는 텔레그램 봇 + 웹앱.
-jojo가 텔레그램으로 자연어 메시지를 보내면, VPS의 봇이 Claude CLI(headless mode)로 요청을 처리하고 jsonbin.io의 여행 데이터를 업데이트한다. 가족이 보는 웹앱은 jsonbin.io에서 자동으로 최신 데이터를 가져온다.
+## 작업 시작 시 필수 읽기 (순서대로)
+1. `CLAUDE.md` (이 파일)
+2. `AGENTS.md` (에이전트 역할/권한)
+3. `tickets/README.md` (티켓 운영 매뉴얼)
+4. `TASKS.md` (현재 작업 보드)
+5. `RULES.md` (자가검수 체크리스트)
+6. `DECISIONS.md` (결정 로그)
 
-## 아키텍처
+## 기본 원칙
+- **No-Write by default**: 오너가 GO를 주기 전에는 파일을 수정하지 않는다.
+- **Plan Gate**: 코드 변경 전, 변경 파일 목록 / 검증 방법 / 리스크를 먼저 제시한다.
+- **SSOT 우선**: 티켓 상태 변경은 tickets/T-###.md에서만 수행한다. TASKS.md는 인덱스(정본 아님).
+- **append-only**: 티켓/기록은 완료 후에도 삭제/축약하지 않는다. 추가만 한다.
+- **AI는 DONE 불가**: DONE은 오너만 확정. AI는 READY_FOR_REVIEW까지만 이동 가능.
 
-```
-jojo (텔레그램) → VPS 봇 (Python) → claude -p (subprocess) → jsonbin.io PUT
-                                                                    ↑
-가족 웹앱 (HTML) ← jsonbin.io GET (30초 폴링) ←─────────────────────┘
-```
+## SSOT 규칙
+- 티켓 정본: `tickets/T-###.md` -- 상태(Status) 변경은 여기서만
+- 스토리 정본: `stories/S-###.md`
+- 인덱스(정본 아님): `TASKS.md`, `STORIES.md`
+- 지속 규범 변경: `DECISIONS.md`에 기록
+- 상태 변경 순서: SSOT 파일 먼저 -> 인덱스는 동기화 대상
+
+## Two-Stage Approval (CODE/HYBRID 필수)
+- Code PR(`work/T-###`) -> 오너 verify -> Closeout PR(`closeout/T-###`) -> 오너 merge = DONE
+- Closeout PR에는 문서/상태/Evidence만 포함 (기능 코드 변경 금지)
+- Merge Gate: main 반영(merge) 전에는 DONE 처리/요청 금지
+
+## Review Pack + Evidence (READY_FOR_REVIEW 필수)
+Review Pack 최소 항목:
+- Scope (변경 범위 요약)
+- Changed files (수정 파일 목록)
+- How to verify (검증 절차)
+- Self-check results (RULES.md 기준)
+- Risks & rollback
+
+Evidence: 오너가 1분 내 검증 가능한 증거 (PR 링크, 실행 로그, 스크린샷 등)
+
+## 에이전트 역할
+
+| 역할 | 담당 | 권한 |
+|---|---|---|
+| Owner (조조) | 우선순위 결정, 최종 승인 | GO/NO-GO, PR merge, DONE 확정 |
+| Team Lead | 전체 조율, 계획 수립, 티켓 관리 | 티켓 생성, 상태 이동(DONE 제외) |
+| Dev | 기능 구현, 버그 수정 | 코드 변경, PR 생성 |
+| QA | 코드 리뷰, 테스트, 품질 검수 | Review Pack 검증 |
+
+## 오너 키워드
+- `PLAN`: 구현 없이 계획/옵션/리스크만 제시
+- `GO`: 제시한 Plan 기준으로 구현 진행
+- `NO-GO`: 작업 중단, 대안 제시
+
+## 커밋 컨벤션
+- `feat:` 새 기능
+- `fix:` 버그 수정
+- `docs:` 문서 변경
+- `refactor:` 리팩토링
+- `chore:` 빌드/설정 변경
+
+## 브랜치 규칙
+- `main`: 안정 브랜치
+- `work/T-###`: 티켓 작업 브랜치 (티켓 1개 = 브랜치 1개)
+- `closeout/T-###`: 서류 마감용 (문서/상태만)
+
+## 파일/폴더 생성 규칙
+- `src/`: 소스코드 (봇, 핸들러, 클라이언트 등)
+- `docs/`: 구현 세부사항, 데이터 구조, 디자인 시스템 등 문서
+- `scripts/`: 유틸리티 스크립트
+- `tests/`: 테스트 코드
+- `tickets/`: 티켓 정본 (SSOT)
+- `stories/`: 스토리 정본 (SSOT)
+
+## 폴더 삭제 규칙
+- 폴더 단위 삭제(rm -rf)는 실행 전 오너에게 "어떤 폴더를, 왜 삭제하는지" 보고 후 승인 받는다
+- 예외: __pycache__/, .venv/, dist/, build/ 등 재생성 가능한 빌드 산출물은 자유롭게 삭제 가능
 
 ## 기술 스택
-
-- **Python 3.10+**: 메인 언어
-- **python-telegram-bot v20+**: 텔레그램 봇 (async)
-- **subprocess**: Claude CLI 호출 (`claude -p "..." --output-format text`)
-- **requests**: jsonbin.io HTTP 통신
-- **python-dotenv**: 환경 변수 (.env)
-- **logging**: 표준 로깅 (print 사용 금지)
-
-## 프로젝트 구조
-
-```
-gyeongju-bot/
-├── CLAUDE.md              # 이 파일
-├── bot.py                 # 텔레그램 봇 메인 (엔트리포인트)
-├── claude_handler.py      # Claude CLI subprocess 래퍼
-├── jsonbin_client.py      # jsonbin.io GET/PUT 클라이언트
-├── prompts.py             # Claude 시스템 프롬프트 템플릿
-├── webapp/
-│   ├── index.html         # 가족용 모바일 웹앱
-│   └── api/
-│       ├── data.js        # jsonbin GET 프록시 (Vercel serverless)
-│       └── save.js        # jsonbin PUT 프록시 (Vercel serverless)
-├── ref-image/             # UI 디자인 레퍼런스 이미지
-│   ├── takt1.png          # 메인 플레이어: 디바이스 하우징, LED 디스플레이, 컨트롤
-│   ├── takt2.png          # 설정 패널: 컬러 스와치, 토글 그룹, 라이선스
-│   └── takt3.png          # 전체 구성: 타이머 + 설정 나란히, 가격/접근 레이아웃
-├── tests/
-│   ├── test_claude_handler.py
-│   ├── test_jsonbin_client.py
-│   └── test_bot.py
-├── requirements.txt
-├── .env.example
-├── gyeongju-bot.service   # systemd 서비스 파일
-└── README.md
-```
+- Python 3.10+ / python-telegram-bot v20+ (async)
+- Anthropic API (Tool Use) -- 여행 데이터 CRUD
+- jsonbin.io -- 여행 데이터 저장소
+- Vercel -- 웹앱 호스팅 (serverless API)
+- python-dotenv / logging
 
 ## 코딩 규칙
-
-- 한국어 주석, 영어 코드 (변수명·함수명 영어)
+- 한국어 주석/docstring, 영어 코드 (변수명/함수명)
 - snake_case (함수, 변수), UPPER_SNAKE_CASE (상수)
 - 네트워크 호출은 반드시 try/except + 타임아웃
-- 모든 credential은 환경 변수로 관리 (.env)
-- 코드에 API 키, 토큰 등 하드코딩 절대 금지
-- 로깅은 logging 모듈 사용, 레벨: INFO 기본, 에러 시 ERROR
+- 모든 credential은 환경 변수로 관리 (.env), 하드코딩 금지
+- 로깅은 logging 모듈 사용 (print 금지), 기본 레벨 INFO
 - 타입 힌트 사용 권장
-- docstring 한국어로 작성
-
-## 환경 변수 (.env)
-
-```
-TELEGRAM_BOT_TOKEN=        # @BotFather에서 발급
-JSONBIN_BIN_ID=698aa0ec43b1c97be973168e
-JSONBIN_API_KEY=           # jsonbin.io Master Key
-ALLOWED_USER_IDS=          # 쉼표 구분, jojo의 Telegram user ID
-```
-
-## 핵심 데이터 흐름
-
-1. jojo가 텔레그램에 메시지 전송 (예: "내일 점심 복길로 확정")
-2. `bot.py`가 메시지 수신, 허용된 user ID인지 확인
-3. `jsonbin_client.py`로 현재 JSON 데이터를 jsonbin.io에서 GET
-4. `claude_handler.py`가 Claude CLI를 subprocess로 호출:
-   - 시스템 프롬프트 (prompts.py) + 현재 JSON + 사용자 메시지
-   - `claude -p "{전체 프롬프트}" --output-format text`
-5. Claude 응답 파싱:
-   - ```json 코드블록이 있으면 → JSON 변경 → jsonbin PUT → "✅ 업데이트 완료"
-   - 코드블록 없으면 → 조회/추천 응답 → 그대로 텔레그램 전송
-6. 에러 시 → "⚠️ 처리 중 문제가 발생했어요" + 로그 기록
-
-## 가족 정보 (프롬프트에 포함할 컨텍스트)
-
-- **인원**: 아버지(당뇨 관리중), 어머니(운전 담당), jojo, 아내, 히로(27개월 아기, 밀/계란 알러지)
-- **숙소**: 까사멜로우 (경주 북군동)
-- **특별 일정**: 2/22(일) 대구국제마라톤 풀코스 (jojo 참가)
-- **여행 기간**: 2026.02.19(목) ~ 02.24(화), 5박 6일
-
-## JSON 데이터 구조
-
-```json
-{
-  "meta": {
-    "lastUpdated": "2026-02-10T09:00:00+09:00",
-    "updateNote": "초기 데이터"
-  },
-  "days": [
-    {
-      "date": "2026-02-19",
-      "dow": "목",
-      "dayNum": 1,
-      "title": "출발 & 도착",
-      "items": [
-        {
-          "id": "d1_dinner",
-          "time": "18:00~",
-          "cat": "meal",
-          "title": "저녁 식사",
-          "options": [
-            {
-              "name": "반월성한우",
-              "menu": "한우 구이",
-              "dad": "good",
-              "hiro": "caution",
-              "hiroNote": "반찬 확인"
-            }
-          ],
-          "chosen": "",
-          "status": "planned",
-          "note": ""
-        }
-      ]
-    }
-  ],
-  "reference": {
-    "distances": [],
-    "contacts": [],
-    "shopping": []
-  }
-}
-```
-
-### status 값: "planned" | "done" | "skipped"
-### cat 값: "activity" | "meal" | "cafe"
-### dad/hiro 값: "good" | "caution"
-
-## 봇 명령어 예시
-
-| 사용자 입력 | 동작 | JSON 변경 |
-|---|---|---|
-| "내일 점심 복길로 확정" | d2_lunch.chosen = "복길" | ✅ |
-| "대릉원 다녀왔어" | d2_daereungwon.status = "done" | ✅ |
-| "교촌마을 패스" | d2_gyochon.status = "skipped" | ✅ |
-| "불국사 주차 무료였어" | d3_bulguksa.note += "주차 무료" | ✅ |
-| "오늘 일정 알려줘" | 해당 날짜 items 요약 | ❌ (조회만) |
-| "아버지한테 괜찮은 저녁?" | dad:"good" 옵션 추천 | ❌ (조회만) |
-
-## 항목 ID 전체 목록
-
-Day 1: d1_move, d1_shop, d1_checkin, d1_dinner, d1_donggung
-Day 2: d2_daereungwon, d2_lunch, d2_gyochon, d2_cafe, d2_dinner, d2_donggung
-Day 3: d3_bulguksa, d3_lunch, d3_cafe, d3_dinner, d3_prep
-Day 4: d4_depart, d4_marathon, d4_family_wait, d4_dinner
-Day 5: d5_bomun, d5_lunch, d5_cafe, d5_donggungwon, d5_dinner
-Day 6: d6_checkout, d6_museum, d6_lunch, d6_return
-
-## UI/UX Design System
-
-### Design Reference
-All UI design references are stored in `/ref-image/`.
-These images define the visual language for this project.
-
-### Core Design Principles
-- **Hardware Skeuomorphism**: UI should feel like a premium physical device (think Braun/Dieter Rams)
-- **Dot-Matrix LED Display**: Primary data readouts use pixel/monospace font on dark backgrounds
-- **Warm Neutral Palette**: Base is light gray (#E5E5E5), device housing is white with soft shadows
-- **Accent Color**: Orange (#E85D2A) for active indicators only — use very sparingly
-- **Control Metaphors**: Buttons look like physical toggles (embossed), sliders look like VU meters
-- **Typography Split**: Serif (Didone family) for hero headlines, monospace/pixel font for device UI
-- **Color Swatches**: Muted palette — cream, olive, lavender, charcoal, white
-- **Active State**: Black fill with white text. Inactive: white/light fill with dark text
-- **Minimal Color**: Almost monochrome. Color only appears in swatches and the orange accent
-
-### Component Patterns
-1. **Device Card**: White rounded container with dark screen area + control buttons below
-2. **Settings Panel**: White card with labeled sections in SMALL CAPS monospace
-3. **Toggle Group**: Row of 2-3 buttons, one black (active), rest white (inactive)
-4. **Level Meter**: Horizontal bar with fine tick marks and orange position indicator
-5. **Circular Knob**: Small volume-style control with label below
-6. **Status Badge**: Small colored text (e.g., green "ACTIVATED", orange "RE/DY")
-
-### Reference Images
-Before making any UI changes, always review the images in `/ref-image/` directory.
-Each image shows a different aspect of the target design:
-- takt1.png: Main player interface, device housing, LED display, controls
-- takt2.png: Settings/maintenance panel, color swatches, toggle groups
-- takt3.png: Full composition with timer + settings side by side, pricing/access layout

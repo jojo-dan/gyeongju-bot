@@ -4,8 +4,13 @@ jsonbin_client 모듈 테스트.
 mock을 사용하여 실제 jsonbin.io API를 호출하지 않고 테스트한다.
 """
 
+import os
+import sys
 import unittest
 from unittest.mock import patch, MagicMock
+
+# src/ 디렉토리를 모듈 경로에 추가
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), "src"))
 
 from jsonbin_client import JsonBinClient, JsonBinError, KST
 

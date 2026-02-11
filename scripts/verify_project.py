@@ -8,7 +8,10 @@ import importlib
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# 프로젝트 루트와 src/ 경로 설정
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_project_root = os.path.dirname(_script_dir)
+sys.path.insert(0, os.path.join(_project_root, "src"))
 
 PASS = "\u2705"
 FAIL = "\u274C"
@@ -31,9 +34,10 @@ def check(desc, cond, detail=""):
 
 # [1] 파일 구조
 print("\n[1/6] 파일 구조 검증")
-root = os.path.dirname(os.path.abspath(__file__))
+root = _project_root
 for f in [
-    "bot.py", "claude_handler.py", "jsonbin_client.py", "prompts.py",
+    "src/bot.py", "src/claude_handler.py", "src/jsonbin_client.py", "src/prompts.py",
+    "src/claude_api_handler.py", "src/tool_definitions.py", "src/tool_executor.py",
     "requirements.txt", ".env.example", "gyeongju-bot.service", "README.md",
     "webapp/index.html", "tests/__init__.py", "tests/test_bot.py",
     "tests/test_claude_handler.py", "tests/test_jsonbin_client.py",

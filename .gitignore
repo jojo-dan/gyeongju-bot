@@ -1,6 +1,26 @@
+# 환경 변수
 .env
+.env.local
+.env.*.local
+
+# Python
 __pycache__/
 *.pyc
+*.egg-info/
+.venv/
+venv/
+
+# 테스트/커버리지
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# 타입 체크
+.mypy_cache/
+
+# OS
 .DS_Store
+
+# Vercel
 .vercel/
-.vercel
