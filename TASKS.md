@@ -17,15 +17,15 @@
 
 ### TODO
 - T-002 [S-001] (P1) (AI) 코드 구조 공동 검토 (deps: T-001)
-- T-003 [S-001] (P1) (AI) 거리 표시 기능 기획 + 구현 (deps: T-001)
 
 ### BACKLOG
 
 ### IN_PROGRESS
 
 ### READY_FOR_REVIEW
-- [T-001](tickets/T-001.md) [S-001] (P0) (AI) 웹앱 지도 뷰 + 관리 기능 제거
+- [T-003](tickets/T-003.md) [S-001] (P1) (AI) 웹앱 사용자 위치 기반 거리 표시 (deps: T-001)
 
 ### CHANGES_REQUESTED
 
 ### DONE
+- [T-001](tickets/T-001.md) [S-001] (P0) (AI) 웹앱 지도 뷰 + 관리 기능 제거 — PR #1 merged

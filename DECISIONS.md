@@ -14,6 +14,18 @@
 
 ## Log
 
+### D-20260211-003: 카카오 SDK 제거
+- **Decision**: 카카오 Maps SDK `<script>` 태그를 webapp/index.html에서 제거한다.
+- **Rationale**: T-001에서 "Places API용으로 유지"했으나, T-003에서 좌표를 JSON에 사전 저장하는 방식을 채택하면서 런타임 API 호출이 불필요해졌다. SDK 로드에 따른 불필요한 네트워크 요청과 번들 크기를 줄인다.
+- **Impact**: webapp/index.html에서 카카오 SDK 참조 삭제. S-001.md AC 3번 업데이트 필요.
+- **Rollback**: `<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=...&libraries=services">` 태그 복원.
+
+### D-20260211-002: 좌표 데이터 사전 저장 방식 채택
+- **Decision**: 런타임 카카오 Places API 검색 대신, 여행 JSON의 option 스키마에 lat/lng 필드를 추가하고 빌드타임에 좌표를 사전 수집한다.
+- **Rationale**: 장소가 고정적(~30개)이므로 런타임 API 호출 0회, 검색어 불일치 리스크 제거, 완전 클라이언트 사이드 거리 계산 가능.
+- **Impact**: option 스키마에 lat/lng 필드 추가, collect_coords.py 스크립트 신규 생성, tool_definitions.py 업데이트.
+- **Rollback**: option에서 lat/lng 필드 제거, collect_coords.py 삭제.
+
 ### D-20260211-001: 프로젝트 구조 개편 -- 거버넌스 문서 체계 도입
 - **Decision**: Python 소스를 `src/`로 배치하고, agent-team-dashboard 수준의 거버넌스 문서 체계(AGENTS.md, RULES.md, DECISIONS.md, tickets/, stories/)를 도입한다.
 - **Rationale**: 코드와 문서의 체계적 관리를 위해 검증된 SSOT/티켓 운영 모델을 적용한다. agent-team-dashboard에서 확립한 운영 체계를 Python 프로젝트 맥락으로 재사용한다.
