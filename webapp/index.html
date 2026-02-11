@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>경주 가족여행</title>
 <meta property="og:title" content="경주 가족여행 2026">
-<meta property="og:description" content="2026.02.19~24 경주 가족여행 일정 · 식당 · 관광지 · 지도">
+<meta property="og:description" content="2026.02.19~24 경주 가족여행 일정 · 식당 · 관광지">
 <meta property="og:image" content="https://gyeongju-trip.vercel.app/og-image.png">
 <meta property="og:url" content="https://gyeongju-trip.vercel.app">
 <meta property="og:type" content="website">
@@ -46,7 +46,6 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  padding-bottom: 72px;
 }
 
 /* ═══ HEADER ═══ */
@@ -200,37 +199,6 @@ body {
   color: var(--display-dim);
 }
 
-/* ═══ CONTROL ROW ═══ */
-.control-row {
-  display: flex;
-  padding: 0 12px 12px;
-  gap: 6px;
-}
-.ctrl-btn {
-  flex: 1;
-  padding: 12px;
-  background: var(--bg);
-  border: none;
-  border-radius: var(--radius-btn);
-  font-family: var(--system);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-mid);
-  cursor: pointer;
-  box-shadow: var(--shadow-btn);
-  transition: all 0.1s ease;
-  min-height: 44px;
-}
-.ctrl-btn:active {
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
-  transform: translateY(1px);
-}
-.ctrl-btn.active {
-  background: var(--text);
-  color: #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-
 /* ═══ LEVEL METER (Day Progress) ═══ */
 .level-meter {
   padding: 0 16px 16px;
@@ -379,155 +347,6 @@ body {
   margin-bottom: 3px;
 }
 
-/* ═══ ADMIN BAR ═══ */
-.admin-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--housing);
-  border-top: 1px solid var(--border);
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  z-index: 200;
-}
-.admin-bar button {
-  padding: 12px 24px;
-  background: var(--bg);
-  color: var(--text-mid);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-btn);
-  font-family: var(--system);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: var(--shadow-btn);
-  transition: all 0.1s;
-  min-height: 44px;
-}
-.admin-bar button:active {
-  box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
-}
-.admin-bar button.active-admin {
-  background: var(--text);
-  color: #fff;
-  border-color: var(--text);
-}
-.admin-bar .admin-status {
-  font-family: var(--system);
-  font-size: 13px;
-  color: #16A34A;
-  font-weight: 600;
-}
-
-/* ═══ EDIT CONTROLS (Admin) ═══ */
-.edit-controls {
-  padding: 10px 12px 12px;
-  border-top: 1px solid var(--border);
-}
-.edit-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.edit-row label {
-  font-family: var(--system);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-light);
-  min-width: 44px;
-}
-.edit-row select, .edit-row input {
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-btn);
-  font-family: var(--system);
-  font-size: 14px;
-  flex: 1;
-  min-width: 0;
-  background: var(--bg);
-  min-height: 44px;
-}
-.edit-row select:focus, .edit-row input:focus {
-  border-color: var(--text);
-  outline: none;
-}
-.save-btn {
-  width: 100%;
-  padding: 12px;
-  background: var(--text);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-btn);
-  font-family: var(--system);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 4px;
-  min-height: 44px;
-}
-.save-btn:active { opacity: 0.8; }
-
-/* ═══ PIN MODAL ═══ */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(4px);
-  z-index: 300;
-  align-items: center;
-  justify-content: center;
-}
-.modal-overlay.show { display: flex; }
-.modal {
-  background: var(--housing);
-  border-radius: var(--radius-device);
-  padding: 28px 24px;
-  width: 280px;
-  text-align: center;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
-}
-.modal h3 {
-  font-family: var(--system);
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: var(--text);
-}
-.modal input {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-btn);
-  font-family: var(--mono);
-  font-size: 24px;
-  text-align: center;
-  letter-spacing: 12px;
-  margin-bottom: 12px;
-  background: var(--bg);
-}
-.modal input:focus { border-color: var(--text); outline: none; }
-.modal .modal-buttons { display: flex; gap: 8px; }
-.modal .modal-buttons button {
-  flex: 1;
-  padding: 14px;
-  border: none;
-  border-radius: var(--radius-btn);
-  font-family: var(--system);
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  min-height: 44px;
-}
-.modal .btn-cancel { background: var(--bg); color: var(--text-mid); }
-.modal .btn-confirm { background: var(--text); color: #fff; }
-.modal .error-msg { color: #DC2626; font-family: var(--system); font-size: 13px; margin-top: 4px; }
-
 /* ═══ LOADING ═══ */
 .loading {
   text-align: center;
@@ -613,81 +432,6 @@ body {
   color: var(--text-mid);
 }
 
-/* ═══ MAP VIEW ═══ */
-.map-container {
-  background: var(--housing);
-  border-radius: var(--radius-device);
-  box-shadow: var(--shadow-device);
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-.map-screen {
-  background: var(--display);
-  margin: 12px;
-  border-radius: var(--radius-display);
-  position: relative;
-  overflow: hidden;
-}
-.map-screen #kakaoMap {
-  width: 100%;
-  height: 300px;
-}
-/* scanline 제거 - 지도 마커 가림 방지 */
-.map-place-list {
-  padding: 8px 12px 12px;
-}
-.map-place-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  background: var(--item-bg);
-  border-radius: 8px;
-  margin-bottom: 6px;
-  cursor: pointer;
-  transition: background 0.15s;
-  font-family: var(--system);
-}
-.map-place-item:active {
-  background: var(--border);
-}
-.map-place-num {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--accent);
-  color: #fff;
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.map-place-num.done { background: #22C55E; }
-.map-place-num.skipped { background: #EF4444; }
-.map-place-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--item-text);
-  flex: 1;
-}
-.map-place-time {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--item-text-dim);
-}
-.map-loading {
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--display-dim);
-  font-family: var(--system);
-  font-size: 14px;
-}
-
 /* ═══ SPEAKER GRILLE (decorative) ═══ */
 .grille {
   display: inline-grid;
@@ -727,45 +471,17 @@ body {
       </div>
     </div>
   </div>
-
-  <div class="admin-bar">
-    <button id="mapBtn" onclick="toggleMapView()">지도</button>
-    <button id="adminBtn" onclick="toggleAdmin()">관리</button>
-    <span id="adminStatus"></span>
-  </div>
-</div>
-
-<!-- PIN 모달 -->
-<div class="modal-overlay" id="pinModal">
-  <div class="modal">
-    <h3>비밀번호 입력</h3>
-    <input type="password" id="pinInput" maxlength="4" inputmode="numeric" pattern="[0-9]*">
-    <div class="error-msg" id="pinError"></div>
-    <div class="modal-buttons">
-      <button class="btn-cancel" onclick="closePinModal()">취소</button>
-      <button class="btn-confirm" onclick="checkPin()">확인</button>
-    </div>
-  </div>
 </div>
 
 <!-- 토스트 -->
 <div class="toast" id="toast"></div>
 
 <script>
-const ADMIN_PIN = '4545';
 const POLL_INTERVAL = 30000;
 
 let travelData = null;
 let activeDay = 0;
-let isAdmin = false;
-let isMapView = false;
 let pollTimer = null;
-let kakaoMap = null;
-let mapMarkers = [];
-let mapPolyline = null;
-let mapInfoWindow = null;
-const coordsCache = {}; // 장소명 → {lat, lng} 캐시
-const GYEONGJU_CENTER = { lat: 35.8562, lng: 129.2247 };
 
 // 앱 시작
 (function init() {
@@ -789,32 +505,11 @@ async function fetchData() {
   }
 }
 
-async function saveData() {
-  try {
-    travelData.meta.lastUpdated = new Date().toISOString();
-    const res = await fetch('/api/save', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(travelData)
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    showToast('저장 완료');
-    render();
-  } catch (e) {
-    showToast('저장 실패');
-    console.error('save error:', e);
-  }
-}
-
 function render() {
   if (!travelData) return;
   updateHeader();
   renderTabs();
-  if (isMapView) {
-    renderMapView();
-  } else {
-    renderDayContent();
-  }
+  renderDayContent();
 }
 
 function updateHeader() {
@@ -849,7 +544,7 @@ function renderTabs() {
     const tab = document.createElement('div');
     tab.className = 'day-tab' + (idx === activeDay ? ' active' : '');
     tab.innerHTML = `${day.dayNum}일차<span class="tab-date">${formatTabDate(day.date, day.dow)}</span>`;
-    tab.onclick = () => { activeDay = idx; renderTabs(); if (isMapView) renderMapView(); else renderDayContent(); };
+    tab.onclick = () => { activeDay = idx; renderTabs(); renderDayContent(); };
     tabs.appendChild(tab);
   });
   const activeTab = tabs.querySelector('.active');
@@ -861,7 +556,6 @@ function renderDayContent() {
   const day = travelData.days[activeDay];
   if (!day) { area.innerHTML = '<div class="loading">데이터 없음</div>'; return; }
 
-  // 진행률 계산
   const totalItems = day.items.length;
   const doneItems = day.items.filter(i => i.status === 'done' || i.status === 'skipped').length;
   const progress = totalItems > 0 ? (doneItems / totalItems * 100) : 0;
@@ -895,8 +589,8 @@ function renderDayContent() {
 
   // 일정 아이템 카드들
   html += '<div class="items-list">';
-  day.items.forEach((item, itemIdx) => {
-    html += renderItemCard(item, itemIdx);
+  day.items.forEach((item) => {
+    html += renderItemCard(item);
   });
   html += '</div>';
 
@@ -908,7 +602,7 @@ function renderDayContent() {
   area.innerHTML = html;
 }
 
-function renderItemCard(item, itemIdx) {
+function renderItemCard(item) {
   const catLabel = { meal: '식사', cafe: '카페', activity: '관광' };
   const titleClass = item.status === 'skipped' ? ' skipped' : '';
 
@@ -951,7 +645,7 @@ function renderItemCard(item, itemIdx) {
     html += '</div>';
   }
 
-  html += '</div>'; // item-display 닫기
+  html += '</div>'; // item-display
 
   // 메모
   if (item.note) {
@@ -961,51 +655,8 @@ function renderItemCard(item, itemIdx) {
     html += '</div>';
   }
 
-  // 관리자 편집 UI
-  if (isAdmin) {
-    html += renderEditControls(item, itemIdx);
-  }
-
   html += '</div>';
   return html;
-}
-
-function renderEditControls(item, itemIdx) {
-  let html = '<div class="edit-controls">';
-
-  html += '<div class="edit-row">';
-  html += '<label>상태</label>';
-  html += `<select onchange="updateItemField(${activeDay}, ${itemIdx}, 'status', this.value)">`;
-  const statusLabel = { planned: '예정', done: '완료', skipped: '건너뜀' };
-  ['planned', 'done', 'skipped'].forEach(s => {
-    html += `<option value="${s}"${item.status === s ? ' selected' : ''}>${statusLabel[s]}</option>`;
-  });
-  html += '</select></div>';
-
-  if (item.options && item.options.length > 0) {
-    html += '<div class="edit-row">';
-    html += '<label>선택</label>';
-    html += `<select onchange="updateItemField(${activeDay}, ${itemIdx}, 'chosen', this.value)">`;
-    html += `<option value="">—</option>`;
-    item.options.forEach(opt => {
-      html += `<option value="${escapeAttr(opt.name)}"${item.chosen === opt.name ? ' selected' : ''}>${opt.name}</option>`;
-    });
-    html += '</select></div>';
-  }
-
-  html += '<div class="edit-row">';
-  html += '<label>메모</label>';
-  html += `<input type="text" value="${escapeAttr(item.note || '')}" onchange="updateItemField(${activeDay}, ${itemIdx}, 'note', this.value)" placeholder="메모 입력...">`;
-  html += '</div>';
-
-  html += `<button class="save-btn" onclick="saveData()">변경사항 저장</button>`;
-  html += '</div>';
-  return html;
-}
-
-function updateItemField(dayIdx, itemIdx, field, value) {
-  if (!travelData) return;
-  travelData.days[dayIdx].items[itemIdx][field] = value;
 }
 
 function renderReference(ref) {
@@ -1030,46 +681,6 @@ function renderReference(ref) {
   html += '</div>';
   return html;
 }
-
-// 관리자 모드
-function toggleAdmin() {
-  if (isAdmin) {
-    isAdmin = false;
-    document.getElementById('adminBtn').classList.remove('active-admin');
-    document.getElementById('adminStatus').textContent = '';
-    render();
-  } else {
-    openPinModal();
-  }
-}
-
-function openPinModal() {
-  document.getElementById('pinModal').classList.add('show');
-  document.getElementById('pinInput').value = '';
-  document.getElementById('pinError').textContent = '';
-  setTimeout(() => document.getElementById('pinInput').focus(), 100);
-}
-
-function closePinModal() {
-  document.getElementById('pinModal').classList.remove('show');
-}
-
-function checkPin() {
-  const pin = document.getElementById('pinInput').value;
-  if (pin === ADMIN_PIN) {
-    isAdmin = true;
-    closePinModal();
-    document.getElementById('adminBtn').classList.add('active-admin');
-    document.getElementById('adminStatus').textContent = '활성화';
-    render();
-  } else {
-    document.getElementById('pinError').textContent = '잘못된 비밀번호';
-  }
-}
-
-document.getElementById('pinInput').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') checkPin();
-});
 
 // 유틸
 function formatDateTime(d) {
@@ -1109,248 +720,6 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2000);
-}
-
-// ═══ 지도 기능 ═══
-
-function toggleMapView() {
-  isMapView = !isMapView;
-  const btn = document.getElementById('mapBtn');
-  if (isMapView) {
-    btn.classList.add('active-admin');
-  } else {
-    btn.classList.remove('active-admin');
-    kakaoMap = null;
-  }
-  render();
-}
-
-function renderMapView() {
-  const area = document.getElementById('contentArea');
-  const day = travelData.days[activeDay];
-  if (!day) return;
-
-  // 장소 목록 추출
-  const places = extractPlaces(day);
-
-  let html = '<div class="map-container">';
-  html += '<div class="map-screen"><div id="kakaoMap"><div class="map-loading">지도 불러오는 중...</div></div></div>';
-  html += '<div class="map-place-list">';
-  const catIcon = { meal: '🍽', cafe: '☕', activity: '📍' };
-  places.forEach((p, i) => {
-    const statusCls = p.status === 'done' ? ' done' : p.status === 'skipped' ? ' skipped' : '';
-    const dimStyle = p.isGeneric ? ' style="opacity:0.5"' : '';
-    html += `<div class="map-place-item"${dimStyle} onclick="panToPlace(${i})">`;
-    html += `<span class="map-place-num${statusCls}">${i + 1}</span>`;
-    html += `<span class="map-place-name">${catIcon[p.cat] || ''} ${escapeHtml(p.name)}</span>`;
-    html += `<span class="map-place-time">${p.time || ''}</span>`;
-    html += '</div>';
-  });
-  html += '</div></div>';
-
-  area.innerHTML = html;
-
-  // 카카오맵 초기화 (DOM 렌더링 후)
-  setTimeout(() => initKakaoMap(places), 100);
-}
-
-// 검색 불가능한 일반 활동 키워드
-const SKIP_KEYWORDS = ['이동', '출발', '도착', '체크인', '체크아웃', '정착', '준비', '마라톤', '대기', '복귀'];
-
-function extractPlaces(day) {
-  const places = [];
-  day.items.forEach(item => {
-    // 일반 활동(이동, 체크인 등)은 스킵
-    const isGeneric = SKIP_KEYWORDS.some(kw => item.title.includes(kw));
-
-    let name = '';
-    let searchQuery = '';
-
-    if (item.chosen && item.options) {
-      const opt = item.options.find(o => o.name === item.chosen);
-      if (opt) { name = opt.name; searchQuery = '경주 ' + opt.name; }
-    }
-    if (!name && item.options && item.options.length > 0) {
-      name = item.options[0].name;
-      searchQuery = '경주 ' + item.options[0].name;
-    }
-    if (!name) {
-      name = item.title;
-      if (!isGeneric) searchQuery = '경주 ' + item.title;
-    }
-
-    places.push({
-      name: name,
-      title: item.title,
-      time: item.time || '',
-      status: item.status,
-      cat: item.cat,
-      searchQuery: searchQuery, // 빈 문자열이면 검색 스킵
-      isGeneric: isGeneric && !searchQuery
-    });
-  });
-  return places;
-}
-
-// 숙소 고정 좌표
-const ACCOMMODATION = { lat: 35.8428, lng: 129.2155, name: '까사멜로우 (숙소)' };
-
-function initKakaoMap(places) {
-  const container = document.getElementById('kakaoMap');
-  if (!container || typeof kakao === 'undefined') {
-    console.error('카카오맵 SDK 로드 실패');
-    return;
-  }
-
-  const center = new kakao.maps.LatLng(GYEONGJU_CENTER.lat, GYEONGJU_CENTER.lng);
-  kakaoMap = new kakao.maps.Map(container, { center: center, level: 7 });
-  mapMarkers = [];
-  mapInfoWindow = null;
-
-  // 숙소 마커 (항상 표시)
-  addAccommodationMarker();
-
-  // 검색 가능한 장소만 필터
-  const searchablePlaces = places.map((p, i) => ({ ...p, originalIdx: i })).filter(p => p.searchQuery);
-
-  if (searchablePlaces.length === 0) {
-    // 검색할 장소 없으면 숙소 중심
-    kakaoMap.setCenter(new kakao.maps.LatLng(ACCOMMODATION.lat, ACCOMMODATION.lng));
-    kakaoMap.setLevel(5);
-    return;
-  }
-
-  const ps = new kakao.maps.services.Places();
-  const coords = new Array(places.length).fill(null);
-  let resolved = 0;
-  const total = searchablePlaces.length;
-
-  searchablePlaces.forEach(place => {
-    const idx = place.originalIdx;
-
-    // 캐시 확인
-    if (coordsCache[place.searchQuery]) {
-      coords[idx] = coordsCache[place.searchQuery];
-      resolved++;
-      if (resolved === total) drawMarkers(places, coords);
-      return;
-    }
-
-    ps.keywordSearch(place.searchQuery, function(data, searchStatus) {
-      if (searchStatus === kakao.maps.services.Status.OK && data.length > 0) {
-        const result = data[0];
-        const c = { lat: parseFloat(result.y), lng: parseFloat(result.x), placeName: result.place_name };
-        coordsCache[place.searchQuery] = c;
-        coords[idx] = c;
-        console.log(`[지도] "${place.searchQuery}" → ${result.place_name}`);
-      } else {
-        console.warn(`[지도] "${place.searchQuery}" 검색 실패`);
-        coords[idx] = null;
-      }
-      resolved++;
-      if (resolved === total) drawMarkers(places, coords);
-    }, { location: center, radius: 30000, size: 1 });
-  });
-}
-
-function addAccommodationMarker() {
-  const pos = new kakao.maps.LatLng(ACCOMMODATION.lat, ACCOMMODATION.lng);
-  const content = `<div style="
-    padding:4px 10px;border-radius:20px;
-    background:#1A1A1A;color:#fff;
-    font-family:-apple-system,sans-serif;font-size:12px;font-weight:600;
-    box-shadow:0 2px 8px rgba(0,0,0,0.3);
-    white-space:nowrap;
-  ">🏠 ${ACCOMMODATION.name}</div>`;
-  const overlay = new kakao.maps.CustomOverlay({
-    position: pos,
-    content: content,
-    yAnchor: 1.3
-  });
-  overlay.setMap(kakaoMap);
-}
-
-function drawMarkers(places, coords) {
-  if (!kakaoMap) return;
-  const bounds = new kakao.maps.LatLngBounds();
-  const pathCoords = [];
-  mapMarkers = new Array(places.length).fill(null);
-
-  // 숙소도 bounds에 포함
-  bounds.extend(new kakao.maps.LatLng(ACCOMMODATION.lat, ACCOMMODATION.lng));
-
-  let foundCount = 0;
-  places.forEach((place, idx) => {
-    const c = coords[idx];
-    if (!c) return;
-    foundCount++;
-
-    const position = new kakao.maps.LatLng(c.lat, c.lng);
-    bounds.extend(position);
-    pathCoords.push(position);
-
-    // 마커 색상
-    let color = '#E85D2A';
-    if (place.status === 'done') color = '#22C55E';
-    else if (place.status === 'skipped') color = '#EF4444';
-
-    // 카테고리 아이콘
-    const catIcon = { meal: '🍽', cafe: '☕', activity: '📍' };
-    const icon = catIcon[place.cat] || '📍';
-
-    // 커스텀 마커 (번호 + 장소명)
-    const markerContent = `<div style="display:flex;flex-direction:column;align-items:center;">
-      <div style="
-        padding:4px 10px;border-radius:16px;
-        background:${color};color:#fff;
-        font-family:-apple-system,sans-serif;font-size:13px;font-weight:700;
-        box-shadow:0 2px 8px rgba(0,0,0,0.3);
-        white-space:nowrap;
-      ">${icon} ${escapeHtml(place.name)}</div>
-      <div style="
-        width:0;height:0;
-        border-left:6px solid transparent;
-        border-right:6px solid transparent;
-        border-top:8px solid ${color};
-      "></div>
-    </div>`;
-
-    const overlay = new kakao.maps.CustomOverlay({
-      position: position,
-      content: markerContent,
-      yAnchor: 1
-    });
-    overlay.setMap(kakaoMap);
-    mapMarkers[idx] = { overlay, position, place, coord: c };
-  });
-
-  // 동선 라인
-  if (pathCoords.length >= 2) {
-    if (mapPolyline) mapPolyline.setMap(null);
-    mapPolyline = new kakao.maps.Polyline({
-      path: pathCoords,
-      strokeWeight: 3,
-      strokeColor: '#E85D2A',
-      strokeOpacity: 0.6,
-      strokeStyle: 'dashed'
-    });
-    mapPolyline.setMap(kakaoMap);
-  }
-
-  // 범위 조정
-  kakaoMap.setBounds(bounds, 50, 50, 50, 50);
-
-  console.log(`[지도] ${foundCount}/${places.length} 장소 표시 완료`);
-}
-
-function panToPlace(idx) {
-  if (!kakaoMap || !mapMarkers[idx]) {
-    showToast('위치 정보 없음');
-    return;
-  }
-  const m = mapMarkers[idx];
-  kakaoMap.setLevel(4);
-  kakaoMap.panTo(m.position);
 }
 </script>
 </body>

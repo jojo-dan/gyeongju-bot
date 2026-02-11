@@ -13,3 +13,4 @@
 
 | Story | Status | Linked tickets | Notes |
 |-------|--------|----------------|-------|
+| [S-001](stories/S-001.md) | IN_PROGRESS | T-001, T-002, T-003 | 웹앱 단순화 — 일정 전용 뷰어로 정리 |
