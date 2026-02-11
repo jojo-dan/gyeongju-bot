@@ -65,3 +65,9 @@ python3 -m unittest discover tests/ -v
 - 봇 경로: `/home/ubuntu/gyeongju-bot`
 - 서비스: `systemctl restart gyeongju-bot`
 - venv: `/home/ubuntu/gyeongju-bot/venv/bin/python3 src/bot.py`
+
+### 배포 규칙
+- push와 배포는 분리한다. main 머지가 자동 배포를 트리거하지 않는다.
+- 배포 절차: `ssh → cd → git pull origin main → pip install -r requirements.txt (변경 시) → systemctl restart gyeongju-bot`
+- 배포 전 로컬에서 테스트 통과를 확인한다 (`python3 -m unittest discover tests/ -v`).
+- 핫픽스 배포 시에도 동일 절차를 따르되, 사후 티켓을 24시간 내 작성한다.
