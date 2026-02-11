@@ -2,6 +2,7 @@
 
 Anthropic Messages API의 tools 파라미터에 전달할 도구 목록을 정의한다.
 읽기 도구 5개, 쓰기 도구 7개, 메타 도구 1개로 총 13개의 도구를 포함한다.
+옵션 스키마에 lat/lng 좌표 필드를 포함한다.
 """
 
 TOOLS = [
@@ -232,6 +233,14 @@ TOOLS = [
                             "items": {"type": "string"},
                             "description": "태그",
                         },
+                        "lat": {
+                            "type": "number",
+                            "description": "위도 (latitude)",
+                        },
+                        "lng": {
+                            "type": "number",
+                            "description": "경도 (longitude)",
+                        },
                     },
                 },
             },
@@ -289,6 +298,14 @@ TOOLS = [
                                 "type": "string",
                                 "description": "히로 알러지 관련 메모",
                             },
+                            "lat": {
+                                "type": "number",
+                                "description": "위도 (latitude)",
+                            },
+                            "lng": {
+                                "type": "number",
+                                "description": "경도 (longitude)",
+                            },
                         },
                         "required": ["name"],
                     },
@@ -328,6 +345,14 @@ TOOLS = [
                 "hiroNote": {
                     "type": "string",
                     "description": "히로 알러지 관련 메모",
+                },
+                "lat": {
+                    "type": "number",
+                    "description": "위도 (latitude)",
+                },
+                "lng": {
+                    "type": "number",
+                    "description": "경도 (longitude)",
                 },
             },
             "required": ["item_id", "name"],

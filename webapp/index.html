@@ -12,7 +12,6 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=5612fbbe8c2401ba1497a119c2c44a7c&libraries=services"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -399,6 +398,117 @@ body {
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
+/* ═══ LOCATION BANNER ═══ */
+.location-banner {
+  max-width: 420px;
+  margin: 0 auto 16px;
+  padding: 0 16px;
+}
+.location-banner .banner-device {
+  background: var(--housing);
+  border-radius: var(--radius-device);
+  box-shadow: var(--shadow-device);
+  overflow: hidden;
+}
+.location-banner .screen {
+  background: var(--display);
+  margin: 12px;
+  border-radius: var(--radius-display);
+  padding: 20px 16px;
+  text-align: center;
+}
+.location-banner .screen p {
+  font-family: var(--system);
+  font-size: 15px;
+  color: var(--display-text);
+  line-height: 1.6;
+}
+.location-banner .banner-buttons {
+  display: flex;
+  gap: 10px;
+  padding: 0 12px 12px;
+}
+.location-banner .btn-primary {
+  flex: 1;
+  padding: 12px 0;
+  font-family: var(--system);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--text);
+  border: none;
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  min-height: 44px;
+  box-shadow: var(--shadow-btn);
+  transition: opacity 0.15s;
+}
+.location-banner .btn-primary:active { opacity: 0.8; }
+.location-banner .btn-secondary {
+  flex: 1;
+  padding: 12px 0;
+  font-family: var(--system);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-mid);
+  background: var(--housing);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  min-height: 44px;
+  transition: opacity 0.15s;
+}
+.location-banner .btn-secondary:active { opacity: 0.8; }
+
+/* ═══ ITEM DISTANCE ═══ */
+.item-distance {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--item-text-dim);
+  margin-top: 4px;
+  letter-spacing: 0.2px;
+}
+.item-distance.nearby {
+  color: var(--accent);
+  font-weight: 600;
+}
+.item-distance.far-away {
+  color: var(--text-light);
+}
+
+/* ═══ OPTION DISTANCE ═══ */
+.option-distance {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--item-text-dim);
+  float: right;
+  margin-left: 8px;
+}
+.option-distance.nearby {
+  color: var(--accent);
+}
+
+/* ═══ REFRESH BUTTON ═══ */
+.refresh-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  padding: 4px 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer;
+  margin-top: 6px;
+  transition: opacity 0.15s;
+  min-height: 28px;
+}
+.refresh-btn:active { opacity: 0.7; }
+.refresh-btn.visible { display: inline-block; }
+
 /* ═══ REFERENCE ═══ */
 .reference-section {
   margin-top: 8px;
@@ -457,6 +567,20 @@ body {
       <span id="tripStatus">2026.02.19 — 02.24</span>
     </div>
     <div class="update-time" id="updateTime"></div>
+    <button class="refresh-btn" id="refreshBtn" onclick="requestLocation()">위치 갱신</button>
+  </div>
+
+  <!-- 위치 안내 배너 -->
+  <div class="location-banner" id="locationBanner" style="display:none;">
+    <div class="banner-device">
+      <div class="screen">
+        <p>위치를 켜면 각 장소까지<br>거리를 확인할 수 있습니다</p>
+      </div>
+      <div class="banner-buttons">
+        <button class="btn-primary" onclick="requestLocation()">위치 켜기</button>
+        <button class="btn-secondary" onclick="dismissLocationBanner()">괜찮습니다</button>
+      </div>
+    </div>
   </div>
 
   <div class="error-banner" id="errorBanner"></div>
@@ -619,12 +743,36 @@ function renderItemCard(item) {
   // 제목
   html += `<div class="item-title${titleClass}">${item.title}</div>`;
 
+  // 거리 행 (위치 활성화 시)
+  if (userLat && item.options && item.options.length > 0) {
+    const distInfo = getItemDistance(item);
+    if (distInfo && distInfo.km < 50) {
+      const fmt = formatDistance(distInfo.km);
+      html += `<div class="item-distance ${fmt.cls}">${fmt.text}</div>`;
+    } else if (distInfo && distInfo.km >= 50) {
+      html += `<div class="item-distance far-away">${formatDistance(distInfo.km).text}</div>`;
+    }
+  }
+
   // 옵션 목록
   if (item.options && item.options.length > 0) {
+    // 50km 이상이면 개별 거리 숨김
+    const showOptionDist = userLat && !(getItemDistance(item) && getItemDistance(item).km >= 50);
+    const multipleOptions = item.options.length >= 2;
+
     html += '<div class="options-list">';
     item.options.forEach(opt => {
       const isChosen = item.chosen && item.chosen === opt.name;
       html += `<div class="option-item${isChosen ? ' chosen' : ''}">`;
+
+      // 옵션별 소형 거리 (옵션 2개 이상일 때)
+      if (showOptionDist && multipleOptions && opt.lat && opt.lng) {
+        const optKm = haversineDistance(userLat, userLng, opt.lat, opt.lng);
+        const optCls = optKm < 1 ? ' nearby' : '';
+        const optText = optKm < 1 ? optKm.toFixed(1) + 'km' : (optKm < 5 ? optKm.toFixed(1) + 'km' : Math.round(optKm) + 'km');
+        html += `<span class="option-distance${optCls}">${optText}</span>`;
+      }
+
       html += `<span class="option-name">${opt.name}</span>`;
       if (opt.menu) html += ` <span class="option-menu">— ${opt.menu}</span>`;
       if (isChosen) html += ` <span class="chosen-tag">확정</span>`;
@@ -721,6 +869,146 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2000);
 }
+
+// ═══ 위치 / 거리 기능 ═══
+
+let userLat = null;
+let userLng = null;
+let locationTimestamp = 0;
+let gpsWarningShown = false;
+
+const GEO_OPTIONS = {
+  enableHighAccuracy: false,
+  timeout: 10000,
+  maximumAge: 300000
+};
+
+// 위치 배너 표시 (페이지 로드 1초 후)
+function initLocationBanner() {
+  // HTTPS 아닌 환경 또는 Geolocation 미지원 시 배너 미표시
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') return;
+  if (!navigator.geolocation) return;
+  // 이미 거부한 경우 미표시
+  if (localStorage.getItem('gj_location_dismissed') === 'true') return;
+
+  setTimeout(() => {
+    document.getElementById('locationBanner').style.display = '';
+  }, 1000);
+}
+
+// [위치 켜기] 클릭
+function requestLocation() {
+  if (!navigator.geolocation) {
+    showToast('이 브라우저에서 위치를 사용할 수 없습니다');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      userLat = pos.coords.latitude;
+      userLng = pos.coords.longitude;
+      locationTimestamp = Date.now();
+
+      // 배너 숨김
+      document.getElementById('locationBanner').style.display = 'none';
+
+      // 갱신 버튼 표시
+      document.getElementById('refreshBtn').classList.add('visible');
+
+      // GPS 정확도 경고 (500m 이상, 1회만)
+      if (pos.coords.accuracy > 500 && !gpsWarningShown) {
+        gpsWarningShown = true;
+        showToast('위치가 정확하지 않을 수 있습니다');
+      }
+
+      updateDistances();
+    },
+    (err) => {
+      if (err.code === err.TIMEOUT) {
+        showToast('위치를 가져올 수 없습니다');
+      } else if (err.code === err.PERMISSION_DENIED) {
+        document.getElementById('locationBanner').style.display = 'none';
+      } else {
+        showToast('위치를 가져올 수 없습니다');
+      }
+    },
+    GEO_OPTIONS
+  );
+}
+
+// [괜찮습니다] 클릭
+function dismissLocationBanner() {
+  localStorage.setItem('gj_location_dismissed', 'true');
+  document.getElementById('locationBanner').style.display = 'none';
+}
+
+// Haversine 거리 계산 (km)
+function haversineDistance(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+    + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
+    * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+// 거리 포맷
+function formatDistance(km) {
+  if (km >= 50) return { text: '현재 경주 근처가 아닙니다', cls: 'far-away' };
+  if (km < 1) {
+    const walkMin = Math.round((km * 1000) / 67);
+    return { text: '도보 약 ' + walkMin + '분 (' + km.toFixed(1) + 'km)', cls: 'nearby' };
+  }
+  const driveMin = Math.round(km / 30 * 60);
+  if (km < 5) return { text: '약 ' + km.toFixed(1) + 'km · 차량 약 ' + driveMin + '분', cls: '' };
+  return { text: '약 ' + Math.round(km) + 'km · 차량 약 ' + driveMin + '분', cls: '' };
+}
+
+// 아이템 대표 거리 계산 (chosen 옵션 우선, 없으면 가장 가까운 옵션)
+function getItemDistance(item) {
+  if (!userLat || !item.options || item.options.length === 0) return null;
+
+  // 좌표가 있는 옵션만 필터
+  const withCoords = item.options.filter(o => o.lat && o.lng);
+  if (withCoords.length === 0) return null;
+
+  // chosen 옵션이 좌표가 있으면 우선
+  if (item.chosen) {
+    const chosen = withCoords.find(o => o.name === item.chosen);
+    if (chosen) {
+      return { km: haversineDistance(userLat, userLng, chosen.lat, chosen.lng), name: chosen.name };
+    }
+  }
+
+  // 가장 가까운 옵션
+  let closest = null;
+  let minKm = Infinity;
+  withCoords.forEach(o => {
+    const km = haversineDistance(userLat, userLng, o.lat, o.lng);
+    if (km < minKm) { minKm = km; closest = o; }
+  });
+  return closest ? { km: minKm, name: closest.name } : null;
+}
+
+// 거리 업데이트 (렌더링 재실행)
+function updateDistances() {
+  if (travelData) renderDayContent();
+  showToast('위치 업데이트됨');
+}
+
+// visibilitychange: 30분 경과 시 자동 갱신
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (!userLat) return;
+  if (Date.now() - locationTimestamp > 1800000) {
+    requestLocation();
+  }
+});
+
+// 페이지 로드 후 배너 초기화
+document.addEventListener('DOMContentLoaded', initLocationBanner);
 </script>
 </body>
 </html>
