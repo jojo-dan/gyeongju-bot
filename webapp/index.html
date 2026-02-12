@@ -1007,8 +1007,32 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// 페이지 로드 후 배너 초기화
-document.addEventListener('DOMContentLoaded', initLocationBanner);
+// 테스트 위치 오버라이드 (?testloc=1 → 까사멜로우)
+function applyTestLocation() {
+  const params = new URLSearchParams(location.search);
+  if (params.get('testloc') !== '1') return false;
+
+  userLat = 35.8428;
+  userLng = 129.2155;
+  locationTimestamp = Date.now();
+
+  document.getElementById('locationBanner').style.display = 'none';
+  document.getElementById('refreshBtn').classList.add('visible');
+
+  const indicator = document.createElement('div');
+  indicator.className = 'update-time';
+  indicator.style.color = 'var(--accent)';
+  indicator.textContent = '테스트 위치: 까사멜로우 (숙소)';
+  document.querySelector('.header').appendChild(indicator);
+
+  if (travelData) renderDayContent();
+  return true;
+}
+
+// 페이지 로드 후 초기화
+document.addEventListener('DOMContentLoaded', () => {
+  if (!applyTestLocation()) initLocationBanner();
+});
 </script>
 </body>
 </html>
