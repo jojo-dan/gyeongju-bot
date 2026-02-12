@@ -41,10 +41,10 @@ REQUEST_TIMEOUT = 15
 KNOWN_COORDS: dict[str, dict] = {
     # --- 식당 ---
     "온목당": {
-        "lat": 35.8378,
-        "lng": 129.2088,
+        "lat": 35.836964367595144,
+        "lng": 129.20943524662704,
         "address": "경주시 사정로57번길 6 1층",
-        "note": "주소 확인 (다이닝코드/114), 좌표는 향화정 기반 추정",
+        "note": "triple.guide 공식 좌표 (geolocation)",
     },
     "복길 경주본점": {
         "lat": 35.8343,
