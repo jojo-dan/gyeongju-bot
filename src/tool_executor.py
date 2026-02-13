@@ -238,7 +238,7 @@ def _handle_get_item_detail(ctx: ExecutionContext, inp: dict) -> dict:
         return {"error": f"아이템을 찾을 수 없습니다: {item_id}"}
     day, item = found
 
-    return {
+    result = {
         "dayNum": day.get("dayNum"),
         "date": day.get("date"),
         "id": item.get("id"),
@@ -250,6 +250,9 @@ def _handle_get_item_detail(ctx: ExecutionContext, inp: dict) -> dict:
         "status": item.get("status", "planned"),
         "note": item.get("note", ""),
     }
+    if "guide" in item:
+        result["guide"] = copy.deepcopy(item["guide"])
+    return result
 
 
 @_register("get_trip_summary")
