@@ -822,6 +822,16 @@ var allRestaurants = [];
 var restSortMode = 'rating'; // 'rating' | 'distance'
 var userLat = null, userLng = null;
 
+// 테스트 위치 오버라이드 (?testloc=1 → 까사멜로우)
+(function() {
+  var params = new URLSearchParams(location.search);
+  if (params.get('testloc') === '1') {
+    userLat = 35.8579382;
+    userLng = 129.262038;
+    restSortMode = 'distance';
+  }
+})();
+
 function extractRestaurants(days) {
   var map = {};
   days.forEach(function(day) {
