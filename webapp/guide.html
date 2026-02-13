@@ -135,27 +135,13 @@ body {
   border-color: var(--text);
 }
 
-/* ═══ SECTION HEADER (Device Display) ═══ */
+/* ═══ SECTION HEADER (Full-bleed Dark) ═══ */
 .section-device {
-  background: var(--housing);
+  background: var(--display);
   border-radius: var(--radius-device);
   box-shadow: var(--shadow-device);
-  margin-bottom: 12px;
-}
-.section-screen {
-  background: var(--display);
-  margin: 12px;
-  border-radius: var(--radius-display);
   padding: 20px 16px;
-  position: relative;
-}
-.section-screen::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: var(--radius-display);
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-  pointer-events: none;
+  margin-bottom: 12px;
 }
 .section-label {
   font-family: var(--mono);
@@ -179,7 +165,7 @@ body {
   margin-top: 4px;
 }
 
-/* ═══ OVERVIEW: DAY CARD ═══ */
+/* ═══ OVERVIEW: DAY CARD (Accordion) ═══ */
 .day-overview {
   background: var(--housing);
   border-radius: var(--radius-device);
@@ -187,11 +173,17 @@ body {
   margin-bottom: 10px;
   overflow: hidden;
 }
-.day-overview-header {
+.day-overview summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 14px 16px;
+}
+.day-overview summary::-webkit-details-marker { display: none; }
+.day-overview-summary-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px 10px;
 }
 .day-overview-num {
   font-family: var(--mono);
@@ -206,23 +198,35 @@ body {
   color: var(--text-light);
 }
 .day-overview-title {
-  padding: 0 16px 4px;
   font-family: var(--system);
   font-size: 17px;
   font-weight: 700;
   color: var(--item-text);
+  margin-top: 4px;
 }
 .day-overview-keyword {
-  padding: 0 16px 12px;
   font-family: var(--system);
   font-size: 13px;
   color: var(--text-light);
+  margin-top: 2px;
+}
+.day-overview-chevron {
+  font-size: 12px;
+  color: var(--text-light);
+  transition: transform 0.15s;
+  margin-left: 8px;
+}
+.day-overview[open] .day-overview-chevron {
+  transform: rotate(90deg);
 }
 .day-overview-items {
   padding: 0 16px 14px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  border-top: 1px solid var(--border);
+  margin-top: 0;
+  padding-top: 12px;
 }
 .day-item-row {
   display: flex;
@@ -258,7 +262,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ═══ PLACE GUIDE ═══ */
+/* ═══ PLACE GUIDE (Accordion) ═══ */
 .place-card {
   background: var(--housing);
   border-radius: var(--radius-device);
@@ -266,8 +270,17 @@ body {
   margin-bottom: 12px;
   overflow: hidden;
 }
-.place-header {
-  padding: 16px 16px 10px;
+.place-card > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 16px 16px 14px;
+}
+.place-card > summary::-webkit-details-marker { display: none; }
+.place-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .place-name {
   font-family: var(--system);
@@ -275,14 +288,29 @@ body {
   font-weight: 700;
   color: var(--item-text);
 }
+.place-chevron {
+  font-size: 12px;
+  color: var(--text-light);
+  transition: transform 0.15s;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+.place-card[open] .place-chevron {
+  transform: rotate(90deg);
+}
 .place-subtitle {
   font-family: var(--system);
   font-size: 13px;
   color: var(--text-light);
   margin-top: 2px;
 }
+.place-body {
+  border-top: 1px solid var(--border);
+  margin: 0 16px;
+  padding-top: 14px;
+}
 .place-section {
-  padding: 0 16px 14px;
+  padding: 0 0 14px;
 }
 .place-section-label {
   font-family: var(--mono);
@@ -341,6 +369,7 @@ body {
   gap: 4px 10px;
   font-family: var(--system);
   font-size: 13px;
+  padding-bottom: 4px;
 }
 .practical-label {
   color: var(--text-light);
@@ -692,22 +721,25 @@ function render() {
 // ═══ ① OVERVIEW ═══
 function renderOverviewSection(days) {
   let html = '<div id="overview">';
-  html += '<div class="section-device"><div class="section-screen">';
+  html += '<div class="section-device">';
   html += '<div class="section-label">OVERVIEW</div>';
   html += '<div class="section-title">일정 한눈에 보기</div>';
   html += '<div class="section-subtitle">6일간의 여행 요약</div>';
-  html += '</div></div>';
+  html += '</div>';
 
   days.forEach(function(day) {
-    html += '<div class="day-overview">';
-    html += '<div class="day-overview-header">';
+    html += '<details class="day-overview">';
+    html += '<summary>';
+    html += '<div class="day-overview-summary-row">';
     html += '<span class="day-overview-num">DAY ' + day.dayNum + '</span>';
-    html += '<span class="day-overview-date">' + formatDate(day.date) + ' ' + day.dow + '</span>';
+    html += '<span style="display:flex;align-items:center"><span class="day-overview-date">' + formatDate(day.date) + ' ' + day.dow + '</span>';
+    html += '<span class="day-overview-chevron">\u25B8</span></span>';
     html += '</div>';
     html += '<div class="day-overview-title">' + esc(day.title) + '</div>';
     if (day.keyword) {
       html += '<div class="day-overview-keyword">' + esc(day.keyword) + '</div>';
     }
+    html += '</summary>';
     html += '<div class="day-overview-items">';
     day.items.forEach(function(item) {
       var icon = item.cat === 'meal' ? '\uD83C\uDF7D' : item.cat === 'cafe' ? '\u2615' : '\uD83C\uDFDB';
@@ -726,7 +758,7 @@ function renderOverviewSection(days) {
       }
       html += '</div>';
     });
-    html += '</div></div>';
+    html += '</div></details>';
   });
   html += '</div>';
   return html;
@@ -735,11 +767,11 @@ function renderOverviewSection(days) {
 // ═══ ② PLACES GUIDE ═══
 function renderPlacesSection(days) {
   var html = '<div id="places" style="margin-top:20px">';
-  html += '<div class="section-device"><div class="section-screen">';
+  html += '<div class="section-device">';
   html += '<div class="section-label">PLACES</div>';
   html += '<div class="section-title">장소 가이드</div>';
   html += '<div class="section-subtitle">주요 관광지 · 아이 동반 팁</div>';
-  html += '</div></div>';
+  html += '</div>';
 
   // 고유 장소 추출 (guide 필드가 있는 activity)
   var seen = {};
@@ -755,11 +787,15 @@ function renderPlacesSection(days) {
 
   places.forEach(function(item) {
     var g = item.guide;
-    html += '<div class="place-card">';
-    html += '<div class="place-header">';
-    html += '<div class="place-name">' + esc(item.title) + '</div>';
-    if (g.subtitle) html += '<div class="place-subtitle">' + esc(g.subtitle) + '</div>';
+    html += '<details class="place-card">';
+    html += '<summary>';
+    html += '<div class="place-summary-row">';
+    html += '<span class="place-name">' + esc(item.title) + '</span>';
+    html += '<span class="place-chevron">\u25B8</span>';
     html += '</div>';
+    if (g.subtitle) html += '<div class="place-subtitle">' + esc(g.subtitle) + '</div>';
+    html += '</summary>';
+    html += '<div class="place-body">';
 
     // Must-Do
     if (g.mustDo && g.mustDo.length > 0) {
@@ -831,7 +867,8 @@ function renderPlacesSection(days) {
       html += '</div></div>';
     }
 
-    html += '</div>';
+    html += '</div>'; // place-body
+    html += '</details>';
   });
 
   html += '</div>';
@@ -841,11 +878,11 @@ function renderPlacesSection(days) {
 // ═══ ③ RESTAURANTS ═══
 function renderRestaurantSection(days) {
   var html = '<div id="restaurants" style="margin-top:20px">';
-  html += '<div class="section-device"><div class="section-screen">';
+  html += '<div class="section-device">';
   html += '<div class="section-label">RESTAURANTS</div>';
   html += '<div class="section-title">식당 가이드</div>';
   html += '<div class="section-subtitle">별점 · 메뉴 · 가격 · 알레르기 정보</div>';
-  html += '</div></div>';
+  html += '</div>';
 
   days.forEach(function(day) {
     day.items.forEach(function(item) {
