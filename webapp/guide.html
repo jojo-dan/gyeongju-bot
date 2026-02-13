@@ -381,104 +381,123 @@ body {
 }
 
 /* ═══ RESTAURANT GUIDE ═══ */
-.meal-group {
-  background: var(--housing);
-  border-radius: var(--radius-device);
-  box-shadow: var(--shadow-device);
-  margin-bottom: 12px;
-  overflow: hidden;
-}
-.meal-group-header {
-  padding: 14px 16px 10px;
+.sort-bar {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  gap: 0;
+  margin-bottom: 12px;
 }
-.meal-group-day {
+.sort-btn {
+  flex: 1 1 0;
+  padding: 8px 0;
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 0.5px;
+  color: var(--text-mid);
+  background: var(--housing);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  text-align: center;
+  min-height: 36px;
+  transition: all 0.15s;
 }
-.meal-group-time {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text-light);
+.sort-btn:first-child { border-radius: var(--radius-btn) 0 0 var(--radius-btn); }
+.sort-btn:last-child { border-radius: 0 var(--radius-btn) var(--radius-btn) 0; }
+.sort-btn:not(:first-child) { border-left: none; }
+.sort-btn.active {
+  background: var(--text);
+  color: #fff;
+  border-color: var(--text);
 }
 
-/* Primary restaurant */
-.restaurant-primary {
-  margin: 0 12px 12px;
-  padding: 14px;
-  background: var(--item-bg);
-  border-radius: var(--radius-display);
-  border-left: 3px solid var(--accent);
+/* Restaurant card (accordion) */
+.rest-card {
+  background: var(--housing);
+  border-radius: var(--radius-device);
+  box-shadow: var(--shadow-device);
+  margin-bottom: 10px;
+  overflow: hidden;
 }
-.rest-top-row {
+.rest-card > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 14px 16px;
+}
+.rest-card > summary::-webkit-details-marker { display: none; }
+.rest-summary-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .rest-name {
   font-family: var(--system);
   font-size: 16px;
   font-weight: 700;
   color: var(--item-text);
+  flex: 1;
 }
 .rest-rating {
   font-family: var(--mono);
   font-size: 14px;
   font-weight: 600;
   color: var(--accent);
+  margin-left: 8px;
 }
-.rest-rating-source {
-  font-family: var(--mono);
-  font-size: 10px;
+.rest-chevron {
+  font-size: 12px;
   color: var(--text-light);
-  margin-left: 2px;
+  transition: transform 0.15s;
+  margin-left: 8px;
+  flex-shrink: 0;
 }
-.rest-category {
+.rest-card[open] .rest-chevron {
+  transform: rotate(90deg);
+}
+.rest-summary-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
   font-family: var(--system);
   font-size: 13px;
   color: var(--text-light);
-  margin-bottom: 8px;
 }
-.rest-chosen-tag {
-  display: inline-block;
+.rest-menu-brief {
+  color: var(--item-text-mid);
+}
+.rest-open-tag {
   font-family: var(--mono);
   font-size: 11px;
-  font-weight: 700;
-  color: #1A6B1A;
-  background: #DEF7E5;
-  border-radius: 4px;
+  font-weight: 600;
   padding: 2px 6px;
-  margin-left: 6px;
+  border-radius: 3px;
 }
-.rest-menu-list {
-  margin-bottom: 8px;
-}
-.rest-menu-item {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--system);
-  font-size: 13px;
-  color: var(--item-text-mid);
-  padding: 2px 0;
-}
-.rest-menu-price {
+.rest-open-tag.open { background: #DEF7E5; color: #1A6B1A; }
+.rest-open-tag.closed { background: #FEE2E2; color: #C53030; }
+.rest-open-tag.unknown { background: var(--item-bg); color: var(--text-light); }
+.rest-distance {
   font-family: var(--mono);
   font-size: 12px;
   color: var(--text-light);
-  white-space: nowrap;
-  margin-left: 8px;
+}
+
+/* Restaurant body (expanded) */
+.rest-body {
+  border-top: 1px solid var(--border);
+  margin: 0 16px;
+  padding: 14px 0;
 }
 .rest-info-row {
   font-family: var(--system);
-  font-size: 12px;
+  font-size: 13px;
+  color: var(--item-text-mid);
+  padding: 3px 0;
+}
+.rest-info-label {
+  font-weight: 600;
   color: var(--text-light);
-  padding: 2px 0;
+  margin-right: 6px;
 }
 .rest-badges {
   display: flex;
@@ -498,6 +517,12 @@ body {
 .badge-dad-caution { background: #FDE8E0; color: #C04A1A; }
 .badge-hiro-good { background: #DBEAFE; color: #1D4ED8; }
 .badge-hiro-caution { background: #FEE2E2; color: #C53030; }
+.rest-meals-list {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-light);
+}
 .rest-map-link {
   display: inline-block;
   margin-top: 8px;
@@ -508,90 +533,6 @@ body {
   text-decoration: none;
   border-bottom: 1px solid var(--border);
   padding-bottom: 1px;
-}
-
-/* Alternative restaurants (accordion) */
-.rest-alternatives {
-  margin: 0 12px 12px;
-}
-.rest-alternatives summary {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-mid);
-  cursor: pointer;
-  padding: 8px 0;
-  list-style: none;
-  user-select: none;
-}
-.rest-alternatives summary::-webkit-details-marker { display: none; }
-.rest-alternatives summary::before {
-  content: '\25B8';
-  display: inline-block;
-  margin-right: 6px;
-  transition: transform 0.15s;
-}
-.rest-alternatives[open] summary::before {
-  transform: rotate(90deg);
-}
-.rest-alt-item {
-  background: var(--item-bg);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 8px;
-}
-.rest-alt-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-.rest-alt-name {
-  font-family: var(--system);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--item-text);
-}
-.rest-alt-rating {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--accent);
-}
-.rest-alt-menu {
-  font-family: var(--system);
-  font-size: 13px;
-  color: var(--item-text-mid);
-  margin-bottom: 4px;
-}
-.rest-alt-price {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text-light);
-  margin-bottom: 6px;
-}
-.rest-alt-badges {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-.rest-alt-map-link {
-  display: inline-block;
-  margin-top: 6px;
-  font-family: var(--system);
-  font-size: 11px;
-  color: var(--text-mid);
-  text-decoration: none;
-  border-bottom: 1px solid var(--border);
-}
-
-/* ═══ CAFE SECTION IN RESTAURANT GUIDE ═══ */
-.cafe-primary {
-  margin: 0 12px 12px;
-  padding: 14px;
-  background: var(--item-bg);
-  border-radius: var(--radius-display);
-  border-left: 3px solid #8B6F47;
 }
 
 /* ═══ FOOTER ═══ */
@@ -876,158 +817,214 @@ function renderPlacesSection(days) {
 }
 
 // ═══ ③ RESTAURANTS ═══
-function renderRestaurantSection(days) {
-  var html = '<div id="restaurants" style="margin-top:20px">';
-  html += '<div class="section-device">';
-  html += '<div class="section-label">RESTAURANTS</div>';
-  html += '<div class="section-title">식당 가이드</div>';
-  html += '<div class="section-subtitle">별점 · 메뉴 · 가격 · 알레르기 정보</div>';
-  html += '</div>';
 
+var allRestaurants = [];
+var restSortMode = 'rating'; // 'rating' | 'distance'
+var userLat = null, userLng = null;
+
+function extractRestaurants(days) {
+  var map = {};
   days.forEach(function(day) {
     day.items.forEach(function(item) {
       if (item.cat !== 'meal' && item.cat !== 'cafe') return;
-      if (!item.options || item.options.length === 0) return;
-
-      var primary = null;
-      var alternatives = [];
-
-      if (item.chosen) {
-        item.options.forEach(function(opt) {
-          if (opt.name === item.chosen) primary = opt;
-          else alternatives.push(opt);
-        });
-        if (!primary) { primary = item.options[0]; alternatives = item.options.slice(1); }
-      } else {
-        primary = item.options[0];
-        alternatives = item.options.slice(1);
-      }
-
-      html += '<div class="meal-group">';
-      html += '<div class="meal-group-header">';
-      html += '<span class="meal-group-day">DAY ' + day.dayNum + ' ' + esc(item.time) + '</span>';
-      html += '<span class="meal-group-time">' + esc(item.title) + '</span>';
-      html += '</div>';
-
-      // Primary
-      html += renderPrimaryRestaurant(primary, item.chosen === primary.name, item.cat);
-
-      // Alternatives
-      if (alternatives.length > 0) {
-        html += '<details class="rest-alternatives">';
-        html += '<summary>다른 선택지 ' + alternatives.length + '곳</summary>';
-        alternatives.forEach(function(alt) {
-          html += renderAltRestaurant(alt);
-        });
-        html += '</details>';
-      }
-
-      html += '</div>';
+      if (!item.options) return;
+      item.options.forEach(function(opt) {
+        var key = opt.name;
+        if (!key) return;
+        if (!map[key]) {
+          map[key] = {
+            name: opt.name,
+            menu: opt.menu || opt.desc || '',
+            hours: opt.hours || '',
+            loc: opt.loc || '',
+            lat: opt.lat || null,
+            lng: opt.lng || null,
+            dad: opt.dad || '',
+            dadNote: opt.dadNote || '',
+            hiro: opt.hiro || '',
+            hiroNote: opt.hiroNote || '',
+            rating: opt.rating || null,
+            ratingSource: opt.ratingSource || '',
+            priceRange: opt.priceRange || '',
+            menuDetail: opt.menuDetail || null,
+            mapUrl: opt.mapUrl || '',
+            category: opt.category || '',
+            cat: item.cat,
+            meals: [],
+            distKm: null
+          };
+        }
+        map[key].meals.push('Day ' + day.dayNum + ' ' + (item.time || ''));
+        // Merge missing data from other appearances
+        if (!map[key].hours && opt.hours) map[key].hours = opt.hours;
+        if (!map[key].lat && opt.lat) { map[key].lat = opt.lat; map[key].lng = opt.lng; }
+        if (!map[key].rating && opt.rating) map[key].rating = opt.rating;
+      });
     });
   });
-
-  html += '</div>';
-  return html;
+  return Object.values(map);
 }
 
-function renderPrimaryRestaurant(opt, isChosen, cat) {
-  var cls = cat === 'cafe' ? 'cafe-primary' : 'restaurant-primary';
-  var html = '<div class="' + cls + '">';
-
-  // Top row: name + rating
-  html += '<div class="rest-top-row">';
-  html += '<span class="rest-name">' + esc(opt.name);
-  if (isChosen) html += '<span class="rest-chosen-tag">확정</span>';
-  html += '</span>';
-  if (opt.rating) {
-    html += '<span class="rest-rating">' + opt.rating.toFixed(1);
-    if (opt.ratingSource) html += '<span class="rest-rating-source">' + opt.ratingSource + '</span>';
-    html += '</span>';
-  }
-  html += '</div>';
-
-  // Category
-  if (opt.category) {
-    html += '<div class="rest-category">' + esc(opt.category) + '</div>';
-  } else if (opt.desc) {
-    html += '<div class="rest-category">' + esc(opt.desc) + '</div>';
-  }
-
-  // Menu detail (if available)
-  if (opt.menuDetail && opt.menuDetail.length > 0) {
-    html += '<div class="rest-menu-list">';
-    opt.menuDetail.forEach(function(m) {
-      html += '<div class="rest-menu-item">';
-      html += '<span>' + esc(m.item) + '</span>';
-      if (m.price) html += '<span class="rest-menu-price">' + formatPrice(m.price) + '</span>';
-      html += '</div>';
+function sortRestaurants(list) {
+  if (restSortMode === 'distance' && userLat) {
+    list.forEach(function(r) {
+      r.distKm = (r.lat && r.lng) ? haversineKm(userLat, userLng, r.lat, r.lng) : 9999;
     });
-    html += '</div>';
-  } else if (opt.menu) {
-    html += '<div class="rest-info-row" style="color:var(--item-text-mid)">' + esc(opt.menu) + '</div>';
+    list.sort(function(a, b) { return a.distKm - b.distKm; });
+  } else {
+    // Sort by rating (desc), then by name
+    list.sort(function(a, b) {
+      var ra = a.rating || 0, rb = b.rating || 0;
+      if (rb !== ra) return rb - ra;
+      return a.name.localeCompare(b.name);
+    });
   }
+  return list;
+}
 
-  // Price range
-  if (opt.priceRange) {
-    html += '<div class="rest-info-row">가격대 ' + esc(opt.priceRange) + '</div>';
+function haversineKm(lat1, lng1, lat2, lng2) {
+  var R = 6371;
+  var dLat = (lat2 - lat1) * Math.PI / 180;
+  var dLng = (lng2 - lng1) * Math.PI / 180;
+  var a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+    + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
+    * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function parseOpenClosed(hoursStr) {
+  if (!hoursStr) return { status: 'unknown', label: '' };
+  // Try HH:MM~HH:MM pattern
+  var m = hoursStr.match(/(\d{1,2}):?(\d{2})?\s*[~\-]\s*(\d{1,2}):?(\d{2})?/);
+  if (!m) return { status: 'unknown', label: hoursStr };
+  var openH = parseInt(m[1]);
+  var openM = m[2] ? parseInt(m[2]) : 0;
+  var closeH = parseInt(m[3]);
+  var closeM = m[4] ? parseInt(m[4]) : 0;
+  var now = new Date();
+  var nowMin = now.getHours() * 60 + now.getMinutes();
+  var openMin = openH * 60 + openM;
+  var closeMin = closeH * 60 + closeM;
+  if (nowMin >= openMin && nowMin < closeMin) {
+    return { status: 'open', label: '영업 중' };
+  } else {
+    return { status: 'closed', label: '영업 종료' };
   }
+}
 
-  // Hours
-  if (opt.hours) {
-    html += '<div class="rest-info-row">' + esc(opt.hours) + '</div>';
-  }
+function renderRestaurantSection(days) {
+  allRestaurants = extractRestaurants(days);
+  allRestaurants = sortRestaurants(allRestaurants);
 
-  // Location
-  if (opt.loc) {
-    html += '<div class="rest-info-row">' + esc(opt.loc) + '</div>';
-  }
+  var html = '<div id="restaurants" style="margin-top:20px">';
+  html += '<div class="section-device">';
+  html += '<div class="section-label">RESTAURANTS</div>';
+  html += '<div class="section-title">식당 · 카페 가이드</div>';
+  html += '<div class="section-subtitle">' + allRestaurants.length + '곳 · 메뉴 · 알레르기 정보</div>';
+  html += '</div>';
 
-  // Badges
-  var badges = buildBadges(opt);
-  if (badges) html += '<div class="rest-badges">' + badges + '</div>';
+  // Sort bar
+  html += '<div class="sort-bar">';
+  html += '<button class="sort-btn' + (restSortMode === 'rating' ? ' active' : '') + '" onclick="changeRestSort(\'rating\')">별점순</button>';
+  html += '<button class="sort-btn' + (restSortMode === 'distance' ? ' active' : '') + '" onclick="changeRestSort(\'distance\')">' + (userLat ? '거리순' : '거리순 (위치 필요)') + '</button>';
+  html += '</div>';
 
-  // Map link
-  if (opt.mapUrl) {
-    html += '<a class="rest-map-link" href="' + escAttr(opt.mapUrl) + '" target="_blank" rel="noopener">지도에서 보기 \u2192</a>';
-  }
+  html += '<div id="restList">';
+  html += renderRestCards(allRestaurants);
+  html += '</div>';
 
   html += '</div>';
   return html;
 }
 
-function renderAltRestaurant(opt) {
-  var html = '<div class="rest-alt-item">';
+function renderRestCards(list) {
+  var html = '';
+  list.forEach(function(r) {
+    html += '<details class="rest-card">';
 
-  html += '<div class="rest-alt-top">';
-  html += '<span class="rest-alt-name">' + esc(opt.name) + '</span>';
-  if (opt.rating) {
-    html += '<span class="rest-alt-rating">' + opt.rating.toFixed(1) + '</span>';
-  }
-  html += '</div>';
+    // Summary (collapsed view)
+    html += '<summary>';
+    html += '<div class="rest-summary-top">';
+    html += '<span class="rest-name">' + esc(r.name) + '</span>';
+    if (r.rating) html += '<span class="rest-rating">' + r.rating.toFixed(1) + '</span>';
+    html += '<span class="rest-chevron">\u25B8</span>';
+    html += '</div>';
+    html += '<div class="rest-summary-meta">';
+    if (r.menu) html += '<span class="rest-menu-brief">' + esc(r.menu) + '</span>';
+    var oc = parseOpenClosed(r.hours);
+    if (oc.status !== 'unknown') {
+      html += '<span class="rest-open-tag ' + oc.status + '">' + oc.label + '</span>';
+    }
+    if (r.distKm !== null && r.distKm < 100) {
+      html += '<span class="rest-distance">' + (r.distKm < 1 ? r.distKm.toFixed(1) : Math.round(r.distKm)) + 'km</span>';
+    }
+    html += '</div>';
+    html += '</summary>';
 
-  if (opt.menu) {
-    html += '<div class="rest-alt-menu">' + esc(opt.menu) + '</div>';
-  } else if (opt.desc) {
-    html += '<div class="rest-alt-menu">' + esc(opt.desc) + '</div>';
-  }
+    // Body (expanded)
+    html += '<div class="rest-body">';
 
-  if (opt.priceRange) {
-    html += '<div class="rest-alt-price">' + esc(opt.priceRange) + '</div>';
-  }
+    if (r.menuDetail && r.menuDetail.length > 0) {
+      r.menuDetail.forEach(function(m) {
+        html += '<div class="rest-info-row">' + esc(m.item);
+        if (m.price) html += ' <span style="color:var(--text-light)">' + formatPrice(m.price) + '</span>';
+        html += '</div>';
+      });
+    } else if (r.menu) {
+      html += '<div class="rest-info-row"><span class="rest-info-label">메뉴</span>' + esc(r.menu) + '</div>';
+    }
+    if (r.priceRange) {
+      html += '<div class="rest-info-row"><span class="rest-info-label">가격대</span>' + esc(r.priceRange) + '</div>';
+    }
+    if (r.hours) {
+      html += '<div class="rest-info-row"><span class="rest-info-label">영업시간</span>' + esc(r.hours) + '</div>';
+    }
+    if (r.loc) {
+      html += '<div class="rest-info-row"><span class="rest-info-label">위치</span>' + esc(r.loc) + '</div>';
+    }
 
-  if (opt.hours) {
-    html += '<div class="rest-alt-price">' + esc(opt.hours) + '</div>';
-  }
+    var badges = buildBadges(r);
+    if (badges) html += '<div class="rest-badges">' + badges + '</div>';
 
-  var badges = buildBadges(opt);
-  if (badges) html += '<div class="rest-alt-badges">' + badges + '</div>';
+    if (r.meals.length > 0) {
+      // Deduplicate meals
+      var uniqueMeals = [];
+      r.meals.forEach(function(m) { if (uniqueMeals.indexOf(m) === -1) uniqueMeals.push(m); });
+      html += '<div class="rest-meals-list">' + uniqueMeals.join(' / ') + '</div>';
+    }
 
-  if (opt.mapUrl) {
-    html += '<a class="rest-alt-map-link" href="' + escAttr(opt.mapUrl) + '" target="_blank" rel="noopener">지도 \u2192</a>';
-  }
+    if (r.mapUrl) {
+      html += '<a class="rest-map-link" href="' + escAttr(r.mapUrl) + '" target="_blank" rel="noopener">지도에서 보기 \u2192</a>';
+    }
 
-  html += '</div>';
+    html += '</div>';
+    html += '</details>';
+  });
   return html;
+}
+
+function changeRestSort(mode) {
+  if (mode === 'distance' && !userLat) {
+    requestRestLocation();
+    return;
+  }
+  restSortMode = mode;
+  allRestaurants = sortRestaurants(allRestaurants);
+  // Re-render sort bar + list
+  var container = document.getElementById('restaurants');
+  if (!container) return;
+  // Just re-render the whole restaurant section
+  render();
+}
+
+function requestRestLocation() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    userLat = pos.coords.latitude;
+    userLng = pos.coords.longitude;
+    restSortMode = 'distance';
+    render();
+  }, function() {}, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
 }
 
 function buildBadges(opt) {
