@@ -567,6 +567,7 @@ body {
       <span id="tripStatus">2026.02.19 — 02.24</span>
     </div>
     <div class="update-time" id="updateTime"></div>
+    <div style="margin-top:10px"><a href="/guide" style="font-family:var(--system);font-size:13px;font-weight:600;color:var(--text-mid);text-decoration:none;border:1px solid var(--border);border-radius:var(--radius-btn);padding:6px 14px;background:var(--housing);display:inline-block">가이드 보기</a></div>
     <button class="refresh-btn" id="refreshBtn" onclick="requestLocation()">위치 갱신</button>
   </div>
 
@@ -643,6 +644,17 @@ function updateHeader() {
     document.getElementById('updateTime').textContent =
       `마지막 업데이트: ${formatDateTime(d)}`;
   }
+  // URL query param으로 특정 일자 선택 (?day=2)
+  const urlParams = new URLSearchParams(location.search);
+  const dayParam = urlParams.get('day');
+  if (dayParam && !window._dayParamApplied) {
+    const d = parseInt(dayParam);
+    if (d >= 1 && d <= travelData.days.length) {
+      activeDay = d - 1;
+      window._dayParamApplied = true;
+    }
+  }
+
   const now = new Date();
   const tripStart = new Date('2026-02-19T00:00:00+09:00');
   const tripEnd = new Date('2026-02-24T23:59:59+09:00');
@@ -655,7 +667,7 @@ function updateHeader() {
   } else {
     const dayNum = Math.floor((now - tripStart) / 86400000) + 1;
     status = `${dayNum}일차 진행 중`;
-    if (activeDay === 0) activeDay = dayNum - 1;
+    if (activeDay === 0 && !dayParam) activeDay = dayNum - 1;
   }
   document.getElementById('tripStatus').textContent = status;
 }
