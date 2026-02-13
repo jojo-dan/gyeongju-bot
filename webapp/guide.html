@@ -476,6 +476,113 @@ body {
 .rest-open-tag.open { background: #DEF7E5; color: #1A6B1A; }
 .rest-open-tag.closed { background: #FEE2E2; color: #C53030; }
 .rest-open-tag.unknown { background: var(--item-bg); color: var(--text-light); }
+
+/* ═══ STAY SECTION ═══ */
+.stay-card {
+  background: var(--housing);
+  border-radius: var(--radius-device);
+  box-shadow: var(--shadow-device);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.stay-card > summary {
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  padding: 14px 16px;
+}
+.stay-card > summary::-webkit-details-marker { display: none; }
+.stay-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.stay-card-name {
+  font-family: var(--system);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--item-text);
+}
+.stay-card-chevron {
+  font-size: 12px;
+  color: var(--text-light);
+  transition: transform 0.15s;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+.stay-card[open] .stay-card-chevron {
+  transform: rotate(90deg);
+}
+.stay-card-sub {
+  font-family: var(--system);
+  font-size: 13px;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+.stay-body {
+  border-top: 1px solid var(--border);
+  margin: 0 16px;
+  padding: 14px 0;
+}
+.stay-room-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.stay-room-chip {
+  background: var(--item-bg);
+  border-radius: var(--radius-btn);
+  padding: 10px 8px;
+  text-align: center;
+}
+.stay-room-label {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--item-text);
+}
+.stay-room-detail {
+  font-family: var(--system);
+  font-size: 11px;
+  color: var(--text-light);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.stay-amenity-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.stay-amenity-tag {
+  font-family: var(--system);
+  font-size: 12px;
+  color: var(--item-text-mid);
+  background: var(--item-bg);
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+.stay-highlight-box {
+  background: #FFF7ED;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+.stay-highlight-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+}
+.stay-highlight-text {
+  font-family: var(--system);
+  font-size: 13px;
+  color: #1A1A1A;
+  line-height: 1.5;
+}
 .rest-distance {
   font-family: var(--mono);
   font-size: 12px;
@@ -618,6 +725,7 @@ body {
   <button class="section-nav-btn active" onclick="scrollToSection('overview')">일정</button>
   <button class="section-nav-btn" onclick="scrollToSection('places')">장소</button>
   <button class="section-nav-btn" onclick="scrollToSection('restaurants')">식당</button>
+  <button class="section-nav-btn" onclick="scrollToSection('stay')">숙소</button>
 </div>
 
 <div class="container">
@@ -655,6 +763,7 @@ function render() {
   html += renderOverviewSection(travelData.days);
   html += renderPlacesSection(travelData.days);
   html += renderRestaurantSection(travelData.days);
+  html += renderStaySection();
   html += renderFooter();
   document.getElementById('contentArea').innerHTML = html;
 }
@@ -1046,6 +1155,157 @@ function buildBadges(opt) {
   return b;
 }
 
+// ═══ ④ STAY ═══
+
+var STAY_DATA = {
+  name: '까사멜로우',
+  nameEn: 'Casa Mellow',
+  desc: '아이와 함께하는 서툰 여행을 응원하며',
+  address: '경상북도 경주시 북군4길 75',
+  phone: '010-3583-6648',
+  email: 'ssoong6648@naver.com',
+  instagram: '@casa.mellow',
+  checkin: '15:30',
+  checkout: '11:00',
+  parking: '건물 외부 전용 주차장',
+  mapUrl: 'https://map.naver.com/p/search/까사멜로우 경주',
+  stayfolioUrl: 'https://www.stayfolio.com/findstay/casa-mellow',
+  rooms: [
+    { name: 'A-1', type: '복층', people: '4/8명', bed: 'Q2 + S1', bath: '2.5', price: '289,000~' },
+    { name: 'A-2', type: '복층', people: '4/8명', bed: 'Q2 + S1', bath: '2.5', price: '329,000~' },
+    { name: 'B', type: '독채', people: '4/8명', bed: '4개', bath: '2', price: '329,000~' }
+  ],
+  amenities: {
+    kitchen: ['인덕션', '전자레인지', '식기세척기', '토스터기', '캡슐커피머신', '전기포트', '제빙기', '조리도구', '기본조미료', '와인잔'],
+    bath: ['샴푸', '컨디셔너', '바디워시', '핸드워시', '치약', '타월', '샤워가운'],
+    general: ['TV', '냉장고', '세탁기', '헤어드라이어', '스피커', '슬리퍼', '생수'],
+    baby: ['젖병소독기', '유아용 어메니티', '유아 샤워용품', '키즈가구']
+  },
+  kids: ['실내 키즈룸 (미끄럼틀, 놀이기구)', '야외 모래 놀이터', '미니 바이킹', '전 객실 키즈 어메니티'],
+  pool: { depth: '약 70cm', note: '온수 풀 · 사계절 이용 · 시간 제한 없음 · 보호자 동반 필수' },
+  bbq: { note: '무료 이용 · 전기그릴 기본 제공 · 시간 제한 없음', extra: '웨버 가스그릴 추가 가능 (유료)' },
+  rules: ['전 공간 절대 금연', '실내 냄새나는 음식 조리 금지', '퇴실 전 정리 및 분리수거', '야간 소음 주의', '24개월 미만 영유아 무료', '기준인원 초과 시 1인 1박 30,000원']
+};
+
+function renderStaySection() {
+  var s = STAY_DATA;
+  var html = '<div id="stay" style="margin-top:20px">';
+
+  // Section header
+  html += '<div class="section-device">';
+  html += '<div class="section-label">STAY</div>';
+  html += '<div class="section-title">숙소 안내</div>';
+  html += '<div class="section-subtitle">' + esc(s.name) + ' · 5박</div>';
+  html += '</div>';
+
+  // ── 기본 정보 카드 (기본 열림)
+  html += '<details class="stay-card" open>';
+  html += '<summary><div class="stay-card-title"><span class="stay-card-name">' + esc(s.name) + '</span><span class="stay-card-chevron">&#9654;</span></div>';
+  html += '<div class="stay-card-sub">' + esc(s.desc) + '</div></summary>';
+  html += '<div class="stay-body">';
+  html += '<div class="practical-grid">';
+  html += '<span class="practical-label">주소</span><span class="practical-value">' + esc(s.address) + '</span>';
+  html += '<span class="practical-label">체크인</span><span class="practical-value">' + esc(s.checkin) + '</span>';
+  html += '<span class="practical-label">체크아웃</span><span class="practical-value">' + esc(s.checkout) + '</span>';
+  html += '<span class="practical-label">주차</span><span class="practical-value">' + esc(s.parking) + '</span>';
+  html += '<span class="practical-label">연락처</span><span class="practical-value">' + esc(s.phone) + '</span>';
+  html += '<span class="practical-label">인스타</span><span class="practical-value">' + esc(s.instagram) + '</span>';
+  html += '</div>';
+  html += '<div style="margin-top:10px; display:flex; gap:8px;">';
+  html += '<a href="' + escAttr(s.mapUrl) + '" target="_blank" style="flex:1; text-align:center; padding:8px; font-size:13px; font-weight:600; color:var(--text-mid); border:1px solid var(--border); border-radius:var(--radius-btn); text-decoration:none; background:var(--housing);">지도 보기</a>';
+  html += '<a href="' + escAttr(s.stayfolioUrl) + '" target="_blank" style="flex:1; text-align:center; padding:8px; font-size:13px; font-weight:600; color:#fff; border:none; border-radius:var(--radius-btn); text-decoration:none; background:var(--text);">스테이폴리오</a>';
+  html += '</div>';
+  html += '</div></details>';
+
+  // ── 객실 정보
+  html += '<details class="stay-card">';
+  html += '<summary><div class="stay-card-title"><span class="stay-card-name">객실 정보</span><span class="stay-card-chevron">&#9654;</span></div>';
+  html += '<div class="stay-card-sub">전 객실 복층 · 키즈룸 · 온수풀</div></summary>';
+  html += '<div class="stay-body">';
+  html += '<div class="stay-room-grid">';
+  s.rooms.forEach(function(r) {
+    html += '<div class="stay-room-chip">';
+    html += '<div class="stay-room-label">' + esc(r.name) + '</div>';
+    html += '<div class="stay-room-detail">' + esc(r.type) + '<br>' + esc(r.people) + '<br>' + esc(r.bed) + '<br>욕실 ' + esc(r.bath) + '</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  html += '<div class="practical-grid">';
+  html += '<span class="practical-label">1층</span><span class="practical-value">거실 · 주방 · 키즈룸 · 세탁실 · BBQ · 풀장</span>';
+  html += '<span class="practical-label">2층</span><span class="practical-value">침실 · 테라스 · 화장실/샤워실</span>';
+  html += '<span class="practical-label">초과 요금</span><span class="practical-value">1인 1박 30,000원 (24개월 미만 무료)</span>';
+  html += '</div>';
+  html += '</div></details>';
+
+  // ── 키즈 시설
+  html += '<details class="stay-card">';
+  html += '<summary><div class="stay-card-title"><span class="stay-card-name">키즈 시설</span><span class="stay-card-chevron">&#9654;</span></div>';
+  html += '<div class="stay-card-sub">실내 키즈룸 + 야외 놀이터</div></summary>';
+  html += '<div class="stay-body">';
+  html += '<ul class="place-list">';
+  s.kids.forEach(function(k) {
+    html += '<li>' + esc(k) + '</li>';
+  });
+  html += '</ul>';
+  html += '<div class="stay-highlight-box" style="margin-top:10px">';
+  html += '<div class="stay-highlight-label">BABY AMENITY</div>';
+  html += '<div class="stay-highlight-text">' + s.amenities.baby.map(esc).join(' · ') + '</div>';
+  html += '</div>';
+  html += '</div></details>';
+
+  // ── 수영장 & BBQ
+  html += '<details class="stay-card">';
+  html += '<summary><div class="stay-card-title"><span class="stay-card-name">수영장 · BBQ</span><span class="stay-card-chevron">&#9654;</span></div>';
+  html += '<div class="stay-card-sub">온수 풀 · 전기그릴 무료</div></summary>';
+  html += '<div class="stay-body">';
+  html += '<div class="place-section"><div class="place-section-label">POOL</div>';
+  html += '<div class="practical-grid">';
+  html += '<span class="practical-label">수심</span><span class="practical-value">' + esc(s.pool.depth) + '</span>';
+  html += '<span class="practical-label">이용</span><span class="practical-value">' + esc(s.pool.note) + '</span>';
+  html += '</div></div>';
+  html += '<div class="place-section"><div class="place-section-label">BBQ</div>';
+  html += '<div class="practical-grid">';
+  html += '<span class="practical-label">기본</span><span class="practical-value">' + esc(s.bbq.note) + '</span>';
+  html += '<span class="practical-label">추가</span><span class="practical-value">' + esc(s.bbq.extra) + '</span>';
+  html += '</div></div>';
+  html += '</div></details>';
+
+  // ── 비품 & 어메니티
+  html += '<details class="stay-card">';
+  html += '<summary><div class="stay-card-title"><span class="stay-card-name">비품 · 어메니티</span><span class="stay-card-chevron">&#9654;</span></div>';
+  html += '<div class="stay-card-sub">주방 · 욕실 · 일반</div></summary>';
+  html += '<div class="stay-body">';
+  var amenityGroups = [
+    { label: 'KITCHEN', items: s.amenities.kitchen },
+    { label: 'BATH', items: s.amenities.bath },
+    { label: 'GENERAL', items: s.amenities.general }
+  ];
+  amenityGroups.forEach(function(g) {
+    html += '<div class="place-section"><div class="place-section-label">' + g.label + '</div>';
+    html += '<div class="stay-amenity-tags">';
+    g.items.forEach(function(item) {
+      html += '<span class="stay-amenity-tag">' + esc(item) + '</span>';
+    });
+    html += '</div></div>';
+  });
+  html += '</div></details>';
+
+  // ── 이용 규칙
+  html += '<details class="stay-card">';
+  html += '<summary><div class="stay-card-title"><span class="stay-card-name">이용 규칙</span><span class="stay-card-chevron">&#9654;</span></div>';
+  html += '<div class="stay-card-sub">숙소 이용 시 참고사항</div></summary>';
+  html += '<div class="stay-body">';
+  html += '<ul class="place-list">';
+  s.rules.forEach(function(r) {
+    html += '<li>' + esc(r) + '</li>';
+  });
+  html += '</ul>';
+  html += '</div></details>';
+
+  html += '</div>';
+  return html;
+}
+
 // ═══ FOOTER ═══
 function renderFooter() {
   var html = '<div class="footer">';
@@ -1080,7 +1340,7 @@ window.addEventListener('scroll', function() {
   if (spyTimer) return;
   spyTimer = setTimeout(function() {
     spyTimer = null;
-    var sections = ['overview', 'places', 'restaurants'];
+    var sections = ['overview', 'places', 'restaurants', 'stay'];
     var active = sections[0];
     sections.forEach(function(id) {
       var el = document.getElementById(id);
