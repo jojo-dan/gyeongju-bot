@@ -725,6 +725,7 @@ body::before{
   <button class="section-nav-btn" data-tab="places" onclick="switchTab('places')">장소</button>
   <button class="section-nav-btn" data-tab="restaurants" onclick="switchTab('restaurants')">식당</button>
   <button class="section-nav-btn" data-tab="stay" onclick="switchTab('stay')">숙소</button>
+  <button class="section-nav-btn" data-tab="homecook" onclick="switchTab('homecook')">홈쿡</button>
 </div>
 
 <!-- 일정 서브탭 (Day) -->
@@ -747,7 +748,7 @@ body::before{
 // ═══ THEME ═══
 function initTheme(){
   var saved=localStorage.getItem('gj_theme');
-  if(saved) document.documentElement.setAttribute('data-theme',saved);
+  document.documentElement.setAttribute('data-theme',saved||'light');
   updateThemeIcon();
 }
 function toggleTheme(){
@@ -771,7 +772,7 @@ initTheme();
 // ═══ FONT SIZE ═══
 var fontSizes=['medium','large','small'];
 function initFontSize(){
-  var saved=localStorage.getItem('gj_fontsize')||'medium';
+  var saved=localStorage.getItem('gj_fontsize')||'large';
   document.documentElement.setAttribute('data-fontsize',saved);
   updateFontSizeIcon(saved);
 }
@@ -815,8 +816,7 @@ function showToast(msg){var t=document.getElementById('toast');t.textContent=msg
 var travelData=null;
 var activeDay=0;
 var activeTab='schedule';
-var pollTimer=null;
-var POLL_INTERVAL=30000;
+// polling removed — data refresh triggered by chatbot on change
 
 // restaurant state
 var allRestaurants=[];
@@ -869,11 +869,27 @@ var STAY_DATA={
 };
 
 // ═══ PATCH DATA ═══
+function patchPreDepartureDay(days){
+  if(days.length>0&&days[0].dayNum===0) return;
+  days.unshift({
+    dayNum:0,date:'2026-02-18',dow:'수',
+    title:'출발 전 확인사항',keyword:'사전 확인, 앱 테스트',
+    items:[
+      {id:'d0_check_coupang',time:'',cat:'todo',title:'쿠팡 앱에서 로켓프레시 확인',desc:'배송지를 "경주시 북군4길 75"로 설정 → 새벽배송 표시 확인',status:'pending',note:''},
+      {id:'d0_check_kurly',time:'',cat:'todo',title:'컬리 앱에서 샛별배송 확인',desc:'배송지를 "경주시 북군4길 75"로 설정 → 샛별배송 가능 표시 확인',status:'pending',note:''},
+      {id:'d0_check_baemin',time:'',cat:'todo',title:'배달의민족에서 배달 가능 음식점 탐색',desc:'위치를 보문관광단지로 설정 → 주변 배달 가능 음식점 목록 확인',status:'pending',note:''},
+      {id:'d0_check_eats',time:'',cat:'todo',title:'쿠팡이츠에서 배달 가능 음식점 탐색',desc:'위치를 경주시 북군동으로 설정 → 음식점 목록 확인',status:'pending',note:''},
+      {id:'d0_call_casa',time:'',cat:'todo',title:'까사멜로우 전화 확인',desc:'010-3583-6648 — 전기 그릴 사양, 기본 조미료 범위, 새벽배송 수령 가능 여부',status:'pending',note:''}
+    ]
+  });
+}
+
 function patchGuideData(days){
   days.forEach(function(day){
     day.items.forEach(function(item){
       if(item.title&&item.title.indexOf('홈플러스')!==-1&&!item.guide){
         item.guide={
+          placeName:'홈플러스',
           subtitle:'경주 유일의 대형 할인점 · 2024 메가푸드마켓 리뉴얼',
           mustDo:['BBQ 식재료·간식·음료 장보기','아기 간식·이유식 재료 확보'],
           babyTips:{
@@ -904,6 +920,11 @@ function patchGuideData(days){
           {name:'교촌 한옥마을',subtitle:'신라 천년 한옥마을 · 돌담길 산책',guide:{mustDo:['한옥 골목 산책 + 돌담길 포토존','월정교 야경 (도보 5분)'],babyTips:{stroller:'대부분 평지, 일부 돌길. 바퀴 큰 유모차 권장'},practicalInfo:{fee:'무료',hours:'마을 24시간 개방',parking:'월정교 공영주차장 무료 (교동 153-5)',mapUrl:'https://map.naver.com/p/search/교촌한옥마을'}}},
           {name:'경주 최부자댁',subtitle:'12대 만석꾼 명문가 · 중요민속문화재',guide:{mustDo:['6가지 가훈으로 유명한 명문가 탐방','교동법주 시음 (최부자댁 옆)'],babyTips:{stroller:'내부 마당 평탄, 유모차 가능'},practicalInfo:{fee:'무료',hours:'~17:00',mapUrl:'https://map.naver.com/p/search/경주최부자댁'}}}
         ];
+      }
+      // placeName 패치: 장소 카드에서 행위 분리
+      if(item.guide&&!item.guide.placeName){
+        if(item.title&&item.title.indexOf('동궁과 월지')!==-1) item.guide.placeName='동궁과 월지';
+        if(item.title&&item.title.indexOf('보문호수')!==-1) item.guide.placeName='보문호수';
       }
     });
   });
@@ -968,7 +989,7 @@ function renderPlaceDetail(item){
   }
   var g=item.guide;
   if(!g) return '';
-  return renderSinglePlaceCardInline(item.title,g.subtitle,g);
+  return renderSinglePlaceCardInline(g.placeName||item.title,g.subtitle,g);
 }
 
 function renderSinglePlaceCardInline(name,subtitle,g){
@@ -1101,7 +1122,7 @@ function renderSimpleOption(opt,item){
 }
 
 function renderItemCard(item){
-  var catLabel={meal:'식사',cafe:'카페',activity:'관광'};
+  var catLabel={meal:'식사',cafe:'카페',activity:'관광',todo:'확인'};
   var isVisited=item.visited===true;
   var isSkipped=item.status==='skipped';
   var titleClass=isSkipped?' skipped':'';
@@ -1126,6 +1147,7 @@ function renderItemCard(item){
   if(item.review) html+='<div class="review-text">"'+esc(item.review)+'"</div>';
 
   if(item.cat==='activity') html+=renderPlaceDetail(item);
+  if(item.cat==='todo'&&item.desc) html+='<div style="font-size:0.85em;color:var(--text-mid);margin-top:4px;line-height:1.5">'+esc(item.desc)+'</div>';
 
   if(userLat&&item.options&&item.options.length>0){
     var distInfo=getItemDistance(item);
@@ -1149,6 +1171,7 @@ function renderItemCard(item){
 }
 
 function renderDayContent(){
+  patchPreDepartureDay(travelData.days);
   patchGuideData(travelData.days);
   var area=document.getElementById('contentArea');
   var day=travelData.days[activeDay];
@@ -1167,7 +1190,7 @@ function renderDayContent(){
   for(var i=0;i<totalItems;i++){html+='<span class="'+(i<doneItems?'on':'')+'"></span>'}
   html+='</div></div>';
   html+='<div class="day-title-display">'+esc(day.title)+'</div>';
-  html+='<div class="day-subtitle">'+day.dayNum+'일차 / '+doneItems+'/'+totalItems+' 완료</div>';
+  html+='<div class="day-subtitle">'+(day.dayNum===0?'출발 전':day.dayNum+'일차')+' / '+doneItems+'/'+totalItems+' 완료</div>';
   html+='</div>';
   html+='<div class="level-meter">';
   html+='<div class="meter-bar"><div class="meter-fill" style="width:'+progress+'%"></div></div>';
@@ -1210,7 +1233,7 @@ function renderPlaces(days){
     if(item.subPlaces&&item.subPlaces.length){
       item.subPlaces.forEach(function(sp){html+=renderGuidePlace(sp,cardIndex++,days)});
     } else {
-      html+=renderGuidePlace({name:item.title,subtitle:g.subtitle,guide:g,babyTips:g.babyTips},cardIndex++,days);
+      html+=renderGuidePlace({name:g.placeName||item.title,subtitle:g.subtitle,guide:g,babyTips:g.babyTips},cardIndex++,days);
     }
   });
   return html;
@@ -1305,6 +1328,7 @@ function extractRestaurants(days){
       if(!item.options) return;
       item.options.forEach(function(opt){
         var key=opt.name;if(!key) return;
+        if(opt.loc==='숙소') return;
         if(!map[key]){
           map[key]={
             name:opt.name,menu:opt.menu||opt.desc||'',hours:opt.hours||'',
@@ -1511,6 +1535,122 @@ function renderStay(){
   return html;
 }
 
+// ═══ HOME COOK TAB ═══
+var HOME_COOK_DATA={
+  breakfast:[
+    {title:'간편 아침 조리',desc:'홈플러스에서 장보기 시 함께 구매',items:['잡곡 햇반','즉석국 (된장/미역)','계란','김','과일'],adultNote:'잡곡밥+국 조합이 든든',hiroNote:'흰쌀 으깬밥+국물, 바나나'},
+    {title:'새벽배송 활용',desc:'전날 밤 주문 → 아침 도착',items:['즉석죽 (비비고)','계란','우유','과일','아기 이유식'],services:['쿠팡 로켓프레시 (자정 주문→7시)','컬리 (23시 주문→8시)']},
+    {title:'히로 전용 메뉴',desc:'2세 아기 아침 식사',items:['시판 이유식/유아식 (베이비본죽, 맘마밀)','부드러운 계란찜 (인덕션 5분)','바나나/딸기 + 우유','흰쌀 햇반 으깬밥 + 국물'],hiroNote:'전자레인지 데우기로 간편하게'}
+  ],
+  dinner:[
+    {title:'숙소 바비큐',desc:'전 객실 BBQ 데크 + 전기 그릴 기본 제공',items:['삼겹살/목살/양념갈비 (1인 200~300g)','소시지','쌈채소 세트','양파/버섯/옥수수','햇반/즉석 냉면'],buyAt:'홈플러스 경주점',hiroNote:'고기 잘게 자르기, 소시지 세로 반 가르기'},
+    {title:'배달 음식',desc:'배달의민족 · 쿠팡이츠에서 주문',categories:['치킨','피자','중식 (짜장/탕수육)','족발/보쌈'],note:'보문단지 인근 배달 가능. 추가 배달비 발생 가능.'},
+    {title:'밀키트 직접 조리',desc:'인덕션 + 조리도구 완비',items:['부대찌개 밀키트','샤브샤브 밀키트','칼국수','카레'],buyAt:'홈플러스 경주점'}
+  ],
+  deliveryServices:[
+    {name:'쿠팡 로켓프레시',statusText:'확인됨',statusClass:'confirmed',hours:'밤 12시 주문 → 아침 7시 도착',note:'오너 직접 확인 완료'},
+    {name:'컬리 샛별배송',statusText:'가능성 매우 높음',statusClass:'likely',hours:'밤 11시 주문 → 아침 8시 도착',note:'2024.2.29 경주시 서비스 개시 (공식 보도)'},
+    {name:'배달의민족',statusText:'가능성 높음',statusClass:'likely',hours:'가게별 (보통 10:00~23:00)',note:'보문단지 인근 풀빌라 배달 후기 다수'},
+    {name:'쿠팡이츠',statusText:'확인됨',statusClass:'confirmed',hours:'가게별',note:'오너 직접 확인 완료'}
+  ],
+  facilities:['인덕션','냉장고','전자레인지','식기세척기','조리도구+기본 조미료','토스터기','캡슐커피머신','젖병소독기','BBQ 데크+전기 그릴 (전 객실)']
+};
+
+function renderHomeCook(){
+  var d=HOME_COOK_DATA;
+  var html='';
+
+  // 섹션 히어로
+  html+='<div class="section-hero fade-up">';
+  html+='<div class="section-label">Home Cook</div>';
+  html+='<div class="section-title">숙소 식사 가이드</div>';
+  html+='<div class="section-subtitle">아침·저녁 추천 · 배달/배송 정보</div>';
+  html+='</div>';
+
+  // 조리 시설 카드
+  html+='<details class="card fade-up">';
+  html+='<summary><div class="card-top"><span class="card-name">까사멜로우 조리 시설</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='</div><div class="card-sub">전 객실 풀 키친 + BBQ 데크</div></summary>';
+  html+='<div class="card-body"><ul class="place-list">';
+  d.facilities.forEach(function(f){html+='<li>'+esc(f)+'</li>'});
+  html+='</ul></div></details>';
+
+  // 아침 추천
+  html+='<div class="section-hero fade-up" style="margin-top:16px;padding:12px 0 4px">';
+  html+='<div class="section-label" style="font-size:11px">Breakfast</div>';
+  html+='<div class="section-title" style="font-size:1.15em">아침 추천</div>';
+  html+='</div>';
+  d.breakfast.forEach(function(b,i){html+=renderMealCard(b,'breakfast-'+i)});
+
+  // 저녁 추천
+  html+='<div class="section-hero fade-up" style="margin-top:16px;padding:12px 0 4px">';
+  html+='<div class="section-label" style="font-size:11px">Dinner</div>';
+  html+='<div class="section-title" style="font-size:1.15em">저녁 추천</div>';
+  html+='</div>';
+  d.dinner.forEach(function(din,i){html+=renderMealCard(din,'dinner-'+i)});
+
+  // 배달/배송 서비스
+  html+='<div class="section-hero fade-up" style="margin-top:16px;padding:12px 0 4px">';
+  html+='<div class="section-label" style="font-size:11px">Delivery</div>';
+  html+='<div class="section-title" style="font-size:1.15em">배달/배송 서비스</div>';
+  html+='</div>';
+  html+=renderDeliveryCard(d.deliveryServices);
+
+  html+='<div class="footer"><div class="footer-note">배송/배달 가능 여부는 지역에 따라 다를 수 있습니다. 여행 전 각 앱에서 숙소 주소를 입력하여 확인하세요.</div></div>';
+  return html;
+}
+
+function renderMealCard(meal,id){
+  var html='<details class="card fade-up">';
+  html+='<summary><div class="card-top"><span class="card-name">'+esc(meal.title)+'</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='</div><div class="card-sub">'+esc(meal.desc)+'</div></summary>';
+  html+='<div class="card-body">';
+
+  if(meal.items){
+    html+='<div class="info-label" style="margin-bottom:4px">준비물</div>';
+    html+='<ul class="place-list">';
+    meal.items.forEach(function(it){html+='<li>'+esc(it)+'</li>'});
+    html+='</ul>';
+  }
+  if(meal.categories){
+    html+='<div class="info-label" style="margin-bottom:4px">추천 카테고리</div>';
+    html+='<ul class="place-list">';
+    meal.categories.forEach(function(c){html+='<li>'+esc(c)+'</li>'});
+    html+='</ul>';
+  }
+  if(meal.services){
+    html+='<div class="info-label" style="margin-top:8px;margin-bottom:4px">이용 서비스</div>';
+    html+='<ul class="place-list">';
+    meal.services.forEach(function(s){html+='<li>'+esc(s)+'</li>'});
+    html+='</ul>';
+  }
+  if(meal.buyAt) html+='<div style="margin-top:8px;font-size:0.85em;color:var(--text-mid)">구매처: '+esc(meal.buyAt)+'</div>';
+  if(meal.adultNote) html+='<div style="margin-top:6px;font-size:0.85em;color:var(--sage)">어른: '+esc(meal.adultNote)+'</div>';
+  if(meal.hiroNote) html+='<div style="margin-top:4px;font-size:0.85em;color:var(--blue)">히로: '+esc(meal.hiroNote)+'</div>';
+  if(meal.note) html+='<div style="margin-top:6px;font-size:0.85em;color:var(--text-light)">'+esc(meal.note)+'</div>';
+
+  html+='</div></details>';
+  return html;
+}
+
+function renderDeliveryCard(services){
+  var html='<div class="card fade-up"><div class="card-body" style="padding:16px">';
+  services.forEach(function(svc){
+    var dot=svc.statusClass==='confirmed'?'var(--sage)':'var(--accent-soft)';
+    html+='<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">';
+    html+='<div style="min-width:8px;margin-top:6px"><div style="width:8px;height:8px;border-radius:50%;background:'+dot+'"></div></div>';
+    html+='<div style="flex:1">';
+    html+='<div style="font-weight:600;font-size:0.95em">'+esc(svc.name)+' <span style="font-weight:400;font-size:0.85em;color:'+dot+'">'+esc(svc.statusText)+'</span></div>';
+    if(svc.hours&&svc.hours!=='-') html+='<div style="font-size:0.82em;color:var(--text-mid);margin-top:2px">'+esc(svc.hours)+'</div>';
+    html+='<div style="font-size:0.8em;color:var(--text-light);margin-top:2px">'+esc(svc.note)+'</div>';
+    html+='</div></div>';
+  });
+  html+='</div></div>';
+  return html;
+}
+
 // ═══ TAB NAVIGATION ═══
 function switchTab(tabName){
   activeTab=tabName;
@@ -1524,6 +1664,7 @@ function switchTab(tabName){
 
 function renderContent(tabName){
   if(!travelData) return;
+  patchPreDepartureDay(travelData.days);
   patchGuideData(travelData.days);
   var area=document.getElementById('contentArea');
   switch(tabName){
@@ -1531,6 +1672,7 @@ function renderContent(tabName){
     case 'places':area.innerHTML=renderPlaces(travelData.days);break;
     case 'restaurants':renderRestSubTabs();area.innerHTML=renderRestaurants(travelData.days);applyRestFilters();break;
     case 'stay':area.innerHTML=renderStay();break;
+    case 'homecook':area.innerHTML=renderHomeCook();break;
   }
 }
 
@@ -1541,7 +1683,7 @@ function renderDayTabs(){
   days.forEach(function(day,idx){
     var tab=document.createElement('div');
     tab.className='day-tab'+(idx===activeDay?' active':'');
-    tab.innerHTML=day.dayNum+'일차<span class="tab-date">'+formatTabDate(day.date)+'</span>';
+    tab.innerHTML=(day.dayNum===0?'출발 전':day.dayNum+'일차')+'<span class="tab-date">'+formatTabDate(day.date)+'</span>';
     tab.onclick=function(){activeDay=idx;renderDayTabs();renderDayContent()};
     tabs.appendChild(tab);
   });
@@ -1599,7 +1741,6 @@ function applyRestFilters(){
 // ═══ APP INIT ═══
 (function init(){
   fetchData();
-  pollTimer=setInterval(fetchData,POLL_INTERVAL);
 })();
 
 async function fetchData(){
@@ -1632,11 +1773,14 @@ function updateHeader(){
   var dayParam=urlParams.get('day');
   if(dayParam&&!window._dayParamApplied){
     var d2=parseInt(dayParam);
-    if(d2>=1&&d2<=travelData.days.length){activeDay=d2-1;window._dayParamApplied=true}
+    // day param에서 dayNum으로 매칭 (dayNum:0 = 출발전)
+    for(var di=0;di<travelData.days.length;di++){
+      if(travelData.days[di].dayNum===d2){activeDay=di;window._dayParamApplied=true;break}
+    }
   }
   var tabParam=urlParams.get('tab');
   if(tabParam&&!window._tabParamApplied){
-    if(['schedule','places','restaurants','stay'].indexOf(tabParam)!==-1){
+    if(['schedule','places','restaurants','stay','homecook'].indexOf(tabParam)!==-1){
       activeTab=tabParam;window._tabParamApplied=true;
       document.querySelectorAll('.section-nav-btn').forEach(function(btn){
         btn.classList.toggle('active',btn.getAttribute('data-tab')===tabParam);
@@ -1656,7 +1800,12 @@ function updateHeader(){
   } else {
     var dayNum=Math.floor((now-tripStart)/86400000)+1;
     status=dayNum+'일차 진행 중';
-    if(activeDay===0&&!dayParam) activeDay=dayNum-1;
+    // dayNum으로 해당 탭 인덱스 찾기 (dayNum:0 출발전 탭 때문)
+    if(activeDay===0&&!dayParam){
+      for(var ai=0;ai<travelData.days.length;ai++){
+        if(travelData.days[ai].dayNum===dayNum){activeDay=ai;break}
+      }
+    }
   }
   document.getElementById('tripStatus').textContent=status;
 }
