@@ -57,6 +57,12 @@ ALLOWED_USER_IDS = [
 # 텔레그램 메시지 길이 제한
 MAX_MESSAGE_LENGTH = 4096
 
+# 대화 히스토리 설정
+MAX_HISTORY = 20  # 최근 20개 메시지 (10턴)
+
+# 채팅별 대화 히스토리: {chat_id: [{role, content}, ...]}
+_chat_histories: dict[int, list] = {}
+
 # 한국 표준시
 KST = timezone(timedelta(hours=9))
 
@@ -110,7 +116,8 @@ async def today_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         return
 
     logger.info("/today 명령어 수신 (user: %d)", user_id)
-    await _handle_user_message(update, "오늘 일정 알려줘")
+    chat_id = update.effective_chat.id
+    await _handle_user_message(update, "오늘 일정 알려줘", chat_id)
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -125,10 +132,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         return
 
     logger.info("메시지 수신 (user: %d): %s", user_id, user_message[:100])
-    await _handle_user_message(update, user_message)
+    chat_id = update.effective_chat.id
+    await _handle_user_message(update, user_message, chat_id)
 
 
-async def _handle_user_message(update: Update, user_message: str) -> None:
+async def _handle_user_message(update: Update, user_message: str, chat_id: int = 0) -> None:
     """
     사용자 메시지를 처리하는 핵심 로직.
 
@@ -154,6 +162,12 @@ async def _handle_user_message(update: Update, user_message: str) -> None:
                 )
                 return
 
+        # 1.5. 대화 히스토리 관리
+        if chat_id not in _chat_histories:
+            _chat_histories[chat_id] = []
+        history = _chat_histories[chat_id]
+        history.append({"role": "user", "content": user_message})
+
         # 2. 타이핑 표시 유지
         typing_active = True
 
@@ -170,14 +184,21 @@ async def _handle_user_message(update: Update, user_message: str) -> None:
 
         try:
             if USE_TOOL_API:
-                reply = await _process_with_api(json_data, user_message)
+                reply = await _process_with_api(json_data, user_message, history)
             else:
                 reply = await _process_with_cli(json_data, user_message)
         finally:
             typing_active = False
             typing_task.cancel()
 
-        # 3. 응답 전송
+        # 3. 응답을 히스토리에 추가
+        history.append({"role": "assistant", "content": reply})
+
+        # 히스토리 크기 제한
+        if len(history) > MAX_HISTORY:
+            _chat_histories[chat_id] = history[-MAX_HISTORY:]
+
+        # 4. 응답 전송
         await _send_long_message(update, reply)
 
     except Exception as e:
@@ -187,9 +208,9 @@ async def _handle_user_message(update: Update, user_message: str) -> None:
         )
 
 
-async def _process_with_api(json_data: dict, user_message: str) -> str:
+async def _process_with_api(json_data: dict, user_message: str, history: list | None = None) -> str:
     """Anthropic API + Tool Use로 메시지를 처리한다."""
-    response = await process_message_api(json_data, user_message)
+    response = await process_message_api(json_data, user_message, history=history)
 
     if response.error:
         logger.error("API 에러: %s", response.error)
