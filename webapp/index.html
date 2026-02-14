@@ -812,6 +812,27 @@ function patchGuideData(days){
   });
 }
 
+// ═══ PLACE COORDS ═══
+var PLACE_COORDS={
+  '동궁과 월지':{lat:35.835202,lng:129.228375},
+  '대릉원(천마총)':{lat:35.839185,lng:129.210721},
+  '첨성대':{lat:35.834375,lng:129.218564},
+  '교촌 한옥마을':{lat:35.829675,lng:129.214723},
+  '경주 최부자댁':{lat:35.830100,lng:129.214200},
+  '불국사':{lat:35.789273,lng:129.331848},
+  '보문호수':{lat:35.844327,lng:129.276681},
+  '경주 동궁원':{lat:35.840500,lng:129.279800},
+  '국립경주박물관':{lat:35.831700,lng:129.228300},
+  '홈플러스 경주점':{lat:35.873420,lng:129.224800},
+  '사랑의 소아과의원':{lat:35.843300,lng:129.213500}
+};
+function getPlaceDistKm(name){
+  if(!userLat) return null;
+  var c=PLACE_COORDS[name];
+  if(!c) return null;
+  return haversineKm(userLat,userLng,c.lat,c.lng);
+}
+
 // ═══ DISTANCE ═══
 function haversineKm(lat1,lng1,lat2,lng2){
   var R=6371;var dLat=(lat2-lat1)*Math.PI/180;var dLng=(lng2-lng1)*Math.PI/180;
@@ -1160,6 +1181,10 @@ function renderGuidePlace(sp,idx,days){
   html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
   html+='</div>';
   if(sp.subtitle) html+='<div class="card-sub">'+esc(sp.subtitle)+'</div>';
+  var placeDistKm=getPlaceDistKm(sp.name);
+  if(placeDistKm!==null&&placeDistKm<100){
+    html+='<div class="rest-status-row"><span class="rest-dist">'+(placeDistKm<1?placeDistKm.toFixed(1):Math.round(placeDistKm))+'km</span></div>';
+  }
   if(review) html+='<div class="review-text">"'+esc(review)+'"</div>';
   html+='</summary>';
   html+='<div class="card-body">';
@@ -1235,9 +1260,11 @@ function extractRestaurants(days){
 }
 
 function sortRestaurants(list){
+  if(userLat){
+    list.forEach(function(r){r.distKm=(r.lat&&r.lng)?haversineKm(userLat,userLng,r.lat,r.lng):null});
+  }
   if(restSortMode==='distance'&&userLat){
-    list.forEach(function(r){r.distKm=(r.lat&&r.lng)?haversineKm(userLat,userLng,r.lat,r.lng):9999});
-    list.sort(function(a,b){return a.distKm-b.distKm});
+    list.sort(function(a,b){return (a.distKm||9999)-(b.distKm||9999)});
   } else {
     list.sort(function(a,b){var ra=a.rating||0,rb=b.rating||0;if(rb!==ra) return rb-ra;return a.name.localeCompare(b.name)});
   }
