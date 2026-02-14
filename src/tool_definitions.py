@@ -108,8 +108,33 @@ TOOLS = [
         },
     },
     # ──────────────────────────────────────────────
-    # 쓰기 도구 (7개)
+    # 쓰기 도구 (8개)
     # ──────────────────────────────────────────────
+    {
+        "name": "update_item",
+        "description": (
+            "항목의 기본 정보(시간, 제목)를 수정한다. "
+            "시간 변경, 제목 변경 등에 사용한다."
+        ),
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "item_id": {
+                    "type": "string",
+                    "description": "항목 ID",
+                },
+                "time": {
+                    "type": "string",
+                    "description": "새 시간 (예: \"09:00\", \"14:00~16:00\")",
+                },
+                "title": {
+                    "type": "string",
+                    "description": "새 제목",
+                },
+            },
+            "required": ["item_id"],
+        },
+    },
     {
         "name": "update_status",
         "description": "항목의 상태를 변경한다.",

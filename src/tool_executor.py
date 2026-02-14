@@ -312,6 +312,35 @@ def _handle_get_trip_summary(ctx: ExecutionContext, inp: dict) -> dict:
 # Write Handlers
 # ---------------------------------------------------------------------------
 
+@_register("update_item")
+def _handle_update_item(ctx: ExecutionContext, inp: dict) -> dict:
+    """아이템 기본 정보(시간, 제목) 수정."""
+    item_id = inp.get("item_id", "")
+
+    found = ctx.find_item(item_id)
+    if found is None:
+        return {"error": f"아이템을 찾을 수 없습니다: {item_id}"}
+    _day, item = found
+
+    updated = []
+    if "time" in inp:
+        old_time = item.get("time", "")
+        item["time"] = inp["time"]
+        updated.append(f"time: {old_time} -> {inp['time']}")
+    if "title" in inp:
+        old_title = item.get("title", "")
+        item["title"] = inp["title"]
+        updated.append(f"title: {old_title} -> {inp['title']}")
+
+    if not updated:
+        return {"error": "수정할 필드가 지정되지 않았습니다 (time 또는 title)"}
+
+    ctx.mark_modified(f"{item_id} 수정: {', '.join(updated)}")
+    logger.info("Item updated: %s %s", item_id, updated)
+
+    return {"ok": True, "item_id": item_id, "updated": updated}
+
+
 _VALID_STATUSES = {"planned", "done", "skipped"}
 
 
