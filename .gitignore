@@ -22,5 +22,8 @@ htmlcov/
 # OS
 .DS_Store
 
+# Data backups
+jsonbin_*.json
+
 # Vercel
 .vercel/
