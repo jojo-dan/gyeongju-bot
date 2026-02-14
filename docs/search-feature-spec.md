@@ -1,16 +1,17 @@
 # 검색/필터 기능 기획서
 
 > 상태: **DRAFT** — 오너 승인 대기
-> 대상: `webapp/index.html`, `webapp/guide.html`
+> 대상: `webapp/guide.html` (가이드 페이지만)
 > 관련: 크라피카(UX), 히소카(UI) 브레인스토밍 결과 반영
+> 결정: index.html은 day tab이 이미 필터 역할을 하므로 검색 미적용 (오너 확정 2026-02-13)
 
 ---
 
 ## 1. 배경
 
-경주 가족여행 웹앱의 두 페이지(일정 상세, 가이드)에 검색/필터 기능을 추가한다.
-전체 데이터 규모가 ~50개 항목(일정 30~48 + 식당 ~20 + 장소 5~8 + 숙소 1)으로 작으므로,
-대량 데이터 탐색보다는 **"이미 있는 정보를 빠르게 찾기"** 가 목적이다.
+경주 가족여행 웹앱의 **가이드 페이지**에 검색/필터 기능을 추가한다.
+식당 ~20개, 장소 5~8개, 숙소 1개가 4개 섹션에 흩어져 있어 필터링의 실질적 가치가 있다.
+일정 상세(index.html)는 day tab이 이미 필터 역할을 하고 하루 5~8개 항목이라 육안 탐색이 더 빠르므로 제외.
 
 ---
 
@@ -35,49 +36,7 @@
 
 ---
 
-## 3. 상세 설계
-
-### 3-1. index.html (일정 상세)
-
-#### 레이아웃
-
-```
-[Day 1][Day 2][Day 3][Day 4][Day 5][Day 6]  ← 기존 day tabs (sticky)
-[🔍] 검색 또는 필터...                        ← 새 search bar (탭하면 확장)
-[아이 OK][아빠 OK][카페][식사][관광]           ← 필터 칩 (확장 시)
-```
-
-#### 동작
-
-1. **검색 트리거**: theme toggle 왼쪽에 동일 스타일 원형 버튼 (36x36px, `right: 60px`)
-2. 탭하면 day tabs 아래에 search bar + 필터 칩이 슬라이드 확장 (`max-height` 애니메이션)
-3. **검색 범위**: 전체 day 검색 (현재 day만 아님)
-4. **필터 동작**:
-   - 매칭되지 않는 item-card → `display: none`
-   - 매칭되는 item 내 해당 텍스트에 `<mark>` 하이라이트 (2차 프리텍스트용)
-   - 결과가 있는 day tab에 accent dot 표시
-   - 현재 day에 결과 0건이면: "Day 3에 2건의 결과가 있습니다" 안내 표시
-5. **칩 필터 매핑**:
-   - `아이 OK` → `option.hiro === 'good'`
-   - `아빠 OK` → `option.dad === 'good'`
-   - `카페` → `item.cat === 'cafe'`
-   - `식사` → `item.cat === 'meal'`
-   - `관광` → `item.cat === 'activity'`
-6. 칩은 토글 방식, 복수 선택 가능 (AND 조합)
-7. "X" 버튼 → 필터 초기화 + bar 접힘
-
-#### 프리텍스트 검색 대상 (2차)
-
-| 필드 | 설명 |
-|---|---|
-| `item.title` | 활동 이름 |
-| `item.note` | 메모 |
-| `option.name` | 식당/장소 이름 |
-| `option.menu` | 메뉴 설명 |
-| `option.hiroNote` | 히로 주의사항 |
-| badge 텍스트 | "아빠 OK" 등 |
-
-### 3-2. guide.html (가이드)
+## 3. 상세 설계 — guide.html
 
 #### 레이아웃
 
@@ -293,13 +252,12 @@ searchInput.addEventListener('input', (e) => {
 
 ### 1차 (MVP): 필터 칩만
 
-1. 검색 트리거 버튼 HTML + CSS 추가
+1. guide.html에 검색 트리거 버튼 HTML + CSS 추가
 2. search-bar-wrapper HTML + CSS 추가 (input은 넣되 2차까지 비활성)
 3. 필터 칩 HTML + CSS + JS (토글/필터 로직)
-4. index.html: item-card show/hide + day tab dot 표시
-5. guide.html: `<details>` show/hide + 자동 open
-6. empty state
-7. 다크모드 확인
+4. `<details>` 카드 show/hide + 자동 open
+5. empty state
+6. 다크모드 확인
 
 ### 2차: 프리텍스트 검색
 
@@ -307,7 +265,6 @@ searchInput.addEventListener('input', (e) => {
 2. 검색 인덱스 구성 (각 카드의 searchable text 결합)
 3. `<mark>` 하이라이트 렌더링
 4. 결과 카운트 표시
-5. 크로스페이지 힌트 (empty state에 "가이드에서 찾아보기" 링크)
 
 ---
 
@@ -315,7 +272,6 @@ searchInput.addEventListener('input', (e) => {
 
 | 파일 | 변경 |
 |---|---|
-| `webapp/index.html` | CSS 추가, HTML (검색 트리거 + bar), JS (필터 로직) |
 | `webapp/guide.html` | CSS 추가, HTML (검색 트리거 + bar), JS (필터 로직) |
 
 ---
@@ -325,6 +281,6 @@ searchInput.addEventListener('input', (e) => {
 | 리스크 | 대응 |
 |---|---|
 | 필터 칩이 화면 폭 초과 | 가로 스크롤 + 우측 페이드 그래디언트 |
-| guide.html의 sort-bar와 UI 겹침 | search-bar 아래에 sort-bar 유지, 자연스럽게 병합 |
-| sticky 요소 겹침 (day tabs + search bar) | z-index 관리: day tabs(100) < search bar(110) < toggle(200) |
+| sort-bar와 UI 겹침 | search-bar 아래에 sort-bar 유지, 자연스럽게 병합 |
+| sticky 요소 겹침 (section nav + search bar) | z-index 관리: section-nav(100) < search bar(110) < toggle(200) |
 | 칩 복수 선택 시 결과 0건 | empty state 표시 + "필터를 줄여보세요" 안내 |
