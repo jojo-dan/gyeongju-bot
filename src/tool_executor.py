@@ -519,9 +519,20 @@ def _handle_add_item(ctx: ExecutionContext, inp: dict) -> dict:
                 opt_entry[field] = opt_data[field]
         new_item["options"].append(opt_entry)
 
-    day.setdefault("items", []).append(new_item)
+    items = day.setdefault("items", [])
+    after_id = inp.get("after_item_id", "")
+    inserted = False
+    if after_id:
+        for i, existing in enumerate(items):
+            if existing.get("id") == after_id:
+                items.insert(i + 1, new_item)
+                inserted = True
+                break
+    if not inserted:
+        items.append(new_item)
+
     ctx.mark_modified(f"아이템 추가: {item_id} ({title})")
-    logger.info("Item added: %s to day %s", item_id, day_num)
+    logger.info("Item added: %s to day %s (after=%s)", item_id, day_num, after_id or "end")
 
     return {"ok": True, "item_id": item_id, "dayNum": day_num, "title": title}
 
@@ -585,9 +596,20 @@ def _handle_move_item(ctx: ExecutionContext, inp: dict) -> dict:
 
     new_id = item["id"]
 
-    tgt_day.setdefault("items", []).append(item)
+    tgt_items = tgt_day.setdefault("items", [])
+    after_id = inp.get("after_item_id", "")
+    inserted = False
+    if after_id:
+        for i, existing in enumerate(tgt_items):
+            if existing.get("id") == after_id:
+                tgt_items.insert(i + 1, item)
+                inserted = True
+                break
+    if not inserted:
+        tgt_items.append(item)
+
     ctx.mark_modified(f"아이템 이동: {item_id} -> Day {to_day_num} ({new_id})")
-    logger.info("Item moved: %s -> day %s as %s", item_id, to_day_num, new_id)
+    logger.info("Item moved: %s -> day %s as %s (after=%s)", item_id, to_day_num, new_id, after_id or "end")
 
     return {"ok": True, "old_id": item_id, "new_id": new_id, "to_day_num": to_day_num}
 

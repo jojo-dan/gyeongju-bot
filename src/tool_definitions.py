@@ -297,7 +297,10 @@ TOOLS = [
     },
     {
         "name": "add_item",
-        "description": "새 일정 항목을 추가한다.",
+        "description": (
+            "새 일정 항목을 추가한다. "
+            "after_item_id를 지정하면 해당 항목 뒤에 삽입된다. 미지정 시 일차 마지막에 추가된다."
+        ),
         "input_schema": {
             "type": "object",
             "properties": {
@@ -317,6 +320,10 @@ TOOLS = [
                 "time": {
                     "type": "string",
                     "description": "시간 (예: \"14:00~\")",
+                },
+                "after_item_id": {
+                    "type": "string",
+                    "description": "이 항목 뒤에 삽입 (예: \"d1_travel\"이면 이동 항목 바로 뒤)",
                 },
                 "options": {
                     "type": "array",
@@ -408,7 +415,10 @@ TOOLS = [
     },
     {
         "name": "move_item",
-        "description": "항목을 다른 일차로 이동한다.",
+        "description": (
+            "항목을 다른 일차로 이동한다. "
+            "after_item_id를 지정하면 해당 항목 뒤에 삽입된다. 미지정 시 일차 마지막에 추가된다."
+        ),
         "input_schema": {
             "type": "object",
             "properties": {
@@ -423,6 +433,10 @@ TOOLS = [
                 "new_time": {
                     "type": "string",
                     "description": "새 시간",
+                },
+                "after_item_id": {
+                    "type": "string",
+                    "description": "이 항목 뒤에 삽입",
                 },
             },
             "required": ["item_id", "to_day_num"],
