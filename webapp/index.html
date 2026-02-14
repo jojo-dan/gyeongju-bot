@@ -347,26 +347,164 @@ body {
   border-top: 1px solid var(--border);
   padding-top: 12px;
 }
-.option-item {
+
+/* ═══ OPTION CARD (Accordion) ═══ */
+.option-card {
+  border-radius: 14px;
+  margin-bottom: 8px;
+  background: var(--bg-warm);
+  border: 1px solid transparent;
+  overflow: hidden;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+.option-card[open] {
+  border-color: var(--border);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.option-card.chosen {
+  background: var(--sage-bg);
+  border-color: rgba(123,143,107,0.25);
+}
+
+.option-card summary {
+  padding: 12px 14px;
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.option-card summary::-webkit-details-marker { display: none; }
+
+/* 상단 행: 이름 + 별점 + 확정 + chevron */
+.option-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.option-name {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--item-text);
+  flex: 1;
+  min-width: 0;
+}
+.option-card.chosen .option-name {
+  color: var(--sage);
+}
+.option-rating {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+}
+.option-chevron {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+  display: flex;
+}
+.option-card[open] .option-chevron {
+  transform: rotate(90deg);
+}
+
+/* 하단 메타: 메뉴 + 영업상태 + 거리 */
+.option-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--item-text-dim);
+}
+.option-menu-brief {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.open-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.open-tag.open {
+  background: var(--sage-bg);
+  color: var(--sage);
+}
+.open-tag.closed {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+.option-dist {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* 펼침 영역 */
+.option-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+  margin-top: 0;
+  padding-top: 12px;
+}
+.option-info {
+  font-size: 13px;
+  color: var(--item-text-mid);
+  padding: 3px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.option-info-label {
+  font-weight: 600;
+  color: var(--item-text-dim);
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.option-map-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+  margin-top: 10px;
+  letter-spacing: 0.3px;
+}
+.option-map-link:active { opacity: 0.7; }
+
+/* ═══ OPTION SIMPLE (fallback) ═══ */
+.option-simple {
   padding: 10px 14px;
-  border-radius: 10px;
+  border-radius: 14px;
   margin-bottom: 8px;
   font-family: var(--system);
   font-size: 14px;
   color: var(--item-text-mid);
   background: var(--bg-warm);
   border: 1px solid transparent;
-  transition: all 0.15s;
 }
-.option-item.chosen {
+.option-simple.chosen {
   background: var(--sage-bg);
   color: var(--sage);
   border-color: rgba(123,143,107,0.25);
 }
-.option-name { font-weight: 700; color: var(--item-text); }
-.option-item.chosen .option-name { color: var(--sage); }
-.option-menu { color: var(--item-text-mid); font-size: 13px; }
-.option-badges { margin-top: 6px; display: flex; gap: 6px; flex-wrap: wrap; }
+.option-simple .option-name {
+  font-family: var(--system);
+  font-size: 14px;
+}
+.option-simple.chosen .option-name {
+  color: var(--sage);
+}
+
+.option-badges { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
 .badge {
   display: inline-block;
   padding: 4px 8px;
@@ -538,18 +676,7 @@ body {
   color: var(--text-light);
 }
 
-/* ═══ OPTION DISTANCE ═══ */
-.option-distance {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--item-text-dim);
-  float: right;
-  margin-left: 8px;
-}
-.option-distance.nearby {
-  color: var(--accent);
-}
+/* (option distance now integrated into .option-dist inside option-card) */
 
 /* ═══ REFRESH BUTTON ═══ */
 .refresh-btn {
@@ -839,6 +966,114 @@ function renderDayContent() {
   area.innerHTML = html;
 }
 
+// ═══ 영업 상태 파싱 (guide.html에서 포팅) ═══
+function parseOpenClosed(hoursStr) {
+  if (!hoursStr) return null;
+  var m = hoursStr.match(/(\d{1,2}):?(\d{2})?\s*[~\-]\s*(\d{1,2}):?(\d{2})?/);
+  if (!m) return null;
+  var now = new Date();
+  var nowMin = now.getHours() * 60 + now.getMinutes();
+  var openMin = parseInt(m[1]) * 60 + (m[2] ? parseInt(m[2]) : 0);
+  var closeMin = parseInt(m[3]) * 60 + (m[4] ? parseInt(m[4]) : 0);
+  return nowMin >= openMin && nowMin < closeMin
+    ? { status: 'open', text: '영업중' }
+    : { status: 'closed', text: '영업종료' };
+}
+
+// ═══ 옵션 카드 렌더링 (enriched data) ═══
+function renderOptionCard(opt, item) {
+  const isChosen = item.chosen && item.chosen === opt.name;
+  const showOptionDist = userLat && !(getItemDistance(item) && getItemDistance(item).km >= 50);
+
+  let html = '<details class="option-card' + (isChosen ? ' chosen' : '') + '"' + (isChosen ? ' open' : '') + '>';
+  html += '<summary>';
+
+  // 상단: 이름 + 별점 + 확정 + chevron
+  html += '<div class="option-top">';
+  html += '<span class="option-name">' + escapeHtml(opt.name) + '</span>';
+  if (opt.rating) html += '<span class="option-rating">' + opt.rating + '</span>';
+  if (isChosen) html += '<span class="chosen-tag">확정</span>';
+  html += '<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
+  html += '</div>';
+
+  // 메타: 메뉴 + 영업상태 + 거리
+  html += '<div class="option-meta">';
+  if (opt.menu) html += '<span class="option-menu-brief">' + escapeHtml(opt.menu) + '</span>';
+  if (opt.hours) {
+    var oc = parseOpenClosed(opt.hours);
+    if (oc) html += '<span class="open-tag ' + oc.status + '">' + oc.text + '</span>';
+  }
+  if (showOptionDist && opt.lat && opt.lng) {
+    var km = haversineDistance(userLat, userLng, opt.lat, opt.lng);
+    html += '<span class="option-dist">' + (km < 1 ? km.toFixed(1) : Math.round(km)) + 'km</span>';
+  }
+  html += '</div>';
+  html += '</summary>';
+
+  // 펼침 영역
+  html += '<div class="option-body">';
+
+  // 메뉴 상세
+  if (opt.menuDetail && opt.menuDetail.length) {
+    opt.menuDetail.forEach(function(m) {
+      html += '<div class="option-info">' + escapeHtml(m.item);
+      if (m.price) html += '<span>' + Number(m.price).toLocaleString() + '원</span>';
+      html += '</div>';
+    });
+  }
+
+  // 가격대
+  if (opt.priceRange) {
+    html += '<div class="option-info"><span class="option-info-label">가격대</span>' + escapeHtml(opt.priceRange) + '</div>';
+  }
+
+  // 영업시간
+  if (opt.hours) {
+    html += '<div class="option-info"><span class="option-info-label">영업시간</span>' + escapeHtml(opt.hours) + '</div>';
+  }
+
+  // 위치
+  if (opt.loc) {
+    html += '<div class="option-info"><span class="option-info-label">위치</span>' + escapeHtml(opt.loc) + '</div>';
+  }
+
+  // 뱃지
+  var badges = [];
+  if (opt.dad === 'good') badges.push('<span class="badge badge-dad-good">아빠 OK</span>');
+  if (opt.dad === 'caution') badges.push('<span class="badge badge-dad-caution">아빠 주의' + (opt.dadNote ? ' · ' + escapeHtml(opt.dadNote) : '') + '</span>');
+  if (opt.hiro === 'good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
+  if (opt.hiro === 'caution') badges.push('<span class="badge badge-hiro-caution">히로 주의' + (opt.hiroNote ? ' · ' + escapeHtml(opt.hiroNote) : '') + '</span>');
+  if (badges.length) html += '<div class="option-badges">' + badges.join('') + '</div>';
+
+  // 지도 링크
+  if (opt.mapUrl) {
+    html += '<a class="option-map-link" href="' + escapeAttr(opt.mapUrl) + '" target="_blank">지도에서 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>';
+  }
+
+  html += '</div></details>';
+  return html;
+}
+
+// ═══ 단순 옵션 렌더링 (non-enriched fallback) ═══
+function renderSimpleOption(opt, item) {
+  const isChosen = item.chosen && item.chosen === opt.name;
+  let html = '<div class="option-simple' + (isChosen ? ' chosen' : '') + '">';
+  html += '<span class="option-name">' + escapeHtml(opt.name) + '</span>';
+  if (opt.menu) html += ' <span class="option-menu-brief" style="color:var(--item-text-dim);font-size:13px">— ' + escapeHtml(opt.menu) + '</span>';
+  if (isChosen) html += ' <span class="chosen-tag">확정</span>';
+
+  // 뱃지
+  var badges = [];
+  if (opt.dad === 'good') badges.push('<span class="badge badge-dad-good">아빠 OK</span>');
+  if (opt.dad === 'caution') badges.push('<span class="badge badge-dad-caution">아빠 주의' + (opt.dadNote ? ' · ' + escapeHtml(opt.dadNote) : '') + '</span>');
+  if (opt.hiro === 'good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
+  if (opt.hiro === 'caution') badges.push('<span class="badge badge-hiro-caution">히로 주의' + (opt.hiroNote ? ' · ' + escapeHtml(opt.hiroNote) : '') + '</span>');
+  if (badges.length) html += '<div class="option-badges">' + badges.join('') + '</div>';
+
+  html += '</div>';
+  return html;
+}
+
 function renderItemCard(item) {
   const catLabel = { meal: '식사', cafe: '카페', activity: '관광' };
   const titleClass = item.status === 'skipped' ? ' skipped' : '';
@@ -869,39 +1104,14 @@ function renderItemCard(item) {
 
   // 옵션 목록
   if (item.options && item.options.length > 0) {
-    // 50km 이상이면 개별 거리 숨김
-    const showOptionDist = userLat && !(getItemDistance(item) && getItemDistance(item).km >= 50);
-    const multipleOptions = item.options.length >= 2;
-
     html += '<div class="options-list">';
     item.options.forEach(opt => {
-      const isChosen = item.chosen && item.chosen === opt.name;
-      html += `<div class="option-item${isChosen ? ' chosen' : ''}">`;
-
-      // 옵션별 소형 거리 (옵션 2개 이상일 때)
-      if (showOptionDist && multipleOptions && opt.lat && opt.lng) {
-        const optKm = haversineDistance(userLat, userLng, opt.lat, opt.lng);
-        const optCls = optKm < 1 ? ' nearby' : '';
-        const optText = optKm < 1 ? optKm.toFixed(1) + 'km' : (optKm < 5 ? optKm.toFixed(1) + 'km' : Math.round(optKm) + 'km');
-        html += `<span class="option-distance${optCls}">${optText}</span>`;
+      const hasRichData = opt.rating || opt.menuDetail || opt.hours || opt.mapUrl;
+      if (hasRichData) {
+        html += renderOptionCard(opt, item);
+      } else {
+        html += renderSimpleOption(opt, item);
       }
-
-      html += `<span class="option-name">${opt.name}</span>`;
-      if (opt.menu) html += ` <span class="option-menu">— ${opt.menu}</span>`;
-      if (isChosen) html += ` <span class="chosen-tag">확정</span>`;
-
-      const badges = [];
-      if (opt.dad === 'good') badges.push('<span class="badge badge-dad-good">아빠 OK</span>');
-      if (opt.dad === 'caution') badges.push('<span class="badge badge-dad-caution">아빠 주의</span>');
-      if (opt.hiro === 'good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
-      if (opt.hiro === 'caution') {
-        let hiroLabel = '히로 주의';
-        if (opt.hiroNote) hiroLabel += ` (${opt.hiroNote})`;
-        badges.push(`<span class="badge badge-hiro-caution">${hiroLabel}</span>`);
-      }
-      if (badges.length) html += `<div class="option-badges">${badges.join('')}</div>`;
-
-      html += '</div>';
     });
     html += '</div>';
   }
