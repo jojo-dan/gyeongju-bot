@@ -48,10 +48,14 @@
   --shadow-hero:0 4px 32px rgba(60,46,31,0.12);
 }
 
+:root[data-fontsize="small"] { --base-font: 14px; }
+:root[data-fontsize="large"] { --base-font: 18px; }
+
 html{scroll-behavior:smooth}
 
 body{
   font-family:var(--body);
+  font-size:var(--base-font, 16px);
   background:var(--bg);
   color:var(--text);
   min-height:100vh;
@@ -326,7 +330,7 @@ body::before{
 }
 .card-name{
   font-family:var(--body);
-  font-size:17px;
+  font-size:calc(var(--base-font, 16px) + 2px);
   font-weight:700;
   color:var(--text);
   line-height:1.3;
@@ -485,6 +489,32 @@ body::before{
 .info-label{color:var(--text-light);font-weight:600;white-space:nowrap}
 .info-value{color:var(--text-mid);line-height:1.4}
 
+/* ═══ RESTAURANT SUB TABS ═══ */
+.rest-sub-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 0 16px 12px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.rest-sub-tab {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.rest-sub-tab.active {
+  background: var(--hero);
+  color: var(--hero-text);
+  border-color: var(--hero);
+}
+
 /* ═══ RESTAURANT ═══ */
 .sort-bar{
   display:flex;gap:8px;
@@ -523,7 +553,7 @@ body::before{
 }
 .rest-meta{
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-  font-size:13px;color:var(--text-light);margin-top:4px;
+  font-size:calc(var(--base-font, 16px) - 3px);color:var(--text-light);margin-top:4px;
 }
 .rest-menu-brief{color:var(--text-mid)}
 .open-tag{
@@ -723,7 +753,7 @@ body::before{
 .search-trigger {
   position: fixed;
   top: 12px;
-  right: 60px;
+  right: 104px;
   z-index: 200;
   width: 36px; height: 36px; border-radius: 50%;
   border: 1.5px solid var(--border-strong);
@@ -741,6 +771,26 @@ body::before{
   border-color: var(--hero);
 }
 .search-trigger svg { width: 16px; height: 16px; }
+
+/* ═══ FONT SIZE TRIGGER ═══ */
+.font-size-trigger {
+  position: fixed;
+  top: 12px;
+  right: 60px;
+  z-index: 200;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  background: var(--card);
+  color: var(--text-mid);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 700;
+}
+.font-size-trigger:active { transform: scale(0.9); }
 
 /* ═══ SEARCH BAR ═══ */
 .search-bar-wrapper {
@@ -855,6 +905,149 @@ body::before{
   color: var(--text-light);
   line-height: 1.6;
 }
+
+/* ═══ CHAT BUBBLE & SHEET ═══ */
+.chat-fab {
+  position: fixed; bottom: 24px; right: 20px; z-index: 300;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--accent); color: #fff; border: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(196,93,62,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.chat-fab:active { transform: scale(0.9); }
+.chat-fab svg { width: 24px; height: 24px; }
+.chat-fab.hidden { display: none; }
+
+.chat-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(0,0,0,0.3); backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.chat-overlay.open { opacity: 1; pointer-events: auto; }
+
+.chat-sheet {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 401;
+  max-width: 480px; margin: 0 auto;
+  height: 65vh; max-height: 520px;
+  background: var(--bg);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 32px rgba(0,0,0,0.12);
+  display: flex; flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.chat-sheet.open { transform: translateY(0); }
+
+.chat-sheet-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.chat-sheet-title {
+  font-family: var(--serif); font-size: 16px; font-weight: 600;
+  color: var(--text);
+}
+.chat-sheet-subtitle {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-muted); margin-top: 2px;
+}
+.chat-close-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--card);
+  color: var(--text-mid); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 16px 16px 8px;
+  display: flex; flex-direction: column; gap: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-msg {
+  max-width: 85%; padding: 10px 14px;
+  border-radius: 16px; font-size: 14px; line-height: 1.55;
+  font-family: var(--serif); word-break: break-word;
+}
+.chat-msg.user {
+  align-self: flex-end;
+  background: var(--accent); color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.chat-msg.bot {
+  align-self: flex-start;
+  background: var(--card); color: var(--text);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.bot .msg-label {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--accent); margin-bottom: 4px; font-weight: 500;
+}
+.chat-msg.typing .dots span {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--text-muted); border-radius: 50%;
+  margin: 0 2px; animation: dotBounce 1.2s infinite;
+}
+.chat-msg.typing .dots span:nth-child(2) { animation-delay: 0.2s; }
+.chat-msg.typing .dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
+}
+
+.chat-msg.error {
+  align-self: center; max-width: 90%;
+  background: rgba(196,93,62,0.08); color: var(--accent);
+  font-size: 12px; text-align: center;
+  border-radius: 10px; border: 1px solid rgba(196,93,62,0.15);
+}
+
+.chat-input-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.chat-input {
+  flex: 1; border: 1.5px solid var(--border-strong);
+  border-radius: 20px; padding: 10px 16px;
+  font-family: var(--serif); font-size: 14px;
+  background: var(--card); color: var(--text);
+  outline: none; resize: none; max-height: 80px;
+}
+.chat-input:focus { border-color: var(--accent); }
+.chat-input::placeholder { color: var(--text-muted); }
+.chat-send-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--accent); color: #fff; border: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+.chat-send-btn:disabled { opacity: 0.4; cursor: default; }
+.chat-send-btn svg { width: 18px; height: 18px; }
+
+.chat-welcome {
+  text-align: center; padding: 32px 20px;
+  color: var(--text-mid); font-family: var(--serif);
+}
+.chat-welcome-icon { font-size: 32px; margin-bottom: 12px; }
+.chat-welcome-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+.chat-welcome-desc { font-size: 13px; line-height: 1.6; }
+.chat-welcome-hints {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: center; margin-top: 16px;
+}
+.chat-hint-chip {
+  font-family: var(--mono); font-size: 11px;
+  padding: 6px 12px; border-radius: 20px;
+  background: var(--card); border: 1px solid var(--border-strong);
+  color: var(--text-mid); cursor: pointer;
+  transition: all 0.15s;
+}
+.chat-hint-chip:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -862,6 +1055,8 @@ body::before{
 <button class="search-trigger" id="searchTrigger" onclick="toggleSearch()" aria-label="검색/필터">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
 </button>
+
+<button class="font-size-trigger" id="fontSizeTrigger" onclick="cycleFontSize()" aria-label="글자 크기">가</button>
 
 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="테마 전환">
   <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -878,8 +1073,7 @@ body::before{
 </div>
 
 <div class="section-nav">
-  <button class="section-nav-btn active" onclick="scrollToSection('overview')">일정</button>
-  <button class="section-nav-btn" onclick="scrollToSection('places')">장소</button>
+  <button class="section-nav-btn active" onclick="scrollToSection('places')">장소</button>
   <button class="section-nav-btn" onclick="scrollToSection('restaurants')">식당</button>
   <button class="section-nav-btn" onclick="scrollToSection('stay')">숙소</button>
 </div>
@@ -931,7 +1125,6 @@ let travelData = null;
 function render() {
   if (!travelData) return;
   let html = '';
-  html += renderOverview(travelData.days);
   html += renderPlaces(travelData.days);
   html += renderRestaurants(travelData.days);
   html += renderStay();
@@ -1000,6 +1193,56 @@ function renderPlaces(days) {
     });
   });
 
+  // 하드코딩 추가 장소 (홈플러스, 소아과)
+  var extraPlaces = [
+    {
+      title: '홈플러스 경주점',
+      id: 'extra_homeplus',
+      cat: 'activity',
+      guide: {
+        subtitle: '경주 유일의 대형 할인점 · 2024 메가푸드마켓 리뉴얼',
+        mustDo: ['BBQ 식재료·간식·음료 장보기', '아기 간식·이유식 재료 확보'],
+        babyTips: {
+          stroller: '단층 매장이라 유모차 이동 편리',
+          nursingRoom: '매장 내 수유실 (전화확인: 054-770-8000)',
+          restSpots: ['수퍼윙스 키즈카페 (1층)']
+        },
+        practicalInfo: {
+          hours: '09:00~22:00',
+          parking: '1층 고객주차장 + 2층 옥상주차장 (유료, 구매시 무료)',
+          phone: '054-770-8000',
+          closedDays: '매월 둘째·넷째 일요일 (\u26A0\uFE0F 2/22 휴무!)',
+          address: '경상북도 경주시 공단로 97',
+          fromAccommodation: '까사멜로우에서 차량 약 15분',
+          mapUrl: 'https://map.naver.com/p/search/홈플러스%20경주점'
+        }
+      }
+    },
+    {
+      title: '사랑의 소아과의원',
+      id: 'extra_clinic',
+      cat: 'activity',
+      guide: {
+        subtitle: '아이 아플 때 대비 — 소아청소년과 전문의',
+        mustDo: ['방문 전 반드시 전화 확인 (임시 휴진 가능)', '야간/공휴일: E-GEN 앱에서 당일 진료 병원 검색'],
+        babyTips: {},
+        practicalInfo: {
+          address: '경상북도 경주시 황성로 59, 2층',
+          phone: '054-773-7740',
+          hours: '평일 09:00~18:00 (추정), 토 09:00~13:00',
+          closedDays: '일요일·공휴일 휴진',
+          mapUrl: 'https://naver.me/GJrFT2S7'
+        }
+      }
+    }
+  ];
+  extraPlaces.forEach(function(ep) {
+    if (!seen[ep.id]) {
+      seen[ep.id] = true;
+      places.push(ep);
+    }
+  });
+
   places.forEach(function(item, i) {
     var g = item.guide;
     var hasNursing = (g.babyTips && g.babyTips.nursingRoom) ? '1' : '';
@@ -1060,13 +1303,22 @@ function renderPlaces(days) {
       html += '<div class="place-section">';
       html += '<div class="place-section-label">실용 정보</div>';
       html += '<div class="info-grid">';
+      if (pi.address) html += '<span class="info-label">주소</span><span class="info-value">' + esc(pi.address) + '</span>';
+      if (pi.phone) html += '<span class="info-label">전화</span><span class="info-value">' + esc(pi.phone) + '</span>';
       if (pi.fee) html += '<span class="info-label">입장료</span><span class="info-value">' + esc(pi.fee) + '</span>';
       if (pi.hours) html += '<span class="info-label">운영시간</span><span class="info-value">' + esc(pi.hours) + '</span>';
       if (pi.parking) html += '<span class="info-label">주차</span><span class="info-value">' + esc(pi.parking) + '</span>';
       if (pi.timeNeeded) html += '<span class="info-label">소요시간</span><span class="info-value">' + esc(pi.timeNeeded) + '</span>';
       if (pi.fromAccommodation) html += '<span class="info-label">숙소에서</span><span class="info-value">' + esc(pi.fromAccommodation) + '</span>';
       if (pi.closedDays) html += '<span class="info-label">휴무</span><span class="info-value">' + esc(pi.closedDays) + '</span>';
-      html += '</div></div>';
+      html += '</div>';
+      if (pi.mapUrl) {
+        html += '<a class="rest-map-link" href="' + escAttr(pi.mapUrl) + '" target="_blank" rel="noopener">';
+        html += '지도에서 보기';
+        html += '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>';
+        html += '</a>';
+      }
+      html += '</div>';
     }
     html += '</div></details>';
   });
@@ -1078,6 +1330,7 @@ function renderPlaces(days) {
 // ═══ ③ RESTAURANTS ═══
 var allRestaurants = [];
 var restSortMode = 'rating';
+var restTypeFilter = 'all';
 var userLat = null, userLng = null;
 
 (function() {
@@ -1106,6 +1359,7 @@ function extractRestaurants(days) {
             rating:opt.rating||null, ratingSource:opt.ratingSource||'',
             priceRange:opt.priceRange||'', menuDetail:opt.menuDetail||null,
             mapUrl:opt.mapUrl||'', category:opt.category||'', cat:item.cat,
+            type: item.cat === 'cafe' ? 'cafe' : 'meal',
             meals:[], distKm:null
           };
         }
@@ -1167,6 +1421,19 @@ function renderRestaurants(days) {
   html += '<div class="section-subtitle">' + allRestaurants.length + '곳 · 메뉴 · 알레르기 정보</div>';
   html += '</div>';
 
+  // 식당/카페 카운트 계산
+  var mealCount = 0, cafeCount = 0;
+  allRestaurants.forEach(function(r) {
+    if (r.type === 'cafe') cafeCount++;
+    else mealCount++;
+  });
+
+  html += '<div class="rest-sub-tabs" id="restSubTabs">';
+  html += '<button class="rest-sub-tab' + (restTypeFilter === 'all' ? ' active' : '') + '" data-type="all" onclick="filterRestType(\'all\')">전체 (' + allRestaurants.length + ')</button>';
+  html += '<button class="rest-sub-tab' + (restTypeFilter === 'meal' ? ' active' : '') + '" data-type="meal" onclick="filterRestType(\'meal\')">식당 (' + mealCount + ')</button>';
+  html += '<button class="rest-sub-tab' + (restTypeFilter === 'cafe' ? ' active' : '') + '" data-type="cafe" onclick="filterRestType(\'cafe\')">카페 (' + cafeCount + ')</button>';
+  html += '</div>';
+
   html += '<div class="sort-bar">';
   html += '<button class="sort-btn' + (restSortMode === 'rating' ? ' active' : '') + '" onclick="changeRestSort(\'rating\')">별점순</button>';
   html += '<button class="sort-btn' + (restSortMode === 'distance' ? ' active' : '') + '" onclick="changeRestSort(\'distance\')">' + (userLat ? '거리순' : '거리순 (위치 필요)') + '</button>';
@@ -1187,6 +1454,7 @@ function renderRestCards(list) {
     html += ' data-hiro="' + escAttr(r.hiro || '') + '"';
     html += ' data-category="' + escAttr(r.category || '') + '"';
     html += ' data-hours="' + escAttr(oc.status) + '"';
+    html += ' data-type="' + escAttr(r.type || r.cat || 'meal') + '"';
     html += ' style="animation-delay:' + (i * 0.04) + 's">';
     html += '<summary>';
     html += '<div class="card-top">';
@@ -1258,6 +1526,14 @@ function buildBadges(opt) {
   if (opt.hiro === 'good') b += '<span class="badge badge-hiro-good">히로 OK</span>';
   if (opt.hiro === 'caution') b += '<span class="badge badge-hiro-caution">히로 주의' + (opt.hiroNote ? ' · ' + esc(opt.hiroNote) : '') + '</span>';
   return b;
+}
+
+function filterRestType(type) {
+  restTypeFilter = type;
+  document.querySelectorAll('.rest-sub-tab').forEach(function(t) {
+    t.classList.toggle('active', t.getAttribute('data-type') === type);
+  });
+  applyFilters();
 }
 
 // ═══ ④ STAY ═══
@@ -1427,7 +1703,7 @@ window.addEventListener('scroll', function() {
   if (spyTimer) return;
   spyTimer = setTimeout(function() {
     spyTimer = null;
-    var sections = ['overview', 'places', 'restaurants', 'stay'];
+    var sections = ['places', 'restaurants', 'stay'];
     var active = sections[0];
     sections.forEach(function(id) {
       var el = document.getElementById(id);
@@ -1466,6 +1742,33 @@ function updateThemeIcon() {
 }
 initTheme();
 
+// ═══ FONT SIZE ═══
+var fontSizes = ['medium', 'large', 'small'];
+
+function initFontSize() {
+  var saved = localStorage.getItem('gj_fontsize') || 'medium';
+  document.documentElement.setAttribute('data-fontsize', saved);
+  updateFontSizeIcon(saved);
+}
+
+function cycleFontSize() {
+  var current = document.documentElement.getAttribute('data-fontsize') || 'medium';
+  var idx = fontSizes.indexOf(current);
+  var next = fontSizes[(idx + 1) % fontSizes.length];
+  document.documentElement.setAttribute('data-fontsize', next);
+  localStorage.setItem('gj_fontsize', next);
+  updateFontSizeIcon(next);
+}
+
+function updateFontSizeIcon(size) {
+  var btn = document.getElementById('fontSizeTrigger');
+  if (!btn) return;
+  var labels = { small: '가-', medium: '가', large: '가+' };
+  btn.textContent = labels[size];
+}
+
+initFontSize();
+
 function formatDate(s) { var p=s.split('-'); return parseInt(p[1])+'/'+parseInt(p[2]); }
 function formatPrice(n) { return n ? n.toLocaleString() + '원' : ''; }
 function esc(s) { if(!s) return ''; var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
@@ -1503,10 +1806,17 @@ function toggleFilter(chip) {
 function applyFilters() {
   var countEl = document.getElementById('filterResultCount');
 
-  // 필터 없으면 전부 보이기
+  // 필터 없으면 전부 보이기 (restTypeFilter는 별도 적용)
   if (activeFilters.size === 0) {
-    document.querySelectorAll('.card[data-section]').forEach(function(card) {
+    document.querySelectorAll('.card[data-section="places"]').forEach(function(card) {
       card.style.display = '';
+    });
+    document.querySelectorAll('.card[data-section="restaurants"]').forEach(function(card) {
+      if (restTypeFilter !== 'all' && card.getAttribute('data-type') !== restTypeFilter) {
+        card.style.display = 'none';
+      } else {
+        card.style.display = '';
+      }
     });
     // empty state 숨기기
     document.querySelectorAll('.search-empty').forEach(function(el) { el.classList.remove('visible'); });
@@ -1556,6 +1866,9 @@ function applyFilters() {
       else hasNonPlaceFilter = true;
     });
     if (hasPlaceOnlyFilter && !hasNonPlaceFilter) match = false;
+
+    // 식당/카페 서브탭 필터 적용
+    if (restTypeFilter !== 'all' && card.getAttribute('data-type') !== restTypeFilter) match = false;
 
     card.style.display = match ? '' : 'none';
     if (match) { sectionCounts.restaurants++; totalVisible++; }
@@ -1636,7 +1949,7 @@ function applyFilters() {
   if (activeSections.length === 1) {
     var targetId = activeSections[0];
     document.querySelectorAll('.section-nav-btn').forEach(function(btn) { btn.classList.remove('active'); });
-    var sectionIdx = ['overview', 'places', 'restaurants', 'stay'].indexOf(targetId);
+    var sectionIdx = ['places', 'restaurants', 'stay'].indexOf(targetId);
     if (sectionIdx >= 0) {
       document.querySelectorAll('.section-nav-btn')[sectionIdx].classList.add('active');
     }
@@ -1668,6 +1981,163 @@ function manageEmptyState(sectionId, count) {
     emptyEl.classList.remove('visible');
   }
 }
+
+// ═══ CHAT ═══════════════════════════════════════════════════
+var chatOpen = false;
+var chatBusy = false;
+
+function escapeHtmlChat(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chatOverlay').classList.toggle('open', chatOpen);
+  document.getElementById('chatSheet').classList.toggle('open', chatOpen);
+  document.getElementById('chatFab').classList.toggle('hidden', chatOpen);
+  if (chatOpen) {
+    setTimeout(function() { document.getElementById('chatInput').focus(); }, 350);
+    scrollChatBottom();
+  }
+}
+
+function closeChat() {
+  chatOpen = false;
+  document.getElementById('chatOverlay').classList.remove('open');
+  document.getElementById('chatSheet').classList.remove('open');
+  document.getElementById('chatFab').classList.remove('hidden');
+}
+
+function scrollChatBottom() {
+  var el = document.getElementById('chatMessages');
+  if (el) el.scrollTop = el.scrollHeight;
+}
+
+function appendChatMsg(role, text) {
+  var container = document.getElementById('chatMessages');
+  var welcome = container.querySelector('.chat-welcome');
+  if (welcome) welcome.style.display = 'none';
+
+  var div = document.createElement('div');
+  div.className = 'chat-msg ' + role;
+  if (role === 'bot') {
+    div.innerHTML = '<div class="msg-label">포저</div>' + escapeHtmlChat(text).replace(/\n/g, '<br>');
+  } else if (role === 'error') {
+    div.textContent = text;
+  } else {
+    div.textContent = text;
+  }
+  container.appendChild(div);
+  scrollChatBottom();
+  return div;
+}
+
+function showTyping() {
+  var container = document.getElementById('chatMessages');
+  var div = document.createElement('div');
+  div.className = 'chat-msg bot typing';
+  div.id = 'chatTyping';
+  div.innerHTML = '<div class="msg-label">포저</div><div class="dots"><span></span><span></span><span></span></div>';
+  container.appendChild(div);
+  scrollChatBottom();
+}
+
+function removeTyping() {
+  var el = document.getElementById('chatTyping');
+  if (el) el.remove();
+}
+
+async function sendChat() {
+  if (chatBusy) return;
+  var input = document.getElementById('chatInput');
+  var msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  appendChatMsg('user', msg);
+  chatBusy = true;
+  document.getElementById('chatSendBtn').disabled = true;
+  showTyping();
+
+  try {
+    var resp = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
+    });
+    removeTyping();
+    var data = await resp.json();
+    if (!resp.ok) {
+      appendChatMsg('error', data.error || '요청에 실패했습니다');
+    } else {
+      appendChatMsg('bot', data.reply || '응답을 받지 못했어요.');
+    }
+  } catch (e) {
+    removeTyping();
+    appendChatMsg('error', '포저에게 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
+  }
+  chatBusy = false;
+  document.getElementById('chatSendBtn').disabled = false;
+}
+
+function chatHint(text) {
+  document.getElementById('chatInput').value = text;
+  sendChat();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var chatInput = document.getElementById('chatInput');
+  if (chatInput) {
+    chatInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChat();
+      }
+    });
+  }
+});
 </script>
+
+<!-- 채팅 버블 -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="포저와 대화">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+</button>
+
+<!-- 채팅 오버레이 -->
+<div class="chat-overlay" id="chatOverlay" onclick="closeChat()"></div>
+
+<!-- 채팅 시트 -->
+<div class="chat-sheet" id="chatSheet">
+  <div class="chat-sheet-header">
+    <div>
+      <div class="chat-sheet-title">포저와 대화</div>
+      <div class="chat-sheet-subtitle">AI 여행 보좌관</div>
+    </div>
+    <button class="chat-close-btn" onclick="closeChat()" aria-label="닫기">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-welcome">
+      <div class="chat-welcome-icon">&#x1F9ED;</div>
+      <div class="chat-welcome-title">안녕하세요, 포저입니다</div>
+      <div class="chat-welcome-desc">경주 여행에 대해 무엇이든 물어보세요.<br>일정 변경, 맛집 추천, 관광 정보 등<br>무엇이든 도와드릴게요.</div>
+      <div class="chat-welcome-hints">
+        <div class="chat-hint-chip" onclick="chatHint('내일 일정 알려줘')">내일 일정</div>
+        <div class="chat-hint-chip" onclick="chatHint('근처 맛집 추천해줘')">맛집 추천</div>
+        <div class="chat-hint-chip" onclick="chatHint('아이랑 갈만한 곳')">아이와 함께</div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input-row">
+    <textarea class="chat-input" id="chatInput" rows="1" placeholder="메시지를 입력하세요..."></textarea>
+    <button class="chat-send-btn" id="chatSendBtn" onclick="sendChat()" aria-label="전송">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+    </button>
+  </div>
+</div>
+
 </body>
 </html>

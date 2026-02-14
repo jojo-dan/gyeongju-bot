@@ -95,6 +95,7 @@ body::before{
 
 body {
   font-family: var(--system);
+  font-size: var(--base-font, 16px);
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -754,9 +755,266 @@ body {
 .footer-space {
   height: 40px;
 }
+
+/* ═══ PLACE DETAIL (Activity Item 내부) ═══ */
+.place-detail {
+  border-radius: 14px;
+  margin: 10px 0 8px;
+  background: var(--bg-warm);
+  border: 1px solid transparent;
+  overflow: hidden;
+  transition: box-shadow 0.3s, border-color 0.3s;
+}
+.place-detail[open] {
+  border-color: var(--border);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.place-detail[open] .option-chevron {
+  transform: rotate(90deg);
+}
+.place-detail summary {
+  padding: 12px 14px;
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.place-detail summary::-webkit-details-marker { display: none; }
+
+.place-detail-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.place-detail-icon { font-size: 14px; }
+.place-detail-name {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--item-text);
+  flex: 1;
+  min-width: 0;
+}
+.place-detail-hours {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.place-detail-tags {
+  display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;
+}
+.place-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--border);
+  color: var(--text-mid);
+}
+.place-tag.baby { background: var(--accent-bg); color: var(--accent); }
+
+.place-detail-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.place-body-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.3px;
+  margin: 12px 0 6px;
+  text-transform: uppercase;
+}
+.place-body-label:first-child { margin-top: 0; }
+.place-info-row {
+  font-size: 13px;
+  color: var(--item-text-mid);
+  padding: 3px 0;
+}
+.place-info-label {
+  font-weight: 600;
+  color: var(--item-text-dim);
+  margin-right: 8px;
+}
+.place-list {
+  margin: 0; padding-left: 16px;
+  font-size: 13px; color: var(--item-text-mid);
+  line-height: 1.7;
+}
+
+/* ═══ FONT SIZE TRIGGER ═══ */
+.font-size-trigger {
+  position: fixed;
+  top: 12px;
+  right: 60px;
+  z-index: 200;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  background: var(--housing);
+  color: var(--text-mid);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.2s;
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 700;
+}
+.font-size-trigger:active { transform: scale(0.9); }
+
+:root[data-fontsize="small"] { --base-font: 14px; }
+:root[data-fontsize="large"] { --base-font: 18px; }
+
+/* ═══ CHAT BUBBLE & SHEET ═══ */
+.chat-fab {
+  position: fixed; bottom: 24px; right: 20px; z-index: 300;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--accent); color: #fff; border: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(196,93,62,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.chat-fab:active { transform: scale(0.9); }
+.chat-fab svg { width: 24px; height: 24px; }
+.chat-fab.hidden { display: none; }
+
+.chat-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(0,0,0,0.3); backdrop-filter: blur(2px);
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.chat-overlay.open { opacity: 1; pointer-events: auto; }
+
+.chat-sheet {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 401;
+  max-width: 480px; margin: 0 auto;
+  height: 65vh; max-height: 520px;
+  background: var(--bg);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 32px rgba(0,0,0,0.12);
+  display: flex; flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.chat-sheet.open { transform: translateY(0); }
+
+.chat-sheet-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.chat-sheet-title {
+  font-family: var(--serif); font-size: 16px; font-weight: 600;
+  color: var(--text);
+}
+.chat-sheet-subtitle {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--text-muted); margin-top: 2px;
+}
+.chat-close-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--housing);
+  color: var(--text-mid); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 16px 16px 8px;
+  display: flex; flex-direction: column; gap: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-msg {
+  max-width: 85%; padding: 10px 14px;
+  border-radius: 16px; font-size: 14px; line-height: 1.55;
+  font-family: var(--serif); word-break: break-word;
+}
+.chat-msg.user {
+  align-self: flex-end;
+  background: var(--accent); color: #fff;
+  border-bottom-right-radius: 4px;
+}
+.chat-msg.bot {
+  align-self: flex-start;
+  background: var(--housing); color: var(--text);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+.chat-msg.bot .msg-label {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--accent); margin-bottom: 4px; font-weight: 500;
+}
+.chat-msg.typing .dots span {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--text-muted); border-radius: 50%;
+  margin: 0 2px; animation: dotBounce 1.2s infinite;
+}
+.chat-msg.typing .dots span:nth-child(2) { animation-delay: 0.2s; }
+.chat-msg.typing .dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
+}
+
+.chat-msg.error {
+  align-self: center; max-width: 90%;
+  background: rgba(196,93,62,0.08); color: var(--accent);
+  font-size: 12px; text-align: center;
+  border-radius: 10px; border: 1px solid rgba(196,93,62,0.15);
+}
+
+.chat-input-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.chat-input {
+  flex: 1; border: 1.5px solid var(--border-strong);
+  border-radius: 20px; padding: 10px 16px;
+  font-family: var(--serif); font-size: 14px;
+  background: var(--housing); color: var(--text);
+  outline: none; resize: none; max-height: 80px;
+}
+.chat-input:focus { border-color: var(--accent); }
+.chat-input::placeholder { color: var(--text-muted); }
+.chat-send-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--accent); color: #fff; border: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+.chat-send-btn:disabled { opacity: 0.4; cursor: default; }
+.chat-send-btn svg { width: 18px; height: 18px; }
+
+.chat-welcome {
+  text-align: center; padding: 32px 20px;
+  color: var(--text-mid); font-family: var(--serif);
+}
+.chat-welcome-icon { font-size: 32px; margin-bottom: 12px; }
+.chat-welcome-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+.chat-welcome-desc { font-size: 13px; line-height: 1.6; }
+.chat-welcome-hints {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  justify-content: center; margin-top: 16px;
+}
+.chat-hint-chip {
+  font-family: var(--mono); font-size: 11px;
+  padding: 6px 12px; border-radius: 20px;
+  background: var(--housing); border: 1px solid var(--border-strong);
+  color: var(--text-mid); cursor: pointer;
+  transition: all 0.15s;
+}
+.chat-hint-chip:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
 </style>
 </head>
 <body>
+
+<!-- 글자 크기 -->
+<button class="font-size-trigger" id="fontSizeTrigger" onclick="cycleFontSize()" aria-label="글자 크기">가</button>
 
 <!-- 테마 토글 -->
 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="테마 전환">
@@ -829,6 +1087,208 @@ function updateThemeIcon(){
     :'<path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>';
 }
 initTheme();
+
+// ═══ 글자 크기 ═══
+var fontSizes = ['medium', 'large', 'small'];
+
+function initFontSize() {
+  var saved = localStorage.getItem('gj_fontsize') || 'medium';
+  document.documentElement.setAttribute('data-fontsize', saved);
+  updateFontSizeIcon(saved);
+}
+
+function cycleFontSize() {
+  var current = document.documentElement.getAttribute('data-fontsize') || 'medium';
+  var idx = fontSizes.indexOf(current);
+  var next = fontSizes[(idx + 1) % fontSizes.length];
+  document.documentElement.setAttribute('data-fontsize', next);
+  localStorage.setItem('gj_fontsize', next);
+  updateFontSizeIcon(next);
+}
+
+function updateFontSizeIcon(size) {
+  var btn = document.getElementById('fontSizeTrigger');
+  if (!btn) return;
+  var labels = { small: '가-', medium: '가', large: '가+' };
+  btn.textContent = labels[size];
+}
+
+initFontSize();
+
+// ═══ STAY_DATA (guide.html에서 복사) ═══
+var STAY_DATA = {
+  name: '까사멜로우', nameEn: 'Casa Mellow',
+  desc: '아이와 함께하는 서툰 여행을 응원하며',
+  address: '경상북도 경주시 북군4길 75',
+  phone: '010-3583-6648', email: 'ssoong6648@naver.com',
+  instagram: '@casa.mellow',
+  checkin: '15:30', checkout: '11:00',
+  parking: '건물 외부 전용 주차장',
+  mapUrl: 'https://map.naver.com/p/search/까사멜로우 경주',
+  stayfolioUrl: 'https://www.stayfolio.com/findstay/casa-mellow',
+  rooms: [
+    { name: 'A-1', type: '복층', people: '4/8명', bed: 'Q2 + S1', bath: '2.5', price: '289,000~' },
+    { name: 'A-2', type: '복층', people: '4/8명', bed: 'Q2 + S1', bath: '2.5', price: '329,000~' },
+    { name: 'B', type: '독채', people: '4/8명', bed: '4개', bath: '2', price: '329,000~' }
+  ],
+  amenities: {
+    kitchen: ['인덕션', '전자레인지', '식기세척기', '토스터기', '캡슐커피머신', '전기포트', '제빙기', '조리도구', '기본조미료', '와인잔'],
+    bath: ['샴푸', '컨디셔너', '바디워시', '핸드워시', '치약', '타월', '샤워가운'],
+    general: ['TV', '냉장고', '세탁기', '헤어드라이어', '스피커', '슬리퍼', '생수'],
+    baby: ['젖병소독기', '유아용 어메니티', '유아 샤워용품', '키즈가구']
+  },
+  kids: ['실내 키즈룸 (미끄럼틀, 놀이기구)', '야외 모래 놀이터', '미니 바이킹', '전 객실 키즈 어메니티'],
+  pool: { depth: '약 70cm', note: '온수 풀 · 사계절 이용 · 시간 제한 없음 · 보호자 동반 필수' },
+  bbq: { note: '무료 이용 · 전기그릴 기본 제공 · 시간 제한 없음', extra: '웨버 가스그릴 추가 가능 (유료)' },
+  rules: ['전 공간 절대 금연', '실내 냄새나는 음식 조리 금지', '퇴실 전 정리 및 분리수거', '야간 소음 주의', '24개월 미만 영유아 무료', '기준인원 초과 시 1인 1박 30,000원']
+};
+
+// ═══ 홈플러스 guide 데이터 패치 ═══
+function patchGuideData(days) {
+  days.forEach(function(day) {
+    day.items.forEach(function(item) {
+      if (item.title && item.title.indexOf('홈플러스') !== -1 && !item.guide) {
+        item.guide = {
+          subtitle: '경주 유일의 대형 할인점 · 2024 메가푸드마켓 리뉴얼',
+          mustDo: ['BBQ 식재료·간식·음료 장보기', '아기 간식·이유식 재료 확보'],
+          babyTips: {
+            stroller: '단층 매장이라 유모차 이동 편리',
+            nursingRoom: '매장 내 수유실 (전화확인: 054-770-8000)',
+            restSpots: ['수퍼윙스 키즈카페 (1층)']
+          },
+          practicalInfo: {
+            hours: '09:00~22:00',
+            parking: '1층 고객주차장 + 2층 옥상주차장 (유료, 구매시 무료)',
+            phone: '054-770-8000',
+            closedDays: '매월 둘째·넷째 일요일 (\u26A0\uFE0F 2/22 휴무!)',
+            address: '경상북도 경주시 공단로 97',
+            fromAccommodation: '까사멜로우에서 차량 약 15분',
+            mapUrl: 'https://map.naver.com/p/search/홈플러스%20경주점'
+          }
+        };
+      }
+    });
+  });
+}
+
+// ═══ 장소 상세 카드 (activity 아이템 내부) ═══
+function isStayItem(item) {
+  if (!item.title) return false;
+  return item.title.indexOf('체크인') !== -1 || item.title.indexOf('정착') !== -1;
+}
+
+function renderPlaceDetail(item) {
+  if (isStayItem(item)) return renderStayDetail();
+  var g = item.guide;
+  if (!g) return '';
+
+  var html = '<details class="place-detail">';
+  html += '<summary>';
+  html += '<div class="place-detail-top">';
+  html += '<span class="place-detail-icon">\uD83D\uDCCD</span>';
+  html += '<span class="place-detail-name">' + escapeHtml(g.subtitle || item.title) + '</span>';
+  if (g.practicalInfo && g.practicalInfo.hours) {
+    html += '<span class="place-detail-hours">' + escapeHtml(g.practicalInfo.hours) + '</span>';
+  }
+  html += '<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
+  html += '</div>';
+
+  // summary 태그들
+  var tags = [];
+  if (g.practicalInfo && g.practicalInfo.parking) tags.push('주차 가능');
+  if (g.babyTips && g.babyTips.stroller) tags.push({text: '유모차 OK', cls: 'baby'});
+  if (g.babyTips && g.babyTips.nursingRoom) tags.push({text: '수유실', cls: 'baby'});
+  if (tags.length) {
+    html += '<div class="place-detail-tags">';
+    tags.forEach(function(t) {
+      if (typeof t === 'string') html += '<span class="place-tag">' + t + '</span>';
+      else html += '<span class="place-tag ' + t.cls + '">' + t.text + '</span>';
+    });
+    html += '</div>';
+  }
+  html += '</summary>';
+
+  html += '<div class="place-detail-body">';
+
+  // 필수 체험
+  if (g.mustDo && g.mustDo.length) {
+    html += '<div class="place-body-label">꼭 할 것</div><ul class="place-list">';
+    g.mustDo.forEach(function(m) { html += '<li>' + escapeHtml(m) + '</li>'; });
+    html += '</ul>';
+  }
+
+  // 아기 팁
+  if (g.babyTips && Object.keys(g.babyTips).length) {
+    html += '<div class="place-body-label">아기 동반 팁</div>';
+    var bt = g.babyTips;
+    if (bt.stroller) html += '<div class="place-info-row"><span class="place-info-label">유모차</span>' + escapeHtml(bt.stroller) + '</div>';
+    if (bt.nursingRoom) html += '<div class="place-info-row"><span class="place-info-label">수유실</span>' + escapeHtml(bt.nursingRoom) + '</div>';
+    if (bt.restroom) html += '<div class="place-info-row"><span class="place-info-label">화장실</span>' + escapeHtml(bt.restroom) + '</div>';
+    if (bt.restSpots && bt.restSpots.length) {
+      html += '<div class="place-info-row"><span class="place-info-label">쉴 곳</span>' + bt.restSpots.map(escapeHtml).join(', ') + '</div>';
+    }
+    if (bt.recommendedRoute) html += '<div class="place-info-row"><span class="place-info-label">추천 동선</span>' + escapeHtml(bt.recommendedRoute) + '</div>';
+  }
+
+  // 실용 정보
+  if (g.practicalInfo) {
+    html += '<div class="place-body-label">실용 정보</div>';
+    var pi = g.practicalInfo;
+    if (pi.address) html += '<div class="place-info-row"><span class="place-info-label">주소</span>' + escapeHtml(pi.address) + '</div>';
+    if (pi.hours) html += '<div class="place-info-row"><span class="place-info-label">영업시간</span>' + escapeHtml(pi.hours) + '</div>';
+    if (pi.fee) html += '<div class="place-info-row"><span class="place-info-label">입장료</span>' + escapeHtml(pi.fee) + '</div>';
+    if (pi.phone) html += '<div class="place-info-row"><span class="place-info-label">전화</span>' + escapeHtml(pi.phone) + '</div>';
+    if (pi.parking) html += '<div class="place-info-row"><span class="place-info-label">주차</span>' + escapeHtml(pi.parking) + '</div>';
+    if (pi.timeNeeded) html += '<div class="place-info-row"><span class="place-info-label">소요시간</span>' + escapeHtml(pi.timeNeeded) + '</div>';
+    if (pi.closedDays) html += '<div class="place-info-row"><span class="place-info-label">휴무</span>' + escapeHtml(pi.closedDays) + '</div>';
+    if (pi.fromAccommodation) html += '<div class="place-info-row"><span class="place-info-label">숙소에서</span>' + escapeHtml(pi.fromAccommodation) + '</div>';
+  }
+
+  // 지도 링크
+  var mapUrl = (g.practicalInfo && g.practicalInfo.mapUrl) || '';
+  if (!mapUrl && item.options && item.options[0] && item.options[0].mapUrl) mapUrl = item.options[0].mapUrl;
+  if (mapUrl) {
+    html += '<a class="option-map-link" href="' + escapeAttr(mapUrl) + '" target="_blank">지도에서 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>';
+  }
+
+  html += '</div></details>';
+  return html;
+}
+
+function renderStayDetail() {
+  if (typeof STAY_DATA === 'undefined') return '';
+  var s = STAY_DATA;
+  var html = '<details class="place-detail stay-detail">';
+  html += '<summary><div class="place-detail-top">';
+  html += '<span class="place-detail-icon">\uD83C\uDFE0</span>';
+  html += '<span class="place-detail-name">' + escapeHtml(s.name) + '</span>';
+  html += '<span class="place-detail-hours">체크인 ' + escapeHtml(s.checkin) + '</span>';
+  html += '<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
+  html += '</div></summary>';
+  html += '<div class="place-detail-body">';
+  html += '<div class="place-info-row"><span class="place-info-label">주소</span>' + escapeHtml(s.address) + '</div>';
+  html += '<div class="place-info-row"><span class="place-info-label">전화</span>' + escapeHtml(s.phone) + '</div>';
+  html += '<div class="place-info-row"><span class="place-info-label">체크인/아웃</span>' + s.checkin + ' / ' + s.checkout + '</div>';
+  html += '<div class="place-info-row"><span class="place-info-label">주차</span>' + escapeHtml(s.parking) + '</div>';
+  if (s.kids && s.kids.length) {
+    html += '<div class="place-body-label">키즈 시설</div><ul class="place-list">';
+    s.kids.forEach(function(k) { html += '<li>' + escapeHtml(k) + '</li>'; });
+    html += '</ul>';
+  }
+  if (s.amenities && s.amenities.baby && s.amenities.baby.length) {
+    html += '<div class="place-body-label">아기 용품</div>';
+    html += '<div class="place-info-row">' + s.amenities.baby.map(escapeHtml).join(', ') + '</div>';
+  }
+  if (s.pool) {
+    html += '<div class="place-body-label">풀장</div>';
+    html += '<div class="place-info-row">' + escapeHtml(s.pool.note) + '</div>';
+  }
+  if (s.mapUrl) {
+    html += '<a class="option-map-link" href="' + escapeAttr(s.mapUrl) + '" target="_blank">지도에서 보기 ↗</a>';
+  }
+  html += '</div></details>';
+  return html;
+}
 
 const POLL_INTERVAL = 30000;
 
@@ -916,6 +1376,7 @@ function renderTabs() {
 }
 
 function renderDayContent() {
+  patchGuideData(travelData.days);
   const area = document.getElementById('contentArea');
   const day = travelData.days[activeDay];
   if (!day) { area.innerHTML = '<div class="loading">데이터 없음</div>'; return; }
@@ -1090,6 +1551,11 @@ function renderItemCard(item) {
 
   // 제목
   html += `<div class="item-title${titleClass}">${item.title}</div>`;
+
+  // 장소 상세 카드
+  if (item.cat === 'activity') {
+    html += renderPlaceDetail(item);
+  }
 
   // 거리 행 (위치 활성화 시)
   if (userLat && item.options && item.options.length > 0) {
@@ -1356,6 +1822,163 @@ function applyTestLocation() {
 document.addEventListener('DOMContentLoaded', () => {
   if (!applyTestLocation()) initLocationBanner();
 });
+
+// ═══ CHAT ═══════════════════════════════════════════════════
+var chatOpen = false;
+var chatBusy = false;
+var chatMessages = [];
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chatOverlay').classList.toggle('open', chatOpen);
+  document.getElementById('chatSheet').classList.toggle('open', chatOpen);
+  document.getElementById('chatFab').classList.toggle('hidden', chatOpen);
+  if (chatOpen) {
+    setTimeout(function() { document.getElementById('chatInput').focus(); }, 350);
+    scrollChatBottom();
+  }
+}
+
+function closeChat() {
+  chatOpen = false;
+  document.getElementById('chatOverlay').classList.remove('open');
+  document.getElementById('chatSheet').classList.remove('open');
+  document.getElementById('chatFab').classList.remove('hidden');
+}
+
+function scrollChatBottom() {
+  var el = document.getElementById('chatMessages');
+  if (el) el.scrollTop = el.scrollHeight;
+}
+
+function appendChatMsg(role, text) {
+  var container = document.getElementById('chatMessages');
+  var welcome = container.querySelector('.chat-welcome');
+  if (welcome) welcome.style.display = 'none';
+
+  var div = document.createElement('div');
+  div.className = 'chat-msg ' + role;
+  if (role === 'bot') {
+    div.innerHTML = '<div class="msg-label">포저</div>' + escapeHtml(text).replace(/\n/g, '<br>');
+  } else if (role === 'error') {
+    div.textContent = text;
+  } else {
+    div.textContent = text;
+  }
+  container.appendChild(div);
+  scrollChatBottom();
+  return div;
+}
+
+function showTyping() {
+  var container = document.getElementById('chatMessages');
+  var div = document.createElement('div');
+  div.className = 'chat-msg bot typing';
+  div.id = 'chatTyping';
+  div.innerHTML = '<div class="msg-label">포저</div><div class="dots"><span></span><span></span><span></span></div>';
+  container.appendChild(div);
+  scrollChatBottom();
+}
+
+function removeTyping() {
+  var el = document.getElementById('chatTyping');
+  if (el) el.remove();
+}
+
+async function sendChat() {
+  if (chatBusy) return;
+  var input = document.getElementById('chatInput');
+  var msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  appendChatMsg('user', msg);
+  chatBusy = true;
+  document.getElementById('chatSendBtn').disabled = true;
+  showTyping();
+
+  try {
+    var resp = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
+    });
+    removeTyping();
+    var data = await resp.json();
+    if (!resp.ok) {
+      appendChatMsg('error', data.error || '요청에 실패했습니다');
+    } else {
+      appendChatMsg('bot', data.reply || '응답을 받지 못했어요.');
+      if (data.data_modified) {
+        showToast('포저가 일정을 수정했어요. 새로고침합니다.');
+        setTimeout(function() { loadTravelData(); }, 1500);
+      }
+    }
+  } catch (e) {
+    removeTyping();
+    appendChatMsg('error', '포저에게 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
+  }
+  chatBusy = false;
+  document.getElementById('chatSendBtn').disabled = false;
+}
+
+function chatHint(text) {
+  document.getElementById('chatInput').value = text;
+  sendChat();
+}
+
+// 키보드 Enter 전송
+document.addEventListener('DOMContentLoaded', function() {
+  var chatInput = document.getElementById('chatInput');
+  if (chatInput) {
+    chatInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendChat();
+      }
+    });
+  }
+});
 </script>
+
+<!-- 채팅 버블 -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="포저와 대화">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+</button>
+
+<!-- 채팅 오버레이 -->
+<div class="chat-overlay" id="chatOverlay" onclick="closeChat()"></div>
+
+<!-- 채팅 시트 -->
+<div class="chat-sheet" id="chatSheet">
+  <div class="chat-sheet-header">
+    <div>
+      <div class="chat-sheet-title">포저와 대화</div>
+      <div class="chat-sheet-subtitle">AI 여행 보좌관</div>
+    </div>
+    <button class="chat-close-btn" onclick="closeChat()" aria-label="닫기">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="chat-welcome">
+      <div class="chat-welcome-icon">&#x1F9ED;</div>
+      <div class="chat-welcome-title">안녕하세요, 포저입니다</div>
+      <div class="chat-welcome-desc">경주 여행에 대해 무엇이든 물어보세요.<br>일정 변경, 맛집 추천, 관광 정보 등<br>무엇이든 도와드릴게요.</div>
+      <div class="chat-welcome-hints">
+        <div class="chat-hint-chip" onclick="chatHint('내일 일정 알려줘')">내일 일정</div>
+        <div class="chat-hint-chip" onclick="chatHint('근처 맛집 추천해줘')">맛집 추천</div>
+        <div class="chat-hint-chip" onclick="chatHint('아이랑 갈만한 곳')">아이와 함께</div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input-row">
+    <textarea class="chat-input" id="chatInput" rows="1" placeholder="메시지를 입력하세요..."></textarea>
+    <button class="chat-send-btn" id="chatSendBtn" onclick="sendChat()" aria-label="전송">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>
+    </button>
+  </div>
+</div>
+
 </body>
 </html>
