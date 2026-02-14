@@ -1,7 +1,7 @@
 """경주 여행 봇 도구 정의 모듈.
 
 Anthropic Messages API의 tools 파라미터에 전달할 도구 목록을 정의한다.
-읽기 도구 5개, 쓰기 도구 7개, 메타 도구 1개로 총 13개의 도구를 포함한다.
+읽기 도구 5개, 쓰기 도구 8개, 메타 도구 1개로 총 14개의 도구를 포함한다.
 옵션 스키마에 lat/lng 좌표 필드를 포함한다.
 """
 
@@ -130,10 +130,11 @@ TOOLS = [
         },
     },
     {
-        "name": "set_chosen",
+        "name": "update_visit",
         "description": (
-            "항목의 옵션을 확정한다. "
-            "옵션 이름은 부분 일치로 매칭되므로 정확한 전체 이름을 입력하지 않아도 된다."
+            "장소/식당/숙소의 방문 여부를 기록한다. "
+            "옵션이 있는 항목(식당 등)은 어떤 옵션을 방문했는지도 함께 기록한다. "
+            "방문 기록 시 status가 planned이면 자동으로 done으로 변경된다."
         ),
         "input_schema": {
             "type": "object",
@@ -142,12 +143,34 @@ TOOLS = [
                     "type": "string",
                     "description": "항목 ID",
                 },
-                "chosen": {
+                "visited": {
+                    "type": "boolean",
+                    "description": "방문 여부 (true: 방문함, false: 방문 취소)",
+                },
+                "option_name": {
                     "type": "string",
-                    "description": "확정할 옵션 이름 (부분 일치 가능)",
+                    "description": "방문한 옵션 이름 (식당 등 옵션이 있는 항목만. 부분 일치 가능)",
                 },
             },
-            "required": ["item_id", "chosen"],
+            "required": ["item_id", "visited"],
+        },
+    },
+    {
+        "name": "update_review",
+        "description": "장소/식당에 대한 한줄 리뷰(감상)를 기록한다.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "item_id": {
+                    "type": "string",
+                    "description": "항목 ID",
+                },
+                "review": {
+                    "type": "string",
+                    "description": "한줄 리뷰/감상",
+                },
+            },
+            "required": ["item_id", "review"],
         },
     },
     {

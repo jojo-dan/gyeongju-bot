@@ -14,1089 +14,737 @@
 <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/earlyaccess/kopubbatang.css" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+*{margin:0;padding:0;box-sizing:border-box}
 
-:root {
+:root{
   --bg:#FAF7F2;
   --bg-warm:#F3EDE4;
-  --housing:#FFFFFF;
-  --display:#3D2E1F;
-  --display-text:#FAF7F2;
-  --display-dim:rgba(250,247,242,0.55);
+  --card:#FFFFFF;
+  --card-hover:#FDFCFA;
+  --hero:#3D2E1F;
+  --hero-text:#FAF7F2;
+  --hero-dim:rgba(250,247,242,0.55);
   --accent:#C45D3E;
   --accent-soft:#E8896E;
   --accent-bg:rgba(196,93,62,0.08);
   --sage:#7B8F6B;
   --sage-bg:rgba(123,143,107,0.1);
+  --blue:#4A6FA5;
+  --blue-bg:rgba(74,111,165,0.08);
   --text:#2C2218;
   --text-mid:#5C4F42;
   --text-light:#8C7E72;
   --text-muted:#A89E94;
   --border:rgba(60,46,31,0.1);
   --border-strong:rgba(60,46,31,0.18);
-  --item-bg:#F3EDE4;
-  --item-text:#2C2218;
-  --item-text-mid:#5C4F42;
-  --item-text-dim:#8C7E72;
   --serif:'Spectral','KoPub Batang',Georgia,serif;
+  --body:'Spectral','KoPub Batang',Georgia,serif;
   --mono:'DM Mono','SF Mono',monospace;
-  --system:'Spectral','KoPub Batang',Georgia,serif;
-  --radius-device:20px;
-  --radius-display:14px;
-  --radius-btn:12px;
-  --shadow-device:0 1px 3px rgba(60,46,31,0.06),0 8px 24px rgba(60,46,31,0.04);
+  --r-card:20px;
+  --r-btn:12px;
+  --r-tag:6px;
+  --shadow-card:0 1px 3px rgba(60,46,31,0.06),0 8px 24px rgba(60,46,31,0.04);
+  --shadow-card-hover:0 2px 8px rgba(60,46,31,0.1),0 12px 32px rgba(60,46,31,0.06);
+  --shadow-hero:0 4px 32px rgba(60,46,31,0.12);
   --shadow-btn:0 1px 3px rgba(0,0,0,0.1),inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
-/* ═══ DARK MODE ═══ */
-[data-theme="dark"]{
-  --bg:#1A1714;--bg-warm:#242019;--housing:#2C261F;
-  --display:#2C261F;--display-text:#E8E0D6;--display-dim:rgba(232,224,214,0.45);
-  --accent:#E8896E;--accent-soft:#C45D3E;--accent-bg:rgba(232,137,110,0.15);
-  --sage:#9AB089;--sage-bg:rgba(154,176,137,0.15);
-  --text:#E8E0D6;--text-mid:#B5AA9E;--text-light:#8C7E72;--text-muted:#6B5F54;
-  --border:rgba(250,247,242,0.08);--border-strong:rgba(250,247,242,0.15);
-  --item-bg:#242019;--item-text:#E8E0D6;--item-text-mid:#B5AA9E;--item-text-dim:#8C7E72;
-  --shadow-device:0 1px 3px rgba(0,0,0,0.3),0 8px 24px rgba(0,0,0,0.2);
-  --shadow-btn:0 1px 3px rgba(0,0,0,0.3);
-}
-@media(prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#1A1714;--bg-warm:#242019;--housing:#2C261F;
-    --display:#2C261F;--display-text:#E8E0D6;--display-dim:rgba(232,224,214,0.45);
-    --accent:#E8896E;--accent-soft:#C45D3E;--accent-bg:rgba(232,137,110,0.15);
-    --sage:#9AB089;--sage-bg:rgba(154,176,137,0.15);
-    --text:#E8E0D6;--text-mid:#B5AA9E;--text-light:#8C7E72;--text-muted:#6B5F54;
-    --border:rgba(250,247,242,0.08);--border-strong:rgba(250,247,242,0.15);
-    --item-bg:#242019;--item-text:#E8E0D6;--item-text-mid:#B5AA9E;--item-text-dim:#8C7E72;
-    --shadow-device:0 1px 3px rgba(0,0,0,0.3),0 8px 24px rgba(0,0,0,0.2);
-    --shadow-btn:0 1px 3px rgba(0,0,0,0.3);
-  }
+:root[data-fontsize="small"] { --base-font: 14px; --delta: -2px; }
+:root[data-fontsize="large"] { --base-font: 18px; --delta: 2px; }
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:var(--body);
+  font-size:var(--base-font, 16px);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  -webkit-text-size-adjust:100%;
+  overflow-x:hidden;
 }
 
-/* ═══ THEME TOGGLE ═══ */
-.theme-toggle{
-  position:fixed;top:12px;right:16px;z-index:200;
-  width:36px;height:36px;border-radius:50%;
-  border:1.5px solid var(--border-strong);
-  background:var(--housing);color:var(--text-mid);
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:all 0.2s;
-}
-.theme-toggle:active{transform:scale(0.9)}
-.theme-toggle svg{width:16px;height:16px}
-
-/* ═══ GRAIN ═══ */
+/* grain */
 body::before{
   content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.03;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat:repeat;background-size:256px;
 }
 
-body {
-  font-family: var(--system);
-  font-size: var(--base-font, 16px);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  -webkit-text-size-adjust:100%;
+/* dark mode */
+[data-theme="dark"]{
+  --bg:#1A1714;--bg-warm:#242019;--card:#2C261F;--card-hover:#332D25;
+  --hero:#2C261F;--hero-text:#E8E0D6;--hero-dim:rgba(232,224,214,0.45);
+  --accent:#E8896E;--accent-soft:#C45D3E;--accent-bg:rgba(232,137,110,0.15);
+  --sage:#9AB089;--sage-bg:rgba(154,176,137,0.15);
+  --blue:#7DA0CC;--blue-bg:rgba(125,160,204,0.12);
+  --text:#E8E0D6;--text-mid:#B5AA9E;--text-light:#8C7E72;--text-muted:#6B5F54;
+  --border:rgba(250,247,242,0.08);--border-strong:rgba(250,247,242,0.15);
+  --shadow-card:0 1px 3px rgba(0,0,0,0.3),0 8px 24px rgba(0,0,0,0.2);
+  --shadow-card-hover:0 2px 8px rgba(0,0,0,0.4),0 12px 32px rgba(0,0,0,0.25);
+  --shadow-hero:0 4px 32px rgba(0,0,0,0.4);
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1A1714;--bg-warm:#242019;--card:#2C261F;--card-hover:#332D25;
+    --hero:#2C261F;--hero-text:#E8E0D6;--hero-dim:rgba(232,224,214,0.45);
+    --accent:#E8896E;--accent-soft:#C45D3E;--accent-bg:rgba(232,137,110,0.15);
+    --sage:#9AB089;--sage-bg:rgba(154,176,137,0.15);
+    --blue:#7DA0CC;--blue-bg:rgba(125,160,204,0.12);
+    --text:#E8E0D6;--text-mid:#B5AA9E;--text-light:#8C7E72;--text-muted:#6B5F54;
+    --border:rgba(250,247,242,0.08);--border-strong:rgba(250,247,242,0.15);
+    --shadow-card:0 1px 3px rgba(0,0,0,0.3),0 8px 24px rgba(0,0,0,0.2);
+    --shadow-card-hover:0 2px 8px rgba(0,0,0,0.4),0 12px 32px rgba(0,0,0,0.25);
+    --shadow-hero:0 4px 32px rgba(0,0,0,0.4);
+  }
 }
 
-/* ═══ HEADER ═══ */
-.header {
-  padding: 40px 20px 24px;
-  text-align: center;
-  position:relative;
+/* theme toggle */
+.theme-toggle{
+  position:fixed;top:12px;right:16px;z-index:200;
+  width:36px;height:36px;border-radius:50%;
+  border:1.5px solid var(--border-strong);
+  background:var(--card);color:var(--text-mid);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:all 0.2s;
+}
+.theme-toggle:active{transform:scale(0.9)}
+.theme-toggle svg{width:16px;height:16px}
+
+/* header */
+.header{
+  padding:40px 24px 28px;text-align:center;position:relative;
 }
 .header::after{
   content:'';display:block;width:40px;height:2px;
-  background:var(--accent);margin:16px auto 0;border-radius:1px;
+  background:var(--accent);margin:20px auto 0;border-radius:1px;
 }
-.header h1 {
-  font-family: var(--serif);
-  font-size: 34px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  color: var(--text);
-  line-height:1.2;
+.header h1{
+  font-family:var(--serif);font-size:34px;font-weight:700;
+  letter-spacing:-0.5px;color:var(--text);line-height:1.2;
 }
-.header .sub-info {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--text-light);
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  margin-top:8px;
+.header .sub-info{
+  font-family:var(--mono);font-size:12px;font-weight:400;
+  color:var(--text-light);letter-spacing:1px;margin-top:10px;text-transform:uppercase;
 }
-.header .update-time {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 6px;
-  letter-spacing: 0.3px;
+.header .update-time{
+  font-family:var(--mono);font-size:11px;color:var(--text-muted);
+  margin-top:6px;letter-spacing:0.3px;
 }
 
-/* ═══ DEVICE CONTAINER ═══ */
-.device {
-  max-width: 440px;
-  margin: 0 auto;
-  padding: 0 16px;
+/* container */
+.container{max-width:440px;margin:0 auto;padding:0 16px 40px}
+
+/* section nav (4 tabs) */
+.section-nav{
+  display:flex;gap:6px;max-width:440px;margin:0 auto 0;padding:0 16px;
+  position:sticky;top:0;z-index:100;
+  background:linear-gradient(var(--bg),var(--bg) 85%,transparent);
+  padding-top:10px;padding-bottom:14px;
+}
+.section-nav-btn{
+  flex:1 1 0;padding:10px 0;
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-muted);background:transparent;
+  border:1.5px solid var(--border);cursor:pointer;text-align:center;
+  min-height:40px;border-radius:var(--r-btn);
+  transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+  letter-spacing:0.3px;text-transform:uppercase;
+}
+.section-nav-btn.active{
+  background:var(--hero);color:var(--hero-text);
+  border-color:var(--hero);box-shadow:0 2px 8px rgba(61,46,31,0.2);
+}
+.section-nav-btn:not(.active):active{background:var(--bg-warm)}
+
+/* day tabs (schedule sub-tabs) */
+.day-tabs{
+  display:flex;gap:6px;max-width:440px;margin:0 auto 16px;padding:0 16px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.day-tabs::-webkit-scrollbar{display:none}
+.day-tab{
+  flex:1 1 0;padding:10px 0;
+  font-family:var(--mono);font-size:13px;font-weight:500;
+  color:var(--text-muted);background:transparent;
+  border:1.5px solid var(--border);cursor:pointer;
+  white-space:nowrap;transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+  text-align:center;min-height:44px;border-radius:var(--r-btn);
+}
+.day-tab:not(.active):active{background:var(--bg-warm)}
+.day-tab.active{
+  background:var(--hero);color:var(--hero-text);
+  border-color:var(--hero);box-shadow:0 2px 8px rgba(61,46,31,0.2);
+}
+.day-tab .tab-date{
+  display:block;font-size:11px;font-weight:400;
+  color:var(--text-muted);margin-top:2px;
+}
+.day-tab.active .tab-date{color:var(--hero-dim)}
+
+/* rest sub tabs */
+.rest-sub-tabs{display:flex;gap:6px;margin-bottom:12px}
+.rest-sub-tab{
+  flex:1;text-align:center;font-family:var(--mono);font-size:11px;font-weight:500;
+  padding:6px 12px;border-radius:10px;border:1.5px solid var(--border);
+  background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.2s;
+}
+.rest-sub-tab.active{background:var(--hero);color:var(--hero-text);border-color:var(--hero)}
+
+/* sort bar */
+.sort-bar{display:flex;gap:8px;margin-bottom:16px}
+.sort-btn{
+  flex:1;padding:10px 0;font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-muted);background:var(--card);border:1.5px solid var(--border);
+  cursor:pointer;text-align:center;border-radius:var(--r-btn);
+  transition:all 0.25s;letter-spacing:0.3px;text-transform:uppercase;
+}
+.sort-btn.active{
+  background:var(--hero);color:var(--hero-text);
+  border-color:var(--hero);box-shadow:0 2px 8px rgba(61,46,31,0.15);
+}
+</style>
+<style>
+/* section hero */
+.section-hero{
+  background:var(--hero);border-radius:var(--r-card);box-shadow:var(--shadow-hero);
+  padding:28px 22px;margin-bottom:16px;position:relative;overflow:hidden;
+}
+.section-hero::before{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(196,93,62,0.12);pointer-events:none;
+}
+.section-hero::after{
+  content:'';position:absolute;bottom:-30px;left:-10px;
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(123,143,107,0.08);pointer-events:none;
+}
+.section-label{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--accent-soft);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;
+}
+.section-title{
+  font-family:var(--serif);font-size:26px;font-weight:700;
+  color:var(--hero-text);letter-spacing:-0.3px;line-height:1.25;
+}
+.section-subtitle{
+  font-family:var(--body);font-size:calc(13px + var(--delta, 0px));
+  color:var(--hero-dim);margin-top:6px;font-weight:400;
 }
 
-/* ═══ DAY TABS ═══ */
-.day-tabs {
-  display: flex;
-  gap: 6px;
-  max-width: 440px;
-  margin: 0 auto 20px;
-  padding: 0 16px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: linear-gradient(var(--bg),var(--bg) 85%,transparent);
-  padding-top: 10px;
-  padding-bottom: 14px;
-}
-.day-tabs::-webkit-scrollbar { display: none; }
-.day-tab {
-  flex: 1 1 0;
-  padding: 10px 0;
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-muted);
-  background: transparent;
-  border: 1.5px solid var(--border);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-  text-align: center;
-  min-height: 44px;
-  border-radius: var(--radius-btn);
-}
-.day-tab:not(.active):active { background:var(--bg-warm) }
-.day-tab.active {
-  background: var(--display);
-  color: var(--display-text);
-  border-color: var(--display);
-  box-shadow:0 2px 8px rgba(61,46,31,0.2);
-}
-.day-tab .tab-date {
-  display: block;
-  font-size: 11px;
-  font-weight: 400;
-  color: var(--text-muted);
-  margin-top: 2px;
-}
-.day-tab.active .tab-date { color: var(--display-dim); }
-
-/* ═══ DISPLAY CARD (Main Device) ═══ */
-.display-card {
-  background: var(--display);
-  border-radius: var(--radius-device);
-  box-shadow: 0 4px 32px rgba(60,46,31,0.12);
-  overflow: hidden;
-  margin-bottom: 16px;
-  position:relative;
+/* display card (schedule) */
+.display-card{
+  background:var(--hero);border-radius:var(--r-card);box-shadow:var(--shadow-hero);
+  overflow:hidden;margin-bottom:16px;position:relative;
 }
 .display-card::before{
   content:'';position:absolute;top:-20px;right:-20px;
   width:120px;height:120px;border-radius:50%;
   background:rgba(196,93,62,0.12);pointer-events:none;
 }
-.display-screen {
-  padding: 28px 22px;
-  position: relative;
+.display-screen{padding:28px 22px;position:relative}
+.display-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.display-label{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--accent-soft);letter-spacing:2px;text-transform:uppercase;
 }
-.display-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+.display-indicator{display:flex;gap:4px}
+.display-indicator span{
+  width:8px;height:8px;border-radius:50%;background:rgba(250,247,242,0.2);transition:background 0.3s;
 }
-.display-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--accent-soft);
-  letter-spacing: 2px;
-  text-transform:uppercase;
+.display-indicator span.on{background:var(--hero-text)}
+.day-title-display{
+  font-family:var(--serif);font-size:26px;font-weight:700;
+  color:var(--hero-text);margin-bottom:6px;letter-spacing:-0.3px;line-height:1.25;
 }
-.display-indicator {
-  display: flex;
-  gap: 4px;
-}
-.display-indicator span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(250,247,242,0.2);
-  transition:background 0.3s;
-}
-.display-indicator span.on { background: var(--display-text); }
+.day-subtitle{font-family:var(--body);font-size:13px;color:var(--hero-dim);font-weight:400}
 
-.day-title-display {
-  font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--display-text);
-  margin-bottom: 6px;
-  letter-spacing: -0.3px;
-  line-height:1.25;
-}
-.day-subtitle {
-  font-family: var(--system);
-  font-size: 13px;
-  color: var(--display-dim);
-  font-weight:400;
-}
+/* level meter */
+.level-meter{padding:0 22px 20px}
+.meter-bar{height:3px;background:rgba(250,247,242,0.15);border-radius:2px;position:relative;overflow:visible}
+.meter-fill{height:100%;background:var(--accent-soft);border-radius:2px;transition:width 0.4s cubic-bezier(0.4,0,0.2,1)}
+.meter-ticks{display:flex;justify-content:space-between;margin-top:8px}
+.meter-tick{font-family:var(--mono);font-size:10px;color:var(--hero-dim);letter-spacing:0.3px}
 
-/* ═══ LEVEL METER (Day Progress) ═══ */
-.level-meter {
-  padding: 0 22px 20px;
+/* card (shared for places/restaurants/stay) */
+.card{
+  background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-card);
+  margin-bottom:12px;overflow:hidden;transition:box-shadow 0.3s;
 }
-.meter-bar {
-  height: 3px;
-  background: rgba(250,247,242,0.15);
-  border-radius: 2px;
-  position: relative;
-  overflow: visible;
+.card[open]{box-shadow:var(--shadow-card-hover)}
+.card>summary{
+  list-style:none;cursor:pointer;user-select:none;
+  padding:16px 20px;transition:background 0.15s;
 }
-.meter-fill {
-  height: 100%;
-  background: var(--accent-soft);
-  border-radius: 2px;
-  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+.card>summary::-webkit-details-marker{display:none}
+.card>summary:active{background:var(--bg-warm)}
+.card-top{display:flex;align-items:center;justify-content:space-between}
+.card-name{
+  font-family:var(--body);font-size:calc(var(--base-font, 16px) + 2px);
+  font-weight:700;color:var(--text);line-height:1.3;flex:1;min-width:0;
 }
-.meter-ticks {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
+.card-chevron{
+  width:20px;height:20px;display:flex;align-items:center;justify-content:center;
+  color:var(--text-muted);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  flex-shrink:0;margin-left:12px;
 }
-.meter-tick {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--display-dim);
-  letter-spacing:0.3px;
+.card-chevron svg{width:12px;height:12px}
+.card[open] .card-chevron{transform:rotate(90deg)}
+.card-sub{
+  font-family:var(--body);font-size:calc(13px + var(--delta, 0px));
+  color:var(--text-light);margin-top:3px;line-height:1.4;padding-right:32px;
 }
+.card-body{border-top:1px solid var(--border);margin:0 20px;padding:16px 0 18px}
 
-/* ═══ ITEM CARDS ═══ */
-.items-list {
-  padding: 0 0 8px;
-}
+/* fade animation */
+.fade-up{opacity:0;transform:translateY(16px);animation:fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) forwards}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
 
-.item-card {
-  background: var(--housing);
-  border-radius: var(--radius-device);
-  box-shadow: var(--shadow-device);
-  margin-bottom: 12px;
-  overflow: hidden;
+/* item cards (schedule) */
+.items-list{padding:0 0 8px}
+.item-card{
+  background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-card);
+  margin-bottom:12px;overflow:hidden;
 }
-.item-display {
-  padding: 18px 20px;
+.item-card.visited{border-left:3px solid var(--sage)}
+.item-card.skipped{opacity:0.7}
+.item-display{padding:18px 20px}
+.item-top-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.item-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.item-status-dot.planned{background:var(--text-muted)}
+.item-status-dot.done{background:var(--sage)}
+.item-status-dot.skipped{background:#EF4444}
+.item-status-check{
+  width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:50%;background:var(--sage);color:#fff;font-size:10px;flex-shrink:0;
 }
-.item-top-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
+.item-time{font-family:var(--mono);font-size:calc(12px + var(--delta, 0px));color:var(--text-light);letter-spacing:0.5px;font-weight:500}
+.item-cat-label{
+  font-family:var(--mono);font-size:calc(12px + var(--delta, 0px));
+  color:var(--accent);margin-left:auto;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;
 }
-.item-status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
+.item-title{
+  font-family:var(--serif);font-size:calc(18px + var(--delta, 0px));font-weight:700;
+  color:var(--text);letter-spacing:-0.2px;line-height:1.3;
 }
-.item-status-dot.planned { background: var(--text-muted); }
-.item-status-dot.done { background: var(--sage); }
-.item-status-dot.skipped { background: #EF4444; }
+.item-title.skipped{text-decoration:line-through;color:var(--text-light)}
+.item-visited-info{
+  font-family:var(--body);font-size:14px;color:var(--sage);
+  font-weight:600;margin-left:8px;
+}
+.item-note-row{
+  padding:12px 20px 14px;font-family:var(--body);font-size:14px;
+  color:var(--text-mid);border-top:1px solid var(--border);
+}
+.item-note-label{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--text-light);margin-bottom:4px;letter-spacing:0.5px;text-transform:uppercase;
+}
+</style>
+<style>
+/* options list */
+.options-list{margin-top:12px;border-top:1px solid var(--border);padding-top:12px}
 
-.item-time {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--item-text-dim);
-  letter-spacing: 0.5px;
-  font-weight: 500;
+/* option card (accordion) */
+.option-card{
+  border-radius:14px;margin-bottom:8px;background:var(--bg-warm);
+  border:1px solid transparent;overflow:hidden;transition:box-shadow 0.3s,border-color 0.3s;
 }
-.item-cat-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--accent);
-  margin-left: auto;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+.option-card[open]{border-color:var(--border);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.option-card>summary{
+  padding:12px 14px;cursor:pointer;list-style:none;-webkit-tap-highlight-color:transparent;
 }
+.option-card>summary::-webkit-details-marker{display:none}
+.option-top{display:flex;align-items:center;gap:8px}
+.option-name{
+  font-family:var(--serif);font-size:calc(14px + var(--delta, 0px));font-weight:700;
+  color:var(--text);flex:1;min-width:0;
+}
+.option-rating{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent)}
+.option-chevron{
+  color:var(--text-muted);flex-shrink:0;transition:transform 0.2s;display:flex;
+}
+.option-card[open] .option-chevron{transform:rotate(90deg)}
+.option-meta{
+  display:flex;align-items:center;gap:8px;margin-top:4px;
+  font-size:13px;color:var(--text-light);
+}
+.option-menu-brief{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.open-tag{
+  font-family:var(--mono);font-size:10px;font-weight:500;
+  padding:3px 8px;border-radius:var(--r-tag);letter-spacing:0.3px;flex-shrink:0;
+}
+.open-tag.open{background:var(--sage-bg);color:var(--sage)}
+.open-tag.closed{background:rgba(196,62,62,0.08);color:#B04040}
+.option-dist{font-family:var(--mono);font-size:11px;color:var(--text-muted);flex-shrink:0}
+.option-body{padding:0 14px 14px;border-top:1px solid var(--border);margin-top:0;padding-top:12px}
+.option-info{
+  font-size:calc(13px + var(--delta, 0px));color:var(--text-mid);
+  padding:3px 0;display:flex;justify-content:space-between;
+}
+.option-info-label{font-weight:600;color:var(--text-light);margin-right:8px;flex-shrink:0}
+.option-map-link{
+  display:flex;align-items:center;gap:4px;font-family:var(--mono);
+  font-size:12px;font-weight:500;color:var(--accent);text-decoration:none;
+  margin-top:10px;letter-spacing:0.3px;
+}
+.option-map-link:active{opacity:0.7}
 
-.item-title {
-  font-family: var(--serif);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--item-text);
-  letter-spacing: -0.2px;
-  line-height: 1.3;
+/* option simple */
+.option-simple{
+  padding:10px 14px;border-radius:14px;margin-bottom:8px;
+  font-family:var(--body);font-size:14px;color:var(--text-mid);
+  background:var(--bg-warm);border:1px solid transparent;
 }
-.item-title.skipped {
-  text-decoration: line-through;
-  color: var(--item-text-dim);
-}
+.option-simple .option-name{font-family:var(--body);font-size:14px}
 
-/* ═══ OPTIONS (in display) ═══ */
-.options-list {
-  margin-top: 12px;
-  border-top: 1px solid var(--border);
-  padding-top: 12px;
+/* badges */
+.option-badges,.badges{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.badge{
+  display:inline-block;padding:4px 10px;border-radius:var(--r-tag);
+  font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:0.2px;
 }
+.badge-dad-good{background:var(--sage-bg);color:var(--sage)}
+.badge-dad-caution{background:var(--accent-bg);color:var(--accent)}
+.badge-hiro-good{background:var(--blue-bg);color:var(--blue)}
+.badge-hiro-caution{background:rgba(196,62,62,0.08);color:#B04040}
 
-/* ═══ OPTION CARD (Accordion) ═══ */
-.option-card {
-  border-radius: 14px;
-  margin-bottom: 8px;
-  background: var(--bg-warm);
-  border: 1px solid transparent;
-  overflow: hidden;
-  transition: box-shadow 0.3s, border-color 0.3s;
+/* visited badge */
+.visit-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--sage);color:white;font-size:11px;margin-left:6px;
 }
-.option-card[open] {
-  border-color: var(--border);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
-.option-card.chosen {
-  background: var(--sage-bg);
-  border-color: rgba(123,143,107,0.25);
-}
+.card.visited{border-left:3px solid var(--sage)}
+.option-card.visited{border-left:3px solid var(--sage)}
 
-.option-card summary {
-  padding: 12px 14px;
-  cursor: pointer;
-  list-style: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.option-card summary::-webkit-details-marker { display: none; }
-
-/* 상단 행: 이름 + 별점 + 확정 + chevron */
-.option-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.option-name {
-  font-family: var(--serif);
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--item-text);
-  flex: 1;
-  min-width: 0;
-}
-.option-card.chosen .option-name {
-  color: var(--sage);
-}
-.option-rating {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--accent);
-}
-.option-chevron {
-  color: var(--text-muted);
-  flex-shrink: 0;
-  transition: transform 0.2s;
-  display: flex;
-}
-.option-card[open] .option-chevron {
-  transform: rotate(90deg);
+/* review text */
+.review-text{
+  font-size:calc(12px + var(--delta, 0px));color:var(--text-mid);
+  font-style:italic;padding:4px 0;line-height:1.4;
 }
 
-/* 하단 메타: 메뉴 + 영업상태 + 거리 */
-.option-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-  font-size: 13px;
-  color: var(--item-text-dim);
+/* place detail (inside schedule item) */
+.place-detail{
+  border-radius:14px;margin:10px 0 8px;background:var(--bg-warm);
+  border:1px solid transparent;overflow:hidden;transition:box-shadow 0.3s,border-color 0.3s;
 }
-.option-menu-brief {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.place-detail[open]{border-color:var(--border);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.place-detail[open] .option-chevron{transform:rotate(90deg)}
+.place-detail summary{padding:12px 14px;cursor:pointer;list-style:none;-webkit-tap-highlight-color:transparent}
+.place-detail summary::-webkit-details-marker{display:none}
+.place-detail-top{display:flex;align-items:center;gap:8px}
+.place-detail-name{
+  font-family:var(--serif);font-size:calc(15px + var(--delta, 0px));font-weight:600;
+  color:var(--text);flex:1;min-width:0;
 }
-.open-tag {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 7px;
-  border-radius: 6px;
-  flex-shrink: 0;
+.place-detail-hours{font-family:var(--mono);font-size:12px;color:var(--text-muted);flex-shrink:0}
+.place-detail-sub{font-size:13px;color:var(--text-mid);margin-top:4px;line-height:1.4;padding-right:28px}
+.place-detail-tags{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.place-tag{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:6px;background:var(--border);color:var(--text-mid)}
+.place-tag.baby{background:var(--accent-bg);color:var(--accent)}
+.place-detail-body{padding:0 14px 14px;border-top:1px solid var(--border);padding-top:12px}
+.place-body-label{
+  font-family:var(--mono);font-size:11px;font-weight:500;color:var(--text-muted);
+  letter-spacing:0.3px;margin:12px 0 6px;text-transform:uppercase;
 }
-.open-tag.open {
-  background: var(--sage-bg);
-  color: var(--sage);
+.place-body-label:first-child{margin-top:0}
+.place-info-row{font-size:calc(13px + var(--delta, 0px));color:var(--text-mid);padding:3px 0}
+.place-info-label{font-weight:600;color:var(--text-light);margin-right:8px}
+
+/* place guide cards */
+.place-section{padding:0 0 14px}
+.place-section-label{
+  font-family:var(--mono);font-size:10px;font-weight:500;color:var(--accent);
+  letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;
 }
-.open-tag.closed {
-  background: var(--accent-bg);
-  color: var(--accent);
+.place-list{list-style:none}
+.place-list li{
+  font-size:calc(13px + var(--delta, 0px));color:var(--text-mid);
+  padding:5px 0 5px 14px;position:relative;line-height:1.55;
 }
-.option-dist {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text-muted);
-  flex-shrink: 0;
+.place-list li::before{
+  content:'';position:absolute;left:0;top:13px;
+  width:5px;height:5px;border-radius:50%;background:var(--accent-soft);
 }
 
-/* 펼침 영역 */
-.option-body {
-  padding: 0 14px 14px;
-  border-top: 1px solid var(--border);
-  margin-top: 0;
-  padding-top: 12px;
+.baby-tip{background:var(--blue-bg);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.baby-tip-label{
+  font-family:var(--mono);font-size:10px;font-weight:500;color:var(--blue);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;
 }
-.option-info {
-  font-size: 13px;
-  color: var(--item-text-mid);
-  padding: 3px 0;
-  display: flex;
-  justify-content: space-between;
-}
-.option-info-label {
-  font-weight: 600;
-  color: var(--item-text-dim);
-  margin-right: 8px;
-  flex-shrink: 0;
-}
-.option-map-link {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--accent);
-  text-decoration: none;
-  margin-top: 10px;
-  letter-spacing: 0.3px;
-}
-.option-map-link:active { opacity: 0.7; }
+.baby-tip-text{font-size:13px;color:var(--text);line-height:1.55}
 
-/* ═══ OPTION SIMPLE (fallback) ═══ */
-.option-simple {
-  padding: 10px 14px;
-  border-radius: 14px;
-  margin-bottom: 8px;
-  font-family: var(--system);
-  font-size: 14px;
-  color: var(--item-text-mid);
-  background: var(--bg-warm);
-  border: 1px solid transparent;
+.info-grid{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:13px}
+.info-label{color:var(--text-light);font-weight:600;white-space:nowrap}
+.info-value{color:var(--text-mid);line-height:1.4;font-size:calc(13px + var(--delta, 0px))}
+</style>
+<style>
+/* restaurant cards */
+.rest-rating{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--accent);margin-left:8px;flex-shrink:0}
+.rest-meta{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-size:calc(var(--base-font, 16px) - 3px);color:var(--text-light);margin-top:4px;
 }
-.option-simple.chosen {
-  background: var(--sage-bg);
-  color: var(--sage);
-  border-color: rgba(123,143,107,0.25);
+.rest-menu-brief{color:var(--text-mid);font-size:calc(13px + var(--delta, 0px))}
+.rest-status-row{display:flex;align-items:center;gap:8px;margin-top:4px}
+.rest-dist{font-family:var(--mono);font-size:11px;color:var(--text-muted)}
+.rest-info{font-size:13px;color:var(--text-mid);padding:3px 0}
+.rest-info-label{font-weight:600;color:var(--text-light);margin-right:6px}
+.rest-meals{margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--text-muted);letter-spacing:0.3px}
+.rest-map-link{
+  display:inline-flex;align-items:center;gap:4px;margin-top:10px;
+  font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;
+  border-bottom:1px solid var(--accent-bg);padding-bottom:2px;transition:opacity 0.15s;
 }
-.option-simple .option-name {
-  font-family: var(--system);
-  font-size: 14px;
-}
-.option-simple.chosen .option-name {
-  color: var(--sage);
-}
+.rest-map-link:active{opacity:0.6}
 
-.option-badges { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
-.badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2px;
+/* stay */
+.stay-room-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.stay-room-chip{background:var(--bg-warm);border-radius:12px;padding:14px 10px;text-align:center}
+.stay-room-label{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--text)}
+.stay-room-detail{font-size:11px;color:var(--text-light);margin-top:4px;line-height:1.4}
+.amenity-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.amenity-tag{font-size:12px;color:var(--text-mid);background:var(--bg-warm);border-radius:var(--r-tag);padding:5px 10px}
+.highlight-box{background:var(--accent-bg);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.highlight-label{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.highlight-text{font-size:13px;color:var(--text);line-height:1.55}
+.link-row{display:flex;gap:8px;margin-top:12px}
+.link-btn{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:11px 8px;font-size:13px;font-weight:600;text-decoration:none;
+  border-radius:var(--r-btn);transition:all 0.2s;
 }
-.badge-dad-good { background: var(--sage-bg); color: var(--sage); }
-.badge-dad-caution { background: var(--accent-bg); color: var(--accent); }
-.badge-hiro-good { background: rgba(100,149,237,0.1); color: #6495ED; }
-.badge-hiro-caution { background: var(--accent-bg); color: var(--accent); }
+.link-btn:active{transform:scale(0.97)}
+.link-btn-outline{color:var(--text-mid);border:1.5px solid var(--border-strong);background:var(--card)}
+.link-btn-solid{color:#fff;border:none;background:var(--hero);box-shadow:0 2px 8px rgba(61,46,31,0.15)}
 
-.chosen-tag {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--sage);
-  letter-spacing: 0.3px;
-}
+/* distance (schedule) */
+.item-distance{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--text-light);margin-top:4px;letter-spacing:0.2px}
+.item-distance.nearby{color:var(--accent);font-weight:600}
+.item-distance.far-away{color:var(--text-light)}
 
-/* ═══ ITEM NOTE ═══ */
-.item-note-row {
-  padding: 12px 20px 14px;
-  font-family: var(--system);
-  font-size: 14px;
-  color: var(--text-mid);
-  border-top: 1px solid var(--border);
+/* location banner */
+.location-banner{max-width:440px;margin:0 auto 16px;padding:0 16px}
+.location-banner .banner-device{background:var(--card);border-radius:var(--r-card);box-shadow:var(--shadow-card);overflow:hidden}
+.location-banner .screen{background:var(--hero);margin:12px;border-radius:14px;padding:20px 16px;text-align:center}
+.location-banner .screen p{font-family:var(--body);font-size:15px;color:var(--hero-text);line-height:1.6}
+.location-banner .banner-buttons{display:flex;gap:10px;padding:0 12px 12px}
+.location-banner .btn-primary{
+  flex:1;padding:12px 0;font-family:var(--body);font-size:15px;font-weight:700;
+  color:var(--hero-text);background:var(--hero);border:none;border-radius:var(--r-btn);
+  cursor:pointer;min-height:44px;box-shadow:var(--shadow-btn);transition:all 0.15s;
 }
-.item-note-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-light);
-  margin-bottom: 4px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+.location-banner .btn-primary:active{opacity:0.8;transform:scale(0.98)}
+.location-banner .btn-secondary{
+  flex:1;padding:12px 0;font-family:var(--body);font-size:15px;font-weight:600;
+  color:var(--text-mid);background:var(--card);border:1px solid var(--border-strong);
+  border-radius:var(--r-btn);cursor:pointer;min-height:44px;transition:all 0.15s;
 }
+.location-banner .btn-secondary:active{opacity:0.8;transform:scale(0.98)}
 
-/* ═══ LOADING ═══ */
-.loading {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-light);
-  font-family: var(--system);
-  font-size: 14px;
+/* refresh btn */
+.refresh-btn{
+  display:none;background:var(--card);border:1px solid var(--border-strong);
+  border-radius:var(--r-btn);padding:5px 12px;font-family:var(--mono);font-size:11px;
+  font-weight:500;color:var(--text-mid);cursor:pointer;margin-top:8px;
+  transition:all 0.15s;min-height:28px;letter-spacing:0.3px;
 }
-.loading .spinner {
-  display: inline-block;
-  width: 24px; height: 24px;
-  border: 2px solid var(--border);
-  border-top-color: var(--text);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: 12px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+.refresh-btn:active{opacity:0.7;transform:scale(0.97)}
+.refresh-btn.visible{display:inline-block}
 
-/* ═══ ERROR ═══ */
-.error-banner {
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 12px 16px;
-  font-family: var(--system);
-  font-size: 14px;
-  text-align: center;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border-radius: var(--radius-btn);
-  display: none;
+/* error/toast/loading */
+.error-banner{
+  max-width:420px;margin:0 auto;padding:12px 16px;font-family:var(--body);font-size:14px;
+  text-align:center;color:var(--accent);background:var(--accent-bg);border-radius:var(--r-btn);display:none;
 }
-.error-banner.show { display: block; margin-bottom: 12px; }
+.error-banner.show{display:block;margin-bottom:12px}
+.toast{
+  position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);
+  background:var(--text);color:#fff;padding:14px 28px;border-radius:var(--r-btn);
+  font-family:var(--body);font-size:15px;font-weight:600;z-index:400;transition:transform 0.3s;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.loading{text-align:center;padding:80px 20px;color:var(--text-light);font-size:14px}
+.loading .spinner{
+  display:inline-block;width:28px;height:28px;border:2px solid var(--border);
+  border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:14px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-/* ═══ TOAST ═══ */
-.toast {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-100px);
-  background: var(--text);
-  color: #fff;
-  padding: 14px 28px;
-  border-radius: var(--radius-btn);
-  font-family: var(--system);
-  font-size: 15px;
-  font-weight: 600;
-  z-index: 400;
-  transition: transform 0.3s;
+/* font size trigger */
+.font-size-trigger{
+  position:fixed;top:12px;right:60px;z-index:200;
+  width:36px;height:36px;border-radius:50%;
+  border:1.5px solid var(--border-strong);background:var(--card);color:var(--text-mid);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:all 0.2s;
+  font-family:var(--serif);font-size:14px;font-weight:700;
 }
-.toast.show { transform: translateX(-50%) translateY(0); }
+.font-size-trigger:active{transform:scale(0.9)}
 
-/* ═══ LOCATION BANNER ═══ */
-.location-banner {
-  max-width: 420px;
-  margin: 0 auto 16px;
-  padding: 0 16px;
+/* footer */
+.footer{text-align:center;padding:24px 16px 48px}
+.footer-note{font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:14px;letter-spacing:0.3px}
+</style>
+<style>
+/* chat */
+.chat-fab{
+  position:fixed;bottom:24px;right:20px;z-index:300;
+  width:52px;height:52px;border-radius:50%;
+  background:var(--accent);color:#fff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(196,93,62,0.35);transition:transform 0.2s,box-shadow 0.2s;
 }
-.location-banner .banner-device {
-  background: var(--housing);
-  border-radius: var(--radius-device);
-  box-shadow: var(--shadow-device);
-  overflow: hidden;
-}
-.location-banner .screen {
-  background: var(--display);
-  margin: 12px;
-  border-radius: var(--radius-display);
-  padding: 20px 16px;
-  text-align: center;
-}
-.location-banner .screen p {
-  font-family: var(--system);
-  font-size: 15px;
-  color: var(--display-text);
-  line-height: 1.6;
-}
-.location-banner .banner-buttons {
-  display: flex;
-  gap: 10px;
-  padding: 0 12px 12px;
-}
-.location-banner .btn-primary {
-  flex: 1;
-  padding: 12px 0;
-  font-family: var(--system);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--display-text);
-  background: var(--display);
-  border: none;
-  border-radius: var(--radius-btn);
-  cursor: pointer;
-  min-height: 44px;
-  box-shadow: var(--shadow-btn);
-  transition: all 0.15s;
-}
-.location-banner .btn-primary:active { opacity: 0.8; transform:scale(0.98); }
-.location-banner .btn-secondary {
-  flex: 1;
-  padding: 12px 0;
-  font-family: var(--system);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-mid);
-  background: var(--housing);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-btn);
-  cursor: pointer;
-  min-height: 44px;
-  transition: all 0.15s;
-}
-.location-banner .btn-secondary:active { opacity: 0.8; transform:scale(0.98); }
+.chat-fab:active{transform:scale(0.9)}
+.chat-fab svg{width:24px;height:24px}
+.chat-fab.hidden{display:none}
 
-/* ═══ ITEM DISTANCE ═══ */
-.item-distance {
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--item-text-dim);
-  margin-top: 4px;
-  letter-spacing: 0.2px;
+.chat-overlay{
+  position:fixed;inset:0;z-index:400;
+  background:rgba(0,0,0,0.3);backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;transition:opacity 0.25s;
 }
-.item-distance.nearby {
-  color: var(--accent);
-  font-weight: 600;
-}
-.item-distance.far-away {
-  color: var(--text-light);
-}
+.chat-overlay.open{opacity:1;pointer-events:auto}
 
-/* (option distance now integrated into .option-dist inside option-card) */
-
-/* ═══ REFRESH BUTTON ═══ */
-.refresh-btn {
-  display: none;
-  background: var(--housing);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-btn);
-  padding: 5px 12px;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-mid);
-  cursor: pointer;
-  margin-top: 8px;
-  transition: all 0.15s;
-  min-height: 28px;
-  letter-spacing: 0.3px;
+.chat-sheet{
+  position:fixed;bottom:0;left:0;right:0;z-index:401;
+  max-width:480px;margin:0 auto;height:65vh;max-height:520px;
+  background:var(--bg);border-radius:20px 20px 0 0;
+  box-shadow:0 -4px 32px rgba(0,0,0,0.12);
+  display:flex;flex-direction:column;
+  transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.32,0.72,0,1);
 }
-.refresh-btn:active { opacity: 0.7; transform:scale(0.97); }
-.refresh-btn.visible { display: inline-block; }
-
-/* ═══ REFERENCE ═══ */
-.reference-section {
-  margin-top: 12px;
+.chat-sheet.open{transform:translateY(0)}
+.chat-sheet-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px 12px;border-bottom:1px solid var(--border);
 }
-.reference-section h3 {
-  font-family: var(--serif);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 14px;
-  letter-spacing: -0.2px;
+.chat-sheet-title{font-family:var(--serif);font-size:16px;font-weight:600;color:var(--text)}
+.chat-sheet-subtitle{font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:2px}
+.chat-close-btn{
+  width:32px;height:32px;border-radius:50%;
+  border:1px solid var(--border);background:var(--card);color:var(--text-mid);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
 }
-.ref-card {
-  background: var(--housing);
-  border-radius: var(--radius-device);
-  box-shadow: var(--shadow-device);
-  padding: 16px 20px;
-  margin-bottom: 10px;
+.chat-messages{
+  flex:1;overflow-y:auto;padding:16px 16px 8px;
+  display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch;
 }
-.ref-card h4 {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-light);
-  margin-bottom: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+.chat-msg{
+  max-width:85%;padding:10px 14px;border-radius:16px;
+  font-size:calc(14px + var(--delta, 0px));line-height:1.55;
+  font-family:var(--serif);word-break:break-word;
 }
-.ref-card ul { list-style: none; }
-.ref-card li {
-  font-family: var(--system);
-  font-size: 14px;
-  padding: 5px 0;
-  color: var(--text-mid);
-  border-bottom: 1px solid var(--border);
+.chat-msg.user{align-self:flex-end;background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.chat-msg.bot{
+  align-self:flex-start;background:var(--card);color:var(--text);
+  border:1px solid var(--border);border-bottom-left-radius:4px;
 }
-.ref-card li:last-child { border-bottom: none; }
-
-/* ═══ SPEAKER GRILLE (decorative) ═══ */
-.grille {
-  display: inline-grid;
-  grid-template-columns: repeat(4, 4px);
-  gap: 3px;
-  opacity: 0.15;
+.chat-msg.bot .msg-label{font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:4px;font-weight:500}
+.chat-msg.typing .dots span{
+  display:inline-block;width:6px;height:6px;
+  background:var(--text-muted);border-radius:50%;margin:0 2px;animation:dotBounce 1.2s infinite;
 }
-.grille span {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--text);
+.chat-msg.typing .dots span:nth-child(2){animation-delay:0.2s}
+.chat-msg.typing .dots span:nth-child(3){animation-delay:0.4s}
+@keyframes dotBounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+.chat-msg.error{
+  align-self:center;max-width:90%;
+  background:rgba(196,93,62,0.08);color:var(--accent);
+  font-size:12px;text-align:center;border-radius:10px;border:1px solid rgba(196,93,62,0.15);
 }
-
-/* ═══ FOOTER SPACE ═══ */
-.footer-space {
-  height: 40px;
+.chat-input-row{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 16px 14px;border-top:1px solid var(--border);background:var(--bg);
 }
-
-/* ═══ PLACE DETAIL (Activity Item 내부) ═══ */
-.place-detail {
-  border-radius: 14px;
-  margin: 10px 0 8px;
-  background: var(--bg-warm);
-  border: 1px solid transparent;
-  overflow: hidden;
-  transition: box-shadow 0.3s, border-color 0.3s;
+.chat-input{
+  flex:1;border:1.5px solid var(--border-strong);border-radius:20px;padding:10px 16px;
+  font-family:var(--serif);font-size:14px;background:var(--card);color:var(--text);
+  outline:none;resize:none;max-height:80px;
 }
-.place-detail[open] {
-  border-color: var(--border);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+.chat-input:focus{border-color:var(--accent)}
+.chat-input::placeholder{color:var(--text-muted)}
+.chat-send-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--accent);color:#fff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:opacity 0.15s;flex-shrink:0;
 }
-.place-detail[open] .option-chevron {
-  transform: rotate(90deg);
+.chat-send-btn:disabled{opacity:0.4;cursor:default}
+.chat-send-btn svg{width:18px;height:18px}
+.chat-welcome{text-align:center;padding:32px 20px;color:var(--text-mid);font-family:var(--serif)}
+.chat-welcome-icon{font-size:32px;margin-bottom:12px}
+.chat-welcome-title{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--text)}
+.chat-welcome-desc{font-size:13px;line-height:1.6}
+.chat-welcome-hints{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:16px}
+.chat-hint-chip{
+  font-family:var(--mono);font-size:11px;padding:6px 12px;border-radius:20px;
+  background:var(--card);border:1px solid var(--border-strong);color:var(--text-mid);
+  cursor:pointer;transition:all 0.15s;
 }
-.place-detail summary {
-  padding: 12px 14px;
-  cursor: pointer;
-  list-style: none;
-  -webkit-tap-highlight-color: transparent;
+.chat-hint-chip:hover{background:var(--accent-bg);color:var(--accent);border-color:var(--accent)}
+.chat-welcome-section{
+  font-family:var(--mono);font-size:10px;color:var(--text-muted);
+  text-transform:uppercase;letter-spacing:0.5px;margin-top:20px;margin-bottom:8px;
 }
-.place-detail summary::-webkit-details-marker { display: none; }
-
-.place-detail-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.place-detail-icon { font-size: 14px; }
-.place-detail-name {
-  font-family: var(--serif);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--item-text);
-  flex: 1;
-  min-width: 0;
-}
-.place-detail-hours {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text-muted);
-  flex-shrink: 0;
-}
-.place-detail-sub {
-  font-size: 13px;
-  color: var(--item-text-mid);
-  margin-top: 4px;
-  line-height: 1.4;
-  padding-right: 28px;
-}
-.place-detail-tags {
-  display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;
-}
-.place-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: var(--border);
-  color: var(--text-mid);
-}
-.place-tag.baby { background: var(--accent-bg); color: var(--accent); }
-
-.place-detail-body {
-  padding: 0 14px 14px;
-  border-top: 1px solid var(--border);
-  padding-top: 12px;
-}
-.place-body-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-muted);
-  letter-spacing: 0.3px;
-  margin: 12px 0 6px;
-  text-transform: uppercase;
-}
-.place-body-label:first-child { margin-top: 0; }
-.place-info-row {
-  font-size: 13px;
-  color: var(--item-text-mid);
-  padding: 3px 0;
-}
-.place-info-label {
-  font-weight: 600;
-  color: var(--item-text-dim);
-  margin-right: 8px;
-}
-.place-list {
-  margin: 0; padding-left: 16px;
-  font-size: 13px; color: var(--item-text-mid);
-  line-height: 1.7;
-}
-
-/* ═══ FONT SIZE TRIGGER ═══ */
-.font-size-trigger {
-  position: fixed;
-  top: 12px;
-  right: 60px;
-  z-index: 200;
-  width: 36px; height: 36px; border-radius: 50%;
-  border: 1.5px solid var(--border-strong);
-  background: var(--housing);
-  color: var(--text-mid);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.2s;
-  font-family: var(--serif);
-  font-size: 14px;
-  font-weight: 700;
-}
-.font-size-trigger:active { transform: scale(0.9); }
-
-:root[data-fontsize="small"] { --base-font: 14px; --delta: -2px; }
-:root[data-fontsize="large"] { --base-font: 18px; --delta: 2px; }
-.item-title { font-size: calc(18px + var(--delta, 0px)); }
-.item-time, .item-cat-label { font-size: calc(12px + var(--delta, 0px)); }
-.place-detail-name { font-size: calc(15px + var(--delta, 0px)); }
-.place-info-row { font-size: calc(13px + var(--delta, 0px)); }
-.option-name { font-size: calc(14px + var(--delta, 0px)); }
-.option-info { font-size: calc(13px + var(--delta, 0px)); }
-.chat-msg { font-size: calc(14px + var(--delta, 0px)); }
-
-/* ═══ CHAT BUBBLE & SHEET ═══ */
-.chat-fab {
-  position: fixed; bottom: 24px; right: 20px; z-index: 300;
-  width: 52px; height: 52px; border-radius: 50%;
-  background: var(--accent); color: #fff; border: none;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 16px rgba(196,93,62,0.35);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.chat-fab:active { transform: scale(0.9); }
-.chat-fab svg { width: 24px; height: 24px; }
-.chat-fab.hidden { display: none; }
-
-.chat-overlay {
-  position: fixed; inset: 0; z-index: 400;
-  background: rgba(0,0,0,0.3); backdrop-filter: blur(2px);
-  opacity: 0; pointer-events: none; transition: opacity 0.25s;
-}
-.chat-overlay.open { opacity: 1; pointer-events: auto; }
-
-.chat-sheet {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 401;
-  max-width: 480px; margin: 0 auto;
-  height: 65vh; max-height: 520px;
-  background: var(--bg);
-  border-radius: 20px 20px 0 0;
-  box-shadow: 0 -4px 32px rgba(0,0,0,0.12);
-  display: flex; flex-direction: column;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-}
-.chat-sheet.open { transform: translateY(0); }
-
-.chat-sheet-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px 12px;
-  border-bottom: 1px solid var(--border);
-}
-.chat-sheet-title {
-  font-family: var(--serif); font-size: 16px; font-weight: 600;
-  color: var(--text);
-}
-.chat-sheet-subtitle {
-  font-family: var(--mono); font-size: 11px;
-  color: var(--text-muted); margin-top: 2px;
-}
-.chat-close-btn {
-  width: 32px; height: 32px; border-radius: 50%;
-  border: 1px solid var(--border); background: var(--housing);
-  color: var(--text-mid); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-}
-
-.chat-messages {
-  flex: 1; overflow-y: auto; padding: 16px 16px 8px;
-  display: flex; flex-direction: column; gap: 10px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.chat-msg {
-  max-width: 85%; padding: 10px 14px;
-  border-radius: 16px; font-size: 14px; line-height: 1.55;
-  font-family: var(--serif); word-break: break-word;
-}
-.chat-msg.user {
-  align-self: flex-end;
-  background: var(--accent); color: #fff;
-  border-bottom-right-radius: 4px;
-}
-.chat-msg.bot {
-  align-self: flex-start;
-  background: var(--housing); color: var(--text);
-  border: 1px solid var(--border);
-  border-bottom-left-radius: 4px;
-}
-.chat-msg.bot .msg-label {
-  font-family: var(--mono); font-size: 10px;
-  color: var(--accent); margin-bottom: 4px; font-weight: 500;
-}
-.chat-msg.typing .dots span {
-  display: inline-block; width: 6px; height: 6px;
-  background: var(--text-muted); border-radius: 50%;
-  margin: 0 2px; animation: dotBounce 1.2s infinite;
-}
-.chat-msg.typing .dots span:nth-child(2) { animation-delay: 0.2s; }
-.chat-msg.typing .dots span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes dotBounce {
-  0%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-6px); }
-}
-
-.chat-msg.error {
-  align-self: center; max-width: 90%;
-  background: rgba(196,93,62,0.08); color: var(--accent);
-  font-size: 12px; text-align: center;
-  border-radius: 10px; border: 1px solid rgba(196,93,62,0.15);
-}
-
-.chat-input-row {
-  display: flex; align-items: center; gap: 8px;
-  padding: 10px 16px 14px;
-  border-top: 1px solid var(--border);
-  background: var(--bg);
-}
-.chat-input {
-  flex: 1; border: 1.5px solid var(--border-strong);
-  border-radius: 20px; padding: 10px 16px;
-  font-family: var(--serif); font-size: 14px;
-  background: var(--housing); color: var(--text);
-  outline: none; resize: none; max-height: 80px;
-}
-.chat-input:focus { border-color: var(--accent); }
-.chat-input::placeholder { color: var(--text-muted); }
-.chat-send-btn {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: var(--accent); color: #fff; border: none;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: opacity 0.15s;
-  flex-shrink: 0;
-}
-.chat-send-btn:disabled { opacity: 0.4; cursor: default; }
-.chat-send-btn svg { width: 18px; height: 18px; }
-
-.chat-welcome {
-  text-align: center; padding: 32px 20px;
-  color: var(--text-mid); font-family: var(--serif);
-}
-.chat-welcome-icon { font-size: 32px; margin-bottom: 12px; }
-.chat-welcome-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
-.chat-welcome-desc { font-size: 13px; line-height: 1.6; }
-.chat-welcome-hints {
-  display: flex; flex-wrap: wrap; gap: 6px;
-  justify-content: center; margin-top: 16px;
-}
-.chat-hint-chip {
-  font-family: var(--mono); font-size: 11px;
-  padding: 6px 12px; border-radius: 20px;
-  background: var(--housing); border: 1px solid var(--border-strong);
-  color: var(--text-mid); cursor: pointer;
-  transition: all 0.15s;
-}
-.chat-hint-chip:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
-.chat-welcome-section {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-top: 20px;
-  margin-bottom: 8px;
-}
-.chat-welcome-caveat {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 16px;
-  line-height: 1.5;
-}
+.chat-welcome-caveat{font-size:11px;color:var(--text-muted);margin-top:16px;line-height:1.5}
 </style>
 </head>
 <body>
 
-<!-- 글자 크기 -->
 <button class="font-size-trigger" id="fontSizeTrigger" onclick="cycleFontSize()" aria-label="글자 크기">가</button>
 
-<!-- 테마 토글 -->
 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="테마 전환">
   <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
 </button>
 
-<!-- 메인 앱 -->
-<div id="mainApp">
-  <div class="header">
-    <h1>경주 가족여행</h1>
-    <div class="sub-info">
-      <span id="tripStatus">2026.02.19 — 02.24</span>
-    </div>
-    <div class="update-time" id="updateTime"></div>
-    <div style="margin-top:12px"><a href="/guide" style="font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text-mid);text-decoration:none;border:1px solid var(--border-strong);border-radius:var(--radius-btn);padding:8px 18px;background:var(--housing);display:inline-block;letter-spacing:0.5px;transition:all 0.15s">가이드 보기</a></div>
-    <button class="refresh-btn" id="refreshBtn" onclick="requestLocation()">위치 갱신</button>
-  </div>
+<div class="header">
+  <h1>경주 가족여행</h1>
+  <div class="sub-info"><span id="tripStatus">2026.02.19 thu — 02.24 tue</span></div>
+  <div class="update-time" id="updateTime"></div>
+  <button class="refresh-btn" id="refreshBtn" onclick="requestLocation()">위치 갱신</button>
+</div>
 
-  <!-- 위치 안내 배너 -->
-  <div class="location-banner" id="locationBanner" style="display:none;">
-    <div class="banner-device">
-      <div class="screen">
-        <p>위치를 켜면 각 장소까지<br>거리를 확인할 수 있습니다</p>
-      </div>
-      <div class="banner-buttons">
-        <button class="btn-primary" onclick="requestLocation()">위치 켜기</button>
-        <button class="btn-secondary" onclick="dismissLocationBanner()">괜찮습니다</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="error-banner" id="errorBanner"></div>
-
-  <div class="day-tabs" id="dayTabs"></div>
-
-  <div class="device">
-    <div id="contentArea">
-      <div class="loading">
-        <div class="spinner"></div>
-        <div>일정 불러오는 중...</div>
-      </div>
+<!-- 위치 안내 배너 -->
+<div class="location-banner" id="locationBanner" style="display:none;">
+  <div class="banner-device">
+    <div class="screen"><p>위치를 켜면 각 장소까지<br>거리를 확인할 수 있습니다</p></div>
+    <div class="banner-buttons">
+      <button class="btn-primary" onclick="requestLocation()">위치 켜기</button>
+      <button class="btn-secondary" onclick="dismissLocationBanner()">괜찮습니다</button>
     </div>
   </div>
 </div>
 
-<!-- 토스트 -->
-<div class="toast" id="toast"></div>
+<div class="error-banner" id="errorBanner"></div>
 
+<!-- 상단 4탭 네비게이션 -->
+<div class="section-nav">
+  <button class="section-nav-btn active" data-tab="schedule" onclick="switchTab('schedule')">일정</button>
+  <button class="section-nav-btn" data-tab="places" onclick="switchTab('places')">장소</button>
+  <button class="section-nav-btn" data-tab="restaurants" onclick="switchTab('restaurants')">식당</button>
+  <button class="section-nav-btn" data-tab="stay" onclick="switchTab('stay')">숙소</button>
+</div>
+
+<!-- 일정 서브탭 (Day) -->
+<div class="day-tabs" id="dayTabs"></div>
+
+<!-- 식당 서브탭+정렬 -->
+<div id="restSubTabsWrap" style="display:none;max-width:440px;margin:0 auto;padding:0 16px;">
+  <div class="rest-sub-tabs" id="restSubTabs"></div>
+  <div class="sort-bar" id="sortBar"></div>
+</div>
+
+<div class="container">
+  <div id="contentArea">
+    <div class="loading"><div class="spinner"></div><div>불러오는 중...</div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 <script>
-// ═══ 테마 초기화 ═══
+// ═══ THEME ═══
 function initTheme(){
   var saved=localStorage.getItem('gj_theme');
   if(saved) document.documentElement.setAttribute('data-theme',saved);
@@ -1120,934 +768,1068 @@ function updateThemeIcon(){
 }
 initTheme();
 
-// ═══ 글자 크기 ═══
-var fontSizes = ['medium', 'large', 'small'];
-
-function initFontSize() {
-  var saved = localStorage.getItem('gj_fontsize') || 'medium';
-  document.documentElement.setAttribute('data-fontsize', saved);
+// ═══ FONT SIZE ═══
+var fontSizes=['medium','large','small'];
+function initFontSize(){
+  var saved=localStorage.getItem('gj_fontsize')||'medium';
+  document.documentElement.setAttribute('data-fontsize',saved);
   updateFontSizeIcon(saved);
 }
-
-function cycleFontSize() {
-  var current = document.documentElement.getAttribute('data-fontsize') || 'medium';
-  var idx = fontSizes.indexOf(current);
-  var next = fontSizes[(idx + 1) % fontSizes.length];
-  document.documentElement.setAttribute('data-fontsize', next);
-  localStorage.setItem('gj_fontsize', next);
+function cycleFontSize(){
+  var current=document.documentElement.getAttribute('data-fontsize')||'medium';
+  var idx=fontSizes.indexOf(current);
+  var next=fontSizes[(idx+1)%fontSizes.length];
+  document.documentElement.setAttribute('data-fontsize',next);
+  localStorage.setItem('gj_fontsize',next);
   updateFontSizeIcon(next);
 }
-
-function updateFontSizeIcon(size) {
-  var btn = document.getElementById('fontSizeTrigger');
-  if (!btn) return;
-  var labels = { small: '가-', medium: '가', large: '가+' };
-  btn.textContent = labels[size];
+function updateFontSizeIcon(size){
+  var btn=document.getElementById('fontSizeTrigger');
+  if(!btn) return;
+  var labels={small:'가-',medium:'가',large:'가+'};
+  btn.textContent=labels[size];
 }
-
 initFontSize();
 
-// ═══ STAY_DATA (guide.html에서 복사) ═══
-var STAY_DATA = {
-  name: '까사멜로우', nameEn: 'Casa Mellow',
-  desc: '아이와 함께하는 서툰 여행을 응원하며',
-  address: '경상북도 경주시 북군4길 75',
-  phone: '010-3583-6648', email: 'ssoong6648@naver.com',
-  instagram: '@casa.mellow',
-  checkin: '15:30', checkout: '11:00',
-  parking: '건물 외부 전용 주차장',
-  mapUrl: 'https://map.naver.com/p/search/까사멜로우 경주',
-  stayfolioUrl: 'https://www.stayfolio.com/findstay/casa-mellow',
-  rooms: [
-    { name: 'A-1', type: '복층', people: '4/8명', bed: 'Q2 + S1', bath: '2.5', price: '289,000~' },
-    { name: 'A-2', type: '복층', people: '4/8명', bed: 'Q2 + S1', bath: '2.5', price: '329,000~' },
-    { name: 'B', type: '독채', people: '4/8명', bed: '4개', bath: '2', price: '329,000~' }
+// ═══ UTILS ═══
+function esc(s){if(!s) return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function escAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+var escapeHtml=esc;
+var escapeAttr=escAttr;
+function formatDate(s){var p=s.split('-');return parseInt(p[1])+'/'+parseInt(p[2])}
+function formatPrice(n){return n?n.toLocaleString()+'원':''}
+function formatTabDate(dateStr){var parts=dateStr.split('-');return parseInt(parts[1])+'/'+parseInt(parts[2])}
+function formatDateTime(d){
+  var mm=String(d.getMonth()+1).padStart(2,'0');
+  var dd=String(d.getDate()).padStart(2,'0');
+  var hh=String(d.getHours()).padStart(2,'0');
+  var mi=String(d.getMinutes()).padStart(2,'0');
+  return mm+'.'+dd+' '+hh+':'+mi;
+}
+
+function showError(msg){var el=document.getElementById('errorBanner');el.textContent=msg;el.classList.add('show')}
+function hideError(){document.getElementById('errorBanner').classList.remove('show')}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000)}
+
+// ═══ GLOBALS ═══
+var travelData=null;
+var activeDay=0;
+var activeTab='schedule';
+var pollTimer=null;
+var POLL_INTERVAL=30000;
+
+// restaurant state
+var allRestaurants=[];
+var restSortMode='rating';
+var restTypeFilter='all';
+
+// location state
+var userLat=null;
+var userLng=null;
+var locationTimestamp=0;
+var gpsWarningShown=false;
+var GEO_OPTIONS={enableHighAccuracy:false,timeout:10000,maximumAge:300000};
+
+// test location
+(function(){
+  var params=new URLSearchParams(location.search);
+  if(params.get('testloc')==='1'){
+    userLat=35.8579382;userLng=129.262038;
+    restSortMode='distance';
+  }
+})();
+</script>
+<script>
+// ═══ STAY DATA ═══
+var STAY_DATA={
+  name:'까사멜로우',nameEn:'Casa Mellow',
+  desc:'아이와 함께하는 서툰 여행을 응원하며',
+  address:'경상북도 경주시 북군4길 75',
+  phone:'010-3583-6648',email:'ssoong6648@naver.com',
+  instagram:'@casa.mellow',
+  checkin:'15:30',checkout:'11:00',
+  parking:'건물 외부 전용 주차장',
+  mapUrl:'https://map.naver.com/p/search/까사멜로우 경주',
+  stayfolioUrl:'https://www.stayfolio.com/findstay/casa-mellow',
+  rooms:[
+    {name:'A-1',type:'복층',people:'4/8명',bed:'Q2 + S1',bath:'2.5',price:'289,000~'},
+    {name:'A-2',type:'복층',people:'4/8명',bed:'Q2 + S1',bath:'2.5',price:'329,000~'},
+    {name:'B',type:'독채',people:'4/8명',bed:'4개',bath:'2',price:'329,000~'}
   ],
-  amenities: {
-    kitchen: ['인덕션', '전자레인지', '식기세척기', '토스터기', '캡슐커피머신', '전기포트', '제빙기', '조리도구', '기본조미료', '와인잔'],
-    bath: ['샴푸', '컨디셔너', '바디워시', '핸드워시', '치약', '타월', '샤워가운'],
-    general: ['TV', '냉장고', '세탁기', '헤어드라이어', '스피커', '슬리퍼', '생수'],
-    baby: ['젖병소독기', '유아용 어메니티', '유아 샤워용품', '키즈가구']
+  amenities:{
+    kitchen:['인덕션','전자레인지','식기세척기','토스터기','캡슐커피머신','전기포트','제빙기','조리도구','기본조미료','와인잔'],
+    bath:['샴푸','컨디셔너','바디워시','핸드워시','치약','타월','샤워가운'],
+    general:['TV','냉장고','세탁기','헤어드라이어','스피커','슬리퍼','생수'],
+    baby:['젖병소독기','유아용 어메니티','유아 샤워용품','키즈가구']
   },
-  kids: ['실내 키즈룸 (미끄럼틀, 놀이기구)', '야외 모래 놀이터', '미니 바이킹', '전 객실 키즈 어메니티'],
-  pool: { depth: '약 70cm', note: '온수 풀 · 사계절 이용 · 시간 제한 없음 · 보호자 동반 필수' },
-  bbq: { note: '무료 이용 · 전기그릴 기본 제공 · 시간 제한 없음', extra: '웨버 가스그릴 추가 가능 (유료)' },
-  rules: ['전 공간 절대 금연', '실내 냄새나는 음식 조리 금지', '퇴실 전 정리 및 분리수거', '야간 소음 주의', '24개월 미만 영유아 무료', '기준인원 초과 시 1인 1박 30,000원']
+  kids:['실내 키즈룸 (미끄럼틀, 놀이기구)','야외 모래 놀이터','미니 바이킹','전 객실 키즈 어메니티'],
+  pool:{depth:'약 70cm',note:'온수 풀 · 사계절 이용 · 시간 제한 없음 · 보호자 동반 필수'},
+  bbq:{note:'무료 이용 · 전기그릴 기본 제공 · 시간 제한 없음',extra:'웨버 가스그릴 추가 가능 (유료)'},
+  rules:['전 공간 절대 금연','실내 냄새나는 음식 조리 금지','퇴실 전 정리 및 분리수거','야간 소음 주의','24개월 미만 영유아 무료','기준인원 초과 시 1인 1박 30,000원']
 };
 
-// ═══ 홈플러스 guide 데이터 패치 ═══
-function patchGuideData(days) {
-  days.forEach(function(day) {
-    day.items.forEach(function(item) {
-      if (item.title && item.title.indexOf('홈플러스') !== -1 && !item.guide) {
-        item.guide = {
-          subtitle: '경주 유일의 대형 할인점 · 2024 메가푸드마켓 리뉴얼',
-          mustDo: ['BBQ 식재료·간식·음료 장보기', '아기 간식·이유식 재료 확보'],
-          babyTips: {
-            stroller: '단층 매장이라 유모차 이동 편리',
-            nursingRoom: '매장 내 수유실 (전화확인: 054-770-8000)',
-            restSpots: ['수퍼윙스 키즈카페 (1층)']
+// ═══ PATCH DATA ═══
+function patchGuideData(days){
+  days.forEach(function(day){
+    day.items.forEach(function(item){
+      if(item.title&&item.title.indexOf('홈플러스')!==-1&&!item.guide){
+        item.guide={
+          subtitle:'경주 유일의 대형 할인점 · 2024 메가푸드마켓 리뉴얼',
+          mustDo:['BBQ 식재료·간식·음료 장보기','아기 간식·이유식 재료 확보'],
+          babyTips:{
+            stroller:'단층 매장이라 유모차 이동 편리',
+            nursingRoom:'매장 내 수유실 (전화확인: 054-770-8000)',
+            restSpots:['수퍼윙스 키즈카페 (1층)']
           },
-          practicalInfo: {
-            hours: '09:00~22:00',
-            parking: '1층 고객주차장 + 2층 옥상주차장 (유료, 구매시 무료)',
-            phone: '054-770-8000',
-            closedDays: '매월 둘째·넷째 일요일 (\u26A0\uFE0F 2/22 휴무!)',
-            address: '경상북도 경주시 공단로 97',
-            fromAccommodation: '까사멜로우에서 차량 약 15분',
-            mapUrl: 'https://map.naver.com/p/search/홈플러스%20경주점'
+          practicalInfo:{
+            hours:'09:00~22:00',
+            parking:'1층 고객주차장 + 2층 옥상주차장 (유료, 구매시 무료)',
+            phone:'054-770-8000',
+            closedDays:'매월 둘째·넷째 일요일 (\u26A0\uFE0F 2/22 휴무!)',
+            address:'경상북도 경주시 공단로 97',
+            fromAccommodation:'까사멜로우에서 차량 약 15분',
+            mapUrl:'https://map.naver.com/p/search/홈플러스%20경주점'
           }
         };
       }
-
-      // 복합 장소 세분화
-      if (item.title === '대릉원(천마총) + 첨성대' && !item.subPlaces) {
-        item.subPlaces = [
-          {
-            name: '대릉원(천마총)',
-            subtitle: '신라 왕릉 23기 거대 고분군 · 유모차 산책 코스',
-            guide: {
-              mustDo: ['천마총 내부 관람 (경주 유일 고분 내부 공개)', '고분 사이 잔디 산책 · 목련나무 포토존', '무료 문화해설 (매시 정각, 10~16시)'],
-              babyTips: {
-                stroller: '전체 평지, 유모차 매우 편리. 정문에서 대여 가능',
-                nursingRoom: '주차장 부근 수유실 (054-750-8655)'
-              },
-              practicalInfo: {
-                fee: '대릉원 무료 / 천마총 3,000원 (만6세 이하 무료)',
-                hours: '09:00~22:00 (매표 21:30)',
-                parking: '쪽샘지구 공영주차장 무료 (추천)',
-                mapUrl: 'https://map.naver.com/p/search/대릉원'
-              }
-            }
-          },
-          {
-            name: '첨성대',
-            subtitle: '동양 최고(最古) 천문대 · 국보 제31호',
-            guide: {
-              mustDo: ['1,300년 원형 유지 신라 천문관측대 감상', '야간 조명도 아름다움'],
-              babyTips: { stroller: '주변 평지, 유모차 이동 편리' },
-              practicalInfo: {
-                fee: '무료',
-                hours: '09:00~22:00',
-                fromAccommodation: '대릉원에서 도보 5분',
-                mapUrl: 'https://map.naver.com/p/search/첨성대'
-              }
-            }
-          }
+      // subPlaces
+      if(item.title==='대릉원(천마총) + 첨성대'&&!item.subPlaces){
+        item.subPlaces=[
+          {name:'대릉원(천마총)',subtitle:'신라 왕릉 23기 거대 고분군 · 유모차 산책 코스',guide:{mustDo:['천마총 내부 관람 (경주 유일 고분 내부 공개)','고분 사이 잔디 산책 · 목련나무 포토존','무료 문화해설 (매시 정각, 10~16시)'],babyTips:{stroller:'전체 평지, 유모차 매우 편리. 정문에서 대여 가능',nursingRoom:'주차장 부근 수유실 (054-750-8655)'},practicalInfo:{fee:'대릉원 무료 / 천마총 3,000원 (만6세 이하 무료)',hours:'09:00~22:00 (매표 21:30)',parking:'쪽샘지구 공영주차장 무료 (추천)',mapUrl:'https://map.naver.com/p/search/대릉원'}}},
+          {name:'첨성대',subtitle:'동양 최고(最古) 천문대 · 국보 제31호',guide:{mustDo:['1,300년 원형 유지 신라 천문관측대 감상','야간 조명도 아름다움'],babyTips:{stroller:'주변 평지, 유모차 이동 편리'},practicalInfo:{fee:'무료',hours:'09:00~22:00',fromAccommodation:'대릉원에서 도보 5분',mapUrl:'https://map.naver.com/p/search/첨성대'}}}
         ];
       }
-
-      if (item.title === '교촌마을 산책' && !item.subPlaces) {
-        item.subPlaces = [
-          {
-            name: '교촌 한옥마을',
-            subtitle: '신라 천년 한옥마을 · 돌담길 산책',
-            guide: {
-              mustDo: ['한옥 골목 산책 + 돌담길 포토존', '월정교 야경 (도보 5분)'],
-              babyTips: {
-                stroller: '대부분 평지, 일부 돌길. 바퀴 큰 유모차 권장'
-              },
-              practicalInfo: {
-                fee: '무료',
-                hours: '마을 24시간 개방',
-                parking: '월정교 공영주차장 무료 (교동 153-5)',
-                mapUrl: 'https://map.naver.com/p/search/교촌한옥마을'
-              }
-            }
-          },
-          {
-            name: '경주 최부자댁',
-            subtitle: '12대 만석꾼 명문가 · 중요민속문화재',
-            guide: {
-              mustDo: ['6가지 가훈으로 유명한 명문가 탐방', '교동법주 시음 (최부자댁 옆)'],
-              babyTips: { stroller: '내부 마당 평탄, 유모차 가능' },
-              practicalInfo: {
-                fee: '무료',
-                hours: '~17:00',
-                mapUrl: 'https://map.naver.com/p/search/경주최부자댁'
-              }
-            }
-          }
+      if(item.title==='교촌마을 산책'&&!item.subPlaces){
+        item.subPlaces=[
+          {name:'교촌 한옥마을',subtitle:'신라 천년 한옥마을 · 돌담길 산책',guide:{mustDo:['한옥 골목 산책 + 돌담길 포토존','월정교 야경 (도보 5분)'],babyTips:{stroller:'대부분 평지, 일부 돌길. 바퀴 큰 유모차 권장'},practicalInfo:{fee:'무료',hours:'마을 24시간 개방',parking:'월정교 공영주차장 무료 (교동 153-5)',mapUrl:'https://map.naver.com/p/search/교촌한옥마을'}}},
+          {name:'경주 최부자댁',subtitle:'12대 만석꾼 명문가 · 중요민속문화재',guide:{mustDo:['6가지 가훈으로 유명한 명문가 탐방','교동법주 시음 (최부자댁 옆)'],babyTips:{stroller:'내부 마당 평탄, 유모차 가능'},practicalInfo:{fee:'무료',hours:'~17:00',mapUrl:'https://map.naver.com/p/search/경주최부자댁'}}}
         ];
       }
     });
   });
 }
 
-// ═══ 장소 상세 카드 (activity 아이템 내부) ═══
-function isStayItem(item) {
-  if (!item.title) return false;
-  return item.title.indexOf('체크인') !== -1 || item.title.indexOf('정착') !== -1;
+// ═══ DISTANCE ═══
+function haversineKm(lat1,lng1,lat2,lng2){
+  var R=6371;var dLat=(lat2-lat1)*Math.PI/180;var dLng=(lng2-lng1)*Math.PI/180;
+  var a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+var haversineDistance=haversineKm;
+
+function formatDistance(km){
+  if(km>=50) return {text:'현재 경주 근처가 아닙니다',cls:'far-away'};
+  if(km<1){var walkMin=Math.round((km*1000)/67);return {text:'도보 약 '+walkMin+'분 ('+km.toFixed(1)+'km)',cls:'nearby'};}
+  var driveMin=Math.round(km/30*60);
+  if(km<5) return {text:'약 '+km.toFixed(1)+'km · 차량 약 '+driveMin+'분',cls:''};
+  return {text:'약 '+Math.round(km)+'km · 차량 약 '+driveMin+'분',cls:''};
 }
 
-function renderPlaceDetail(item) {
-  if (isStayItem(item)) return renderStayDetail();
+function getItemDistance(item){
+  if(!userLat||!item.options||item.options.length===0) return null;
+  var withCoords=item.options.filter(function(o){return o.lat&&o.lng});
+  if(withCoords.length===0) return null;
+  if(item.visitedOption){
+    var visited=withCoords.find(function(o){return o.name===item.visitedOption});
+    if(visited) return {km:haversineKm(userLat,userLng,visited.lat,visited.lng),name:visited.name};
+  }
+  var closest=null;var minKm=Infinity;
+  withCoords.forEach(function(o){var km=haversineKm(userLat,userLng,o.lat,o.lng);if(km<minKm){minKm=km;closest=o}});
+  return closest?{km:minKm,name:closest.name}:null;
+}
 
-  // subPlaces가 있으면 각각 개별 카드로 렌더링
-  if (item.subPlaces && item.subPlaces.length) {
-    var html = '';
-    item.subPlaces.forEach(function(sp) {
-      html += renderSinglePlaceCard(sp.name, sp.subtitle, sp.guide);
-    });
+function parseOpenClosed(hoursStr){
+  if(!hoursStr) return null;
+  var m=hoursStr.match(/(\d{1,2}):?(\d{2})?\s*[~\-]\s*(\d{1,2}):?(\d{2})?/);
+  if(!m) return null;
+  var now=new Date();
+  var nowMin=now.getHours()*60+now.getMinutes();
+  var openMin=parseInt(m[1])*60+(m[2]?parseInt(m[2]):0);
+  var closeMin=parseInt(m[3])*60+(m[4]?parseInt(m[4]):0);
+  return nowMin>=openMin&&nowMin<closeMin
+    ?{status:'open',text:'영업중',label:'영업 중'}
+    :{status:'closed',text:'영업종료',label:'오늘 마감'};
+}
+</script>
+<script>
+// ═══ SCHEDULE RENDERING ═══
+
+function isStayItem(item){
+  if(!item.title) return false;
+  return item.title.indexOf('체크인')!==-1||item.title.indexOf('정착')!==-1;
+}
+
+function renderPlaceDetail(item){
+  if(isStayItem(item)) return renderStayDetailInline();
+  if(item.subPlaces&&item.subPlaces.length){
+    var html='';
+    item.subPlaces.forEach(function(sp){html+=renderSinglePlaceCardInline(sp.name,sp.subtitle,sp.guide)});
     return html;
   }
-
-  var g = item.guide;
-  if (!g) return '';
-  return renderSinglePlaceCard(item.title, g.subtitle, g);
+  var g=item.guide;
+  if(!g) return '';
+  return renderSinglePlaceCardInline(item.title,g.subtitle,g);
 }
 
-function renderSinglePlaceCard(name, subtitle, g) {
-  var html = '<details class="place-detail">';
-  html += '<summary>';
-  html += '<div class="place-detail-top">';
-  html += '<span class="place-detail-icon">\uD83D\uDCCD</span>';
-  html += '<span class="place-detail-name">' + escapeHtml(name) + '</span>';
-  html += '<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
-  html += '</div>';
-  if (subtitle) {
-    html += '<div class="place-detail-sub">' + escapeHtml(subtitle) + '</div>';
-  }
-  // tags
-  var tags = [];
-  if (g.practicalInfo && g.practicalInfo.parking) tags.push('주차 가능');
-  if (g.babyTips && g.babyTips.stroller) tags.push({text: '유모차 OK', cls: 'baby'});
-  if (g.babyTips && g.babyTips.nursingRoom) tags.push({text: '수유실', cls: 'baby'});
-  if (tags.length) {
-    html += '<div class="place-detail-tags">';
-    tags.forEach(function(t) {
-      if (typeof t === 'string') html += '<span class="place-tag">' + t + '</span>';
-      else html += '<span class="place-tag ' + t.cls + '">' + t.text + '</span>';
+function renderSinglePlaceCardInline(name,subtitle,g){
+  var html='<details class="place-detail">';
+  html+='<summary>';
+  html+='<div class="place-detail-top">';
+  html+='<span class="place-detail-name">'+esc(name)+'</span>';
+  html+='<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
+  html+='</div>';
+  if(subtitle) html+='<div class="place-detail-sub">'+esc(subtitle)+'</div>';
+  var tags=[];
+  if(g.practicalInfo&&g.practicalInfo.parking) tags.push('주차 가능');
+  if(g.babyTips&&g.babyTips.stroller) tags.push({text:'유모차 OK',cls:'baby'});
+  if(g.babyTips&&g.babyTips.nursingRoom) tags.push({text:'수유실',cls:'baby'});
+  if(tags.length){
+    html+='<div class="place-detail-tags">';
+    tags.forEach(function(t){
+      if(typeof t==='string') html+='<span class="place-tag">'+t+'</span>';
+      else html+='<span class="place-tag '+t.cls+'">'+t.text+'</span>';
     });
-    html += '</div>';
+    html+='</div>';
   }
-  html += '</summary>';
-  html += '<div class="place-detail-body">';
-  // mustDo
-  if (g.mustDo && g.mustDo.length) {
-    html += '<div class="place-body-label">꼭 할 것</div><ul class="place-list">';
-    g.mustDo.forEach(function(m) { html += '<li>' + escapeHtml(m) + '</li>'; });
-    html += '</ul>';
+  html+='</summary>';
+  html+='<div class="place-detail-body">';
+  if(g.mustDo&&g.mustDo.length){
+    html+='<div class="place-body-label">꼭 할 것</div><ul class="place-list">';
+    g.mustDo.forEach(function(m){html+='<li>'+esc(m)+'</li>'});
+    html+='</ul>';
   }
-  // babyTips
-  if (g.babyTips && Object.keys(g.babyTips).length) {
-    html += '<div class="place-body-label">아기 동반 팁</div>';
-    var bt = g.babyTips;
-    if (bt.stroller) html += '<div class="place-info-row"><span class="place-info-label">유모차</span>' + escapeHtml(bt.stroller) + '</div>';
-    if (bt.nursingRoom) html += '<div class="place-info-row"><span class="place-info-label">수유실</span>' + escapeHtml(bt.nursingRoom) + '</div>';
-    if (bt.restroom) html += '<div class="place-info-row"><span class="place-info-label">화장실</span>' + escapeHtml(bt.restroom) + '</div>';
-    if (bt.restSpots && bt.restSpots.length) {
-      html += '<div class="place-info-row"><span class="place-info-label">쉴 곳</span>' + bt.restSpots.map(escapeHtml).join(', ') + '</div>';
-    }
-    if (bt.recommendedRoute) html += '<div class="place-info-row"><span class="place-info-label">추천 동선</span>' + escapeHtml(bt.recommendedRoute) + '</div>';
+  if(g.babyTips&&Object.keys(g.babyTips).length){
+    html+='<div class="place-body-label">아기 동반 팁</div>';
+    var bt=g.babyTips;
+    if(bt.stroller) html+='<div class="place-info-row"><span class="place-info-label">유모차</span>'+esc(bt.stroller)+'</div>';
+    if(bt.nursingRoom) html+='<div class="place-info-row"><span class="place-info-label">수유실</span>'+esc(bt.nursingRoom)+'</div>';
+    if(bt.restroom) html+='<div class="place-info-row"><span class="place-info-label">화장실</span>'+esc(bt.restroom)+'</div>';
+    if(bt.restSpots&&bt.restSpots.length) html+='<div class="place-info-row"><span class="place-info-label">쉴 곳</span>'+bt.restSpots.map(esc).join(', ')+'</div>';
+    if(bt.recommendedRoute) html+='<div class="place-info-row"><span class="place-info-label">추천 동선</span>'+esc(bt.recommendedRoute)+'</div>';
   }
-  // practicalInfo
-  if (g.practicalInfo) {
-    html += '<div class="place-body-label">실용 정보</div>';
-    var pi = g.practicalInfo;
-    if (pi.address) html += '<div class="place-info-row"><span class="place-info-label">주소</span>' + escapeHtml(pi.address) + '</div>';
-    if (pi.hours) html += '<div class="place-info-row"><span class="place-info-label">영업시간</span>' + escapeHtml(pi.hours) + '</div>';
-    if (pi.fee) html += '<div class="place-info-row"><span class="place-info-label">입장료</span>' + escapeHtml(pi.fee) + '</div>';
-    if (pi.phone) html += '<div class="place-info-row"><span class="place-info-label">전화</span>' + escapeHtml(pi.phone) + '</div>';
-    if (pi.parking) html += '<div class="place-info-row"><span class="place-info-label">주차</span>' + escapeHtml(pi.parking) + '</div>';
-    if (pi.timeNeeded) html += '<div class="place-info-row"><span class="place-info-label">소요시간</span>' + escapeHtml(pi.timeNeeded) + '</div>';
-    if (pi.closedDays) html += '<div class="place-info-row"><span class="place-info-label">휴무</span>' + escapeHtml(pi.closedDays) + '</div>';
-    if (pi.fromAccommodation) html += '<div class="place-info-row"><span class="place-info-label">숙소에서</span>' + escapeHtml(pi.fromAccommodation) + '</div>';
+  if(g.practicalInfo){
+    html+='<div class="place-body-label">실용 정보</div>';
+    var pi=g.practicalInfo;
+    if(pi.address) html+='<div class="place-info-row"><span class="place-info-label">주소</span>'+esc(pi.address)+'</div>';
+    if(pi.hours) html+='<div class="place-info-row"><span class="place-info-label">영업시간</span>'+esc(pi.hours)+'</div>';
+    if(pi.fee) html+='<div class="place-info-row"><span class="place-info-label">입장료</span>'+esc(pi.fee)+'</div>';
+    if(pi.phone) html+='<div class="place-info-row"><span class="place-info-label">전화</span>'+esc(pi.phone)+'</div>';
+    if(pi.parking) html+='<div class="place-info-row"><span class="place-info-label">주차</span>'+esc(pi.parking)+'</div>';
+    if(pi.timeNeeded) html+='<div class="place-info-row"><span class="place-info-label">소요시간</span>'+esc(pi.timeNeeded)+'</div>';
+    if(pi.closedDays) html+='<div class="place-info-row"><span class="place-info-label">휴무</span>'+esc(pi.closedDays)+'</div>';
+    if(pi.fromAccommodation) html+='<div class="place-info-row"><span class="place-info-label">숙소에서</span>'+esc(pi.fromAccommodation)+'</div>';
   }
-  // mapUrl
-  var mapUrl = (g.practicalInfo && g.practicalInfo.mapUrl) || '';
-  if (mapUrl) {
-    html += '<a class="option-map-link" href="' + escapeAttr(mapUrl) + '" target="_blank">지도에서 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>';
-  }
-  html += '</div></details>';
+  var mapUrl=(g.practicalInfo&&g.practicalInfo.mapUrl)||'';
+  if(mapUrl) html+='<a class="option-map-link" href="'+escAttr(mapUrl)+'" target="_blank">지도에서 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>';
+  html+='</div></details>';
   return html;
 }
 
-function renderStayDetail() {
-  if (typeof STAY_DATA === 'undefined') return '';
-  var s = STAY_DATA;
-  var html = '<details class="place-detail stay-detail">';
-  html += '<summary><div class="place-detail-top">';
-  html += '<span class="place-detail-icon">\uD83C\uDFE0</span>';
-  html += '<span class="place-detail-name">' + escapeHtml(s.name) + '</span>';
-  html += '<span class="place-detail-hours">체크인 ' + escapeHtml(s.checkin) + '</span>';
-  html += '<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
-  html += '</div></summary>';
-  html += '<div class="place-detail-body">';
-  html += '<div class="place-info-row"><span class="place-info-label">주소</span>' + escapeHtml(s.address) + '</div>';
-  html += '<div class="place-info-row"><span class="place-info-label">전화</span>' + escapeHtml(s.phone) + '</div>';
-  html += '<div class="place-info-row"><span class="place-info-label">체크인/아웃</span>' + s.checkin + ' / ' + s.checkout + '</div>';
-  html += '<div class="place-info-row"><span class="place-info-label">주차</span>' + escapeHtml(s.parking) + '</div>';
-  if (s.kids && s.kids.length) {
-    html += '<div class="place-body-label">키즈 시설</div><ul class="place-list">';
-    s.kids.forEach(function(k) { html += '<li>' + escapeHtml(k) + '</li>'; });
-    html += '</ul>';
+function renderStayDetailInline(){
+  if(typeof STAY_DATA==='undefined') return '';
+  var s=STAY_DATA;
+  var html='<details class="place-detail stay-detail">';
+  html+='<summary><div class="place-detail-top">';
+  html+='<span class="place-detail-name">'+esc(s.name)+'</span>';
+  html+='<span class="place-detail-hours">체크인 '+esc(s.checkin)+'</span>';
+  html+='<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
+  html+='</div></summary>';
+  html+='<div class="place-detail-body">';
+  html+='<div class="place-info-row"><span class="place-info-label">주소</span>'+esc(s.address)+'</div>';
+  html+='<div class="place-info-row"><span class="place-info-label">전화</span>'+esc(s.phone)+'</div>';
+  html+='<div class="place-info-row"><span class="place-info-label">체크인/아웃</span>'+s.checkin+' / '+s.checkout+'</div>';
+  html+='<div class="place-info-row"><span class="place-info-label">주차</span>'+esc(s.parking)+'</div>';
+  if(s.kids&&s.kids.length){
+    html+='<div class="place-body-label">키즈 시설</div><ul class="place-list">';
+    s.kids.forEach(function(k){html+='<li>'+esc(k)+'</li>'});
+    html+='</ul>';
   }
-  if (s.amenities && s.amenities.baby && s.amenities.baby.length) {
-    html += '<div class="place-body-label">아기 용품</div>';
-    html += '<div class="place-info-row">' + s.amenities.baby.map(escapeHtml).join(', ') + '</div>';
+  if(s.amenities&&s.amenities.baby&&s.amenities.baby.length){
+    html+='<div class="place-body-label">아기 용품</div>';
+    html+='<div class="place-info-row">'+s.amenities.baby.map(esc).join(', ')+'</div>';
   }
-  if (s.pool) {
-    html += '<div class="place-body-label">풀장</div>';
-    html += '<div class="place-info-row">' + escapeHtml(s.pool.note) + '</div>';
-  }
-  if (s.mapUrl) {
-    html += '<a class="option-map-link" href="' + escapeAttr(s.mapUrl) + '" target="_blank">지도에서 보기 ↗</a>';
-  }
-  html += '</div></details>';
+  if(s.pool) html+='<div class="place-body-label">풀장</div><div class="place-info-row">'+esc(s.pool.note)+'</div>';
+  if(s.mapUrl) html+='<a class="option-map-link" href="'+escAttr(s.mapUrl)+'" target="_blank">지도에서 보기 ↗</a>';
+  html+='</div></details>';
   return html;
 }
 
-const POLL_INTERVAL = 30000;
-
-let travelData = null;
-let activeDay = 0;
-let pollTimer = null;
-
-// 앱 시작
-(function init() {
-  fetchData();
-  pollTimer = setInterval(fetchData, POLL_INTERVAL);
-})();
-
-async function fetchData() {
-  try {
-    const res = await fetch('/api/data');
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
-    const json = await res.json();
-    travelData = json.record;
-    hideError();
-    render();
-  } catch (e) {
-    showError('연결 끊김. 다시 시도 중...');
-    console.error('fetch error:', e);
-  }
+function renderOptionCard(opt,item){
+  var showOptionDist=userLat&&!(getItemDistance(item)&&getItemDistance(item).km>=50);
+  var html='<details class="option-card">';
+  html+='<summary>';
+  html+='<div class="option-top">';
+  html+='<span class="option-name">'+esc(opt.name)+'</span>';
+  if(opt.rating) html+='<span class="option-rating">'+opt.rating+'</span>';
+  html+='<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
+  html+='</div>';
+  html+='<div class="option-meta">';
+  var brief=opt.menu||opt.desc||'';
+  if(brief) html+='<span class="option-menu-brief">'+esc(brief)+'</span>';
+  if(opt.hours){var oc=parseOpenClosed(opt.hours);if(oc) html+='<span class="open-tag '+oc.status+'">'+oc.text+'</span>'}
+  if(showOptionDist&&opt.lat&&opt.lng){var km=haversineKm(userLat,userLng,opt.lat,opt.lng);html+='<span class="option-dist">'+(km<1?km.toFixed(1):Math.round(km))+'km</span>'}
+  html+='</div></summary>';
+  html+='<div class="option-body">';
+  if(opt.menuDetail&&opt.menuDetail.length){opt.menuDetail.forEach(function(m){html+='<div class="option-info">'+esc(m.item);if(m.price) html+='<span>'+Number(m.price).toLocaleString()+'원</span>';html+='</div>'})}
+  if(opt.priceRange) html+='<div class="option-info"><span class="option-info-label">가격대</span>'+esc(opt.priceRange)+'</div>';
+  if(opt.hours) html+='<div class="option-info"><span class="option-info-label">영업시간</span>'+esc(opt.hours)+'</div>';
+  if(opt.loc) html+='<div class="option-info"><span class="option-info-label">위치</span>'+esc(opt.loc)+'</div>';
+  var badges=[];
+  if(opt.dad==='good') badges.push('<span class="badge badge-dad-good">아빠 OK</span>');
+  if(opt.dad==='caution') badges.push('<span class="badge badge-dad-caution">아빠 주의'+(opt.dadNote?' · '+esc(opt.dadNote):'')+'</span>');
+  if(opt.hiro==='good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
+  if(opt.hiro==='caution') badges.push('<span class="badge badge-hiro-caution">히로 주의'+(opt.hiroNote?' · '+esc(opt.hiroNote):'')+'</span>');
+  if(badges.length) html+='<div class="option-badges">'+badges.join('')+'</div>';
+  if(opt.mapUrl) html+='<a class="option-map-link" href="'+escAttr(opt.mapUrl)+'" target="_blank">지도에서 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>';
+  html+='</div></details>';
+  return html;
 }
 
-function render() {
-  if (!travelData) return;
-  updateHeader();
-  renderTabs();
-  renderDayContent();
+function renderSimpleOption(opt,item){
+  var html='<div class="option-simple">';
+  html+='<span class="option-name">'+esc(opt.name)+'</span>';
+  var simpleBrief=opt.menu||opt.desc||'';
+  if(simpleBrief) html+=' <span class="option-menu-brief" style="color:var(--text-light);font-size:13px">— '+esc(simpleBrief)+'</span>';
+  var badges=[];
+  if(opt.dad==='good') badges.push('<span class="badge badge-dad-good">아빠 OK</span>');
+  if(opt.dad==='caution') badges.push('<span class="badge badge-dad-caution">아빠 주의'+(opt.dadNote?' · '+esc(opt.dadNote):'')+'</span>');
+  if(opt.hiro==='good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
+  if(opt.hiro==='caution') badges.push('<span class="badge badge-hiro-caution">히로 주의'+(opt.hiroNote?' · '+esc(opt.hiroNote):'')+'</span>');
+  if(badges.length) html+='<div class="option-badges">'+badges.join('')+'</div>';
+  html+='</div>';
+  return html;
 }
 
-function updateHeader() {
-  const meta = travelData.meta;
-  if (meta && meta.lastUpdated) {
-    const d = new Date(meta.lastUpdated);
-    document.getElementById('updateTime').textContent =
-      `마지막 업데이트: ${formatDateTime(d)}`;
-  }
-  // URL query param으로 특정 일자 선택 (?day=2)
-  const urlParams = new URLSearchParams(location.search);
-  const dayParam = urlParams.get('day');
-  if (dayParam && !window._dayParamApplied) {
-    const d = parseInt(dayParam);
-    if (d >= 1 && d <= travelData.days.length) {
-      activeDay = d - 1;
-      window._dayParamApplied = true;
-    }
-  }
+function renderItemCard(item){
+  var catLabel={meal:'식사',cafe:'카페',activity:'관광'};
+  var isVisited=item.visited===true;
+  var isSkipped=item.status==='skipped';
+  var titleClass=isSkipped?' skipped':'';
+  var cardClass='item-card'+(isVisited?' visited':'')+(isSkipped?' skipped':'');
 
-  const now = new Date();
-  const tripStart = new Date('2026-02-19T00:00:00+09:00');
-  const tripEnd = new Date('2026-02-24T23:59:59+09:00');
-  let status = '2026.02.19 — 02.24';
-  if (now < tripStart) {
-    const diff = Math.ceil((tripStart - now) / 86400000);
-    status = `D-${diff} / 2026.02.19 — 02.24`;
-  } else if (now > tripEnd) {
-    status = '여행 완료';
+  var html='<div class="'+cardClass+'">';
+  html+='<div class="item-display">';
+  html+='<div class="item-top-row">';
+  if(isVisited){
+    html+='<span class="item-status-check">&#10003;</span>';
+  } else if(isSkipped){
+    html+='<span class="item-status-dot skipped"></span>';
   } else {
-    const dayNum = Math.floor((now - tripStart) / 86400000) + 1;
-    status = `${dayNum}일차 진행 중`;
-    if (activeDay === 0 && !dayParam) activeDay = dayNum - 1;
+    html+='<span class="item-status-dot '+(item.status||'planned')+'"></span>';
   }
-  document.getElementById('tripStatus').textContent = status;
+  html+='<span class="item-time">'+(item.time||'')+'</span>';
+  html+='<span class="item-cat-label">'+(catLabel[item.cat]||'')+'</span>';
+  html+='</div>';
+  html+='<div class="item-title'+titleClass+'">'+esc(item.title);
+  if(isVisited&&item.visitedOption) html+='<span class="item-visited-info"> — '+esc(item.visitedOption)+'</span>';
+  html+='</div>';
+  if(item.review) html+='<div class="review-text">"'+esc(item.review)+'"</div>';
+
+  if(item.cat==='activity') html+=renderPlaceDetail(item);
+
+  if(userLat&&item.options&&item.options.length>0){
+    var distInfo=getItemDistance(item);
+    if(distInfo&&distInfo.km<50){var fmt=formatDistance(distInfo.km);html+='<div class="item-distance '+fmt.cls+'">'+fmt.text+'</div>'}
+    else if(distInfo&&distInfo.km>=50){html+='<div class="item-distance far-away">'+formatDistance(distInfo.km).text+'</div>'}
+  }
+
+  if(item.options&&item.options.length>0){
+    html+='<div class="options-list">';
+    item.options.forEach(function(opt){
+      var hasRichData=opt.rating||opt.menuDetail||opt.hours||opt.mapUrl;
+      if(hasRichData) html+=renderOptionCard(opt,item);
+      else html+=renderSimpleOption(opt,item);
+    });
+    html+='</div>';
+  }
+  html+='</div>';
+  if(item.note){html+='<div class="item-note-row"><div class="item-note-label">메모</div>'+esc(item.note)+'</div>'}
+  html+='</div>';
+  return html;
 }
 
-function renderTabs() {
-  const tabs = document.getElementById('dayTabs');
-  const days = travelData.days;
-  tabs.innerHTML = '';
-  days.forEach((day, idx) => {
-    const tab = document.createElement('div');
-    tab.className = 'day-tab' + (idx === activeDay ? ' active' : '');
-    tab.innerHTML = `${day.dayNum}일차<span class="tab-date">${formatTabDate(day.date, day.dow)}</span>`;
-    tab.onclick = () => { activeDay = idx; renderTabs(); renderDayContent(); };
+function renderDayContent(){
+  patchGuideData(travelData.days);
+  var area=document.getElementById('contentArea');
+  var day=travelData.days[activeDay];
+  if(!day){area.innerHTML='<div class="loading">데이터 없음</div>';return}
+
+  var totalItems=day.items.length;
+  var doneItems=day.items.filter(function(i){return i.status==='done'||i.status==='skipped'}).length;
+  var progress=totalItems>0?(doneItems/totalItems*100):0;
+
+  var html='';
+  html+='<div class="display-card">';
+  html+='<div class="display-screen">';
+  html+='<div class="display-header">';
+  html+='<span class="display-label">일정</span>';
+  html+='<div class="display-indicator">';
+  for(var i=0;i<totalItems;i++){html+='<span class="'+(i<doneItems?'on':'')+'"></span>'}
+  html+='</div></div>';
+  html+='<div class="day-title-display">'+esc(day.title)+'</div>';
+  html+='<div class="day-subtitle">'+day.dayNum+'일차 / '+doneItems+'/'+totalItems+' 완료</div>';
+  html+='</div>';
+  html+='<div class="level-meter">';
+  html+='<div class="meter-bar"><div class="meter-fill" style="width:'+progress+'%"></div></div>';
+  html+='<div class="meter-ticks"><span class="meter-tick">0%</span><span class="meter-tick" style="color:var(--accent)">'+Math.round(progress)+'%</span><span class="meter-tick">100%</span></div></div>';
+  html+='</div>';
+
+  html+='<div class="items-list">';
+  day.items.forEach(function(item){html+=renderItemCard(item)});
+  html+='</div>';
+
+  area.innerHTML=html;
+}
+</script>
+<script>
+// ═══ PLACES TAB ═══
+function renderPlaces(days){
+  var html='';
+  html+='<div class="section-hero fade-up">';
+  html+='<div class="section-label">Places</div>';
+  html+='<div class="section-title">장소 가이드</div>';
+  html+='<div class="section-subtitle">주요 관광지 · 아이 동반 팁</div>';
+  html+='</div>';
+
+  var seen={};var places=[];
+  days.forEach(function(day){
+    day.items.forEach(function(item){
+      if(item.cat==='activity'&&item.guide&&!seen[item.id]){seen[item.id]=true;places.push(item)}
+    });
+  });
+
+  var extraPlaces=[
+    {title:'홈플러스 경주점',id:'extra_homeplus',cat:'activity',guide:{subtitle:'경주 유일의 대형 할인점 · 2024 메가푸드마켓 리뉴얼',mustDo:['BBQ 식재료·간식·음료 장보기','아기 간식·이유식 재료 확보'],babyTips:{stroller:'단층 매장이라 유모차 이동 편리',nursingRoom:'매장 내 수유실 (전화확인: 054-770-8000)',restSpots:['수퍼윙스 키즈카페 (1층)']},practicalInfo:{hours:'09:00~22:00',parking:'1층 고객주차장 + 2층 옥상주차장 (유료, 구매시 무료)',phone:'054-770-8000',closedDays:'매월 둘째·넷째 일요일 (\u26A0\uFE0F 2/22 휴무!)',address:'경상북도 경주시 공단로 97',fromAccommodation:'까사멜로우에서 차량 약 15분',mapUrl:'https://map.naver.com/p/search/홈플러스%20경주점'}}},
+    {title:'사랑의 소아과의원',id:'extra_clinic',cat:'activity',guide:{subtitle:'아이 아플 때 대비 — 소아청소년과 전문의',mustDo:['방문 전 반드시 전화 확인 (임시 휴진 가능)','야간/공휴일: E-GEN 앱에서 당일 진료 병원 검색'],babyTips:{},practicalInfo:{address:'경상북도 경주시 황성로 59, 2층',phone:'054-773-7740',hours:'평일 09:00~18:00 (추정), 토 09:00~13:00',closedDays:'일요일·공휴일 휴진',mapUrl:'https://naver.me/GJrFT2S7'}}}
+  ];
+  extraPlaces.forEach(function(ep){if(!seen[ep.id]){seen[ep.id]=true;places.push(ep)}});
+
+  var cardIndex=0;
+  places.forEach(function(item){
+    var g=item.guide;
+    if(item.subPlaces&&item.subPlaces.length){
+      item.subPlaces.forEach(function(sp){html+=renderGuidePlace(sp,cardIndex++,days)});
+    } else {
+      html+=renderGuidePlace({name:item.title,subtitle:g.subtitle,guide:g,babyTips:g.babyTips},cardIndex++,days);
+    }
+  });
+  return html;
+}
+
+function isPlaceVisited(placeName,days){
+  var visited=false;
+  days.forEach(function(day){
+    day.items.forEach(function(item){
+      if(item.visited&&item.cat==='activity'){
+        if(item.title===placeName) visited=true;
+        if(item.subPlaces){
+          item.subPlaces.forEach(function(sp){if(sp.name===placeName) visited=true});
+        }
+      }
+    });
+  });
+  return visited;
+}
+
+function getPlaceReview(placeName,days){
+  var review='';
+  days.forEach(function(day){
+    day.items.forEach(function(item){
+      if(item.visited&&item.review&&item.cat==='activity'){
+        if(item.title===placeName) review=item.review;
+      }
+    });
+  });
+  return review;
+}
+
+function renderGuidePlace(sp,idx,days){
+  var g=sp.guide;if(!g) return '';
+  var visited=isPlaceVisited(sp.name,days);
+  var review=getPlaceReview(sp.name,days);
+  var html='<details class="card fade-up'+(visited?' visited':'')+'" data-section="places"';
+  html+=' style="animation-delay:'+(idx*0.05)+'s">';
+  html+='<summary>';
+  html+='<div class="card-top">';
+  html+='<span class="card-name">'+esc(sp.name)+'</span>';
+  if(visited) html+='<span class="visit-badge">&#10003;</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='</div>';
+  if(sp.subtitle) html+='<div class="card-sub">'+esc(sp.subtitle)+'</div>';
+  if(review) html+='<div class="review-text">"'+esc(review)+'"</div>';
+  html+='</summary>';
+  html+='<div class="card-body">';
+  if(g.mustDo&&g.mustDo.length>0){
+    html+='<div class="place-section"><div class="place-section-label">Must-Do</div><ul class="place-list">';
+    g.mustDo.forEach(function(m){html+='<li>'+esc(m)+'</li>'});
+    html+='</ul></div>';
+  }
+  if(g.babyTips){
+    var bt=g.babyTips;
+    var hasBt=bt.stroller||bt.nursingRoom||bt.restroom||(bt.restSpots&&bt.restSpots.length)||bt.recommendedRoute;
+    if(hasBt){
+      html+='<div class="place-section"><div class="place-section-label">아이 동반 팁</div>';
+      if(bt.stroller){html+='<div class="baby-tip"><div class="baby-tip-label">유모차</div><div class="baby-tip-text">'+esc(bt.stroller)+'</div></div>'}
+      if(bt.nursingRoom){html+='<div class="baby-tip"><div class="baby-tip-label">수유실</div><div class="baby-tip-text">'+esc(bt.nursingRoom)+'</div></div>'}
+      if(bt.restroom){html+='<div class="baby-tip"><div class="baby-tip-label">화장실</div><div class="baby-tip-text">'+esc(bt.restroom)+'</div></div>'}
+      if(bt.restSpots&&bt.restSpots.length){html+='<div class="baby-tip"><div class="baby-tip-label">쉴 곳</div><div class="baby-tip-text">'+bt.restSpots.map(esc).join(', ')+'</div></div>'}
+      if(bt.recommendedRoute){html+='<div class="baby-tip"><div class="baby-tip-label">추천 동선</div><div class="baby-tip-text">'+esc(bt.recommendedRoute)+'</div></div>'}
+      html+='</div>';
+    }
+  }
+  if(g.practicalInfo){
+    html+='<div class="place-section"><div class="place-section-label">실용 정보</div><div class="info-grid">';
+    var pi=g.practicalInfo;
+    if(pi.address) html+='<div class="info-label">주소</div><div class="info-value">'+esc(pi.address)+'</div>';
+    if(pi.hours) html+='<div class="info-label">운영</div><div class="info-value">'+esc(pi.hours)+'</div>';
+    if(pi.fee) html+='<div class="info-label">요금</div><div class="info-value">'+esc(pi.fee)+'</div>';
+    if(pi.phone) html+='<div class="info-label">전화</div><div class="info-value">'+esc(pi.phone)+'</div>';
+    if(pi.parking) html+='<div class="info-label">주차</div><div class="info-value">'+esc(pi.parking)+'</div>';
+    if(pi.timeNeeded) html+='<div class="info-label">소요</div><div class="info-value">'+esc(pi.timeNeeded)+'</div>';
+    if(pi.closedDays) html+='<div class="info-label">휴무</div><div class="info-value">'+esc(pi.closedDays)+'</div>';
+    if(pi.fromAccommodation) html+='<div class="info-label">숙소에서</div><div class="info-value">'+esc(pi.fromAccommodation)+'</div>';
+    html+='</div>';
+    if(pi.mapUrl) html+='<a href="'+escAttr(pi.mapUrl)+'" target="_blank" class="rest-map-link"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>지도 보기</a>';
+    html+='</div>';
+  }
+  html+='</div></details>';
+  return html;
+}
+
+// ═══ RESTAURANTS TAB ═══
+function extractRestaurants(days){
+  var map={};
+  days.forEach(function(day){
+    day.items.forEach(function(item){
+      if(item.cat!=='meal'&&item.cat!=='cafe') return;
+      if(!item.options) return;
+      item.options.forEach(function(opt){
+        var key=opt.name;if(!key) return;
+        if(!map[key]){
+          map[key]={
+            name:opt.name,menu:opt.menu||opt.desc||'',hours:opt.hours||'',
+            loc:opt.loc||'',lat:opt.lat||null,lng:opt.lng||null,
+            dad:opt.dad||'',dadNote:opt.dadNote||'',hiro:opt.hiro||'',hiroNote:opt.hiroNote||'',
+            rating:opt.rating||null,ratingSource:opt.ratingSource||'',
+            priceRange:opt.priceRange||'',menuDetail:opt.menuDetail||null,
+            mapUrl:opt.mapUrl||'',category:opt.category||'',cat:item.cat,
+            type:item.cat==='cafe'?'cafe':'meal',
+            meals:[],distKm:null
+          };
+        }
+        map[key].meals.push('Day '+day.dayNum+' '+(item.time||''));
+        if(!map[key].hours&&opt.hours) map[key].hours=opt.hours;
+        if(!map[key].lat&&opt.lat){map[key].lat=opt.lat;map[key].lng=opt.lng}
+        if(!map[key].rating&&opt.rating) map[key].rating=opt.rating;
+        if(opt.dad==='good') map[key].dad='good';
+        if(opt.hiro==='good') map[key].hiro='good';
+      });
+    });
+  });
+  return Object.values(map);
+}
+
+function sortRestaurants(list){
+  if(restSortMode==='distance'&&userLat){
+    list.forEach(function(r){r.distKm=(r.lat&&r.lng)?haversineKm(userLat,userLng,r.lat,r.lng):9999});
+    list.sort(function(a,b){return a.distKm-b.distKm});
+  } else {
+    list.sort(function(a,b){var ra=a.rating||0,rb=b.rating||0;if(rb!==ra) return rb-ra;return a.name.localeCompare(b.name)});
+  }
+  return list;
+}
+
+function isRestVisited(name,days){
+  var visited=false;
+  days.forEach(function(day){
+    day.items.forEach(function(item){
+      if(item.visited&&item.visitedOption===name) visited=true;
+    });
+  });
+  return visited;
+}
+
+function getRestReview(name,days){
+  var review='';
+  days.forEach(function(day){
+    day.items.forEach(function(item){
+      if(item.visited&&item.visitedOption===name&&item.review) review=item.review;
+    });
+  });
+  return review;
+}
+
+function buildBadges(opt){
+  var b='';
+  if(opt.dad==='good') b+='<span class="badge badge-dad-good">아빠 OK</span>';
+  if(opt.dad==='caution') b+='<span class="badge badge-dad-caution">아빠 주의'+(opt.dadNote?' · '+esc(opt.dadNote):'')+'</span>';
+  if(opt.hiro==='good') b+='<span class="badge badge-hiro-good">히로 OK</span>';
+  if(opt.hiro==='caution') b+='<span class="badge badge-hiro-caution">히로 주의'+(opt.hiroNote?' · '+esc(opt.hiroNote):'')+'</span>';
+  return b;
+}
+
+function renderRestaurants(days){
+  allRestaurants=extractRestaurants(days);
+  allRestaurants=sortRestaurants(allRestaurants);
+  var html='';
+  html+='<div class="section-hero fade-up">';
+  html+='<div class="section-label">Restaurants</div>';
+  html+='<div class="section-title">식당 · 카페 가이드</div>';
+  html+='<div class="section-subtitle">'+allRestaurants.length+'곳 · 메뉴 · 알레르기 정보</div>';
+  html+='</div>';
+  html+='<div id="restList">'+renderRestCards(allRestaurants,days)+'</div>';
+  return html;
+}
+
+function renderRestCards(list,days){
+  if(!days) days=travelData.days;
+  var html='';
+  list.forEach(function(r,i){
+    var oc=parseOpenClosed(r.hours);
+    var visited=isRestVisited(r.name,days);
+    var review=getRestReview(r.name,days);
+    html+='<details class="card fade-up'+(visited?' visited':'')+'" data-section="restaurants"';
+    html+=' data-type="'+escAttr(r.type||r.cat||'meal')+'"';
+    html+=' style="animation-delay:'+(i*0.04)+'s">';
+    html+='<summary>';
+    html+='<div class="card-top">';
+    html+='<span class="card-name">'+esc(r.name)+'</span>';
+    if(r.rating) html+='<span class="rest-rating">'+r.rating.toFixed(1)+'</span>';
+    if(visited) html+='<span class="visit-badge">&#10003;</span>';
+    html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+    html+='</div>';
+    html+='<div class="rest-meta">';
+    if(r.menu) html+='<span class="rest-menu-brief">'+esc(r.menu)+'</span>';
+    html+='</div>';
+    html+='<div class="rest-status-row">';
+    if(oc&&oc.status!=='unknown') html+='<span class="open-tag '+oc.status+'">'+(oc.label||oc.text)+'</span>';
+    if(r.distKm!==null&&r.distKm<100) html+='<span class="rest-dist">'+(r.distKm<1?r.distKm.toFixed(1):Math.round(r.distKm))+'km</span>';
+    html+='</div>';
+    if(review) html+='<div class="review-text">"'+esc(review)+'"</div>';
+    html+='</summary>';
+    html+='<div class="card-body">';
+    if(r.menuDetail&&r.menuDetail.length>0){r.menuDetail.forEach(function(m){html+='<div class="rest-info">'+esc(m.item);if(m.price) html+=' <span style="color:var(--text-light)">'+formatPrice(m.price)+'</span>';html+='</div>'})}
+    else if(r.menu){html+='<div class="rest-info"><span class="rest-info-label">메뉴</span>'+esc(r.menu)+'</div>'}
+    if(r.priceRange) html+='<div class="rest-info"><span class="rest-info-label">가격대</span>'+esc(r.priceRange)+'</div>';
+    if(r.hours) html+='<div class="rest-info"><span class="rest-info-label">영업시간</span>'+esc(r.hours)+'</div>';
+    if(r.loc) html+='<div class="rest-info"><span class="rest-info-label">위치</span>'+esc(r.loc)+'</div>';
+    var badges=buildBadges(r);if(badges) html+='<div class="badges">'+badges+'</div>';
+    if(r.meals.length>0){var um=[];r.meals.forEach(function(m){if(um.indexOf(m)===-1) um.push(m)});html+='<div class="rest-meals">'+um.join(' / ')+'</div>'}
+    if(r.mapUrl){html+='<a class="rest-map-link" href="'+escAttr(r.mapUrl)+'" target="_blank" rel="noopener">지도에서 보기<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>'}
+    html+='</div></details>';
+  });
+  return html;
+}
+</script>
+<script>
+// ═══ STAY TAB ═══
+function renderStay(){
+  var s=STAY_DATA;
+  var html='';
+  html+='<div class="section-hero fade-up">';
+  html+='<div class="section-label">Stay</div>';
+  html+='<div class="section-title">숙소 안내</div>';
+  html+='<div class="section-subtitle">'+esc(s.name)+' · 5박</div>';
+  html+='</div>';
+
+  html+='<details class="card fade-up" open>';
+  html+='<summary><div class="card-top"><span class="card-name">'+esc(s.name)+'</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='</div><div class="card-sub">'+esc(s.desc)+'</div></summary>';
+  html+='<div class="card-body"><div class="info-grid">';
+  html+='<span class="info-label">주소</span><span class="info-value">'+esc(s.address)+'</span>';
+  html+='<span class="info-label">체크인</span><span class="info-value">'+esc(s.checkin)+'</span>';
+  html+='<span class="info-label">체크아웃</span><span class="info-value">'+esc(s.checkout)+'</span>';
+  html+='<span class="info-label">주차</span><span class="info-value">'+esc(s.parking)+'</span>';
+  html+='<span class="info-label">연락처</span><span class="info-value">'+esc(s.phone)+'</span>';
+  html+='<span class="info-label">인스타</span><span class="info-value">'+esc(s.instagram)+'</span>';
+  html+='</div>';
+  html+='<div class="link-row">';
+  html+='<a href="'+escAttr(s.mapUrl)+'" target="_blank" class="link-btn link-btn-outline">지도 보기</a>';
+  html+='<a href="'+escAttr(s.stayfolioUrl)+'" target="_blank" class="link-btn link-btn-solid">스테이폴리오</a>';
+  html+='</div></div></details>';
+
+  html+='<details class="card fade-up" style="animation-delay:0.06s">';
+  html+='<summary><div class="card-top"><span class="card-name">객실 정보</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='</div><div class="card-sub">전 객실 복층 · 키즈룸 · 온수풀</div></summary>';
+  html+='<div class="card-body"><div class="stay-room-grid">';
+  s.rooms.forEach(function(r){
+    html+='<div class="stay-room-chip"><div class="stay-room-label">'+esc(r.name)+'</div>';
+    html+='<div class="stay-room-detail">'+esc(r.type)+'<br>'+esc(r.people)+'<br>'+esc(r.bed)+'<br>욕실 '+esc(r.bath)+'</div></div>';
+  });
+  html+='</div><div class="info-grid">';
+  html+='<span class="info-label">1층</span><span class="info-value">거실 · 주방 · 키즈룸 · 세탁실 · BBQ · 풀장</span>';
+  html+='<span class="info-label">2층</span><span class="info-value">침실 · 테라스 · 화장실/샤워실</span>';
+  html+='<span class="info-label">초과</span><span class="info-value">1인 1박 30,000원 (24개월 미만 무료)</span>';
+  html+='</div></div></details>';
+
+  html+='<details class="card fade-up" style="animation-delay:0.12s">';
+  html+='<summary><div class="card-top"><span class="card-name">키즈 시설</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='</div><div class="card-sub">실내 키즈룸 + 야외 놀이터</div></summary>';
+  html+='<div class="card-body"><ul class="place-list">';
+  s.kids.forEach(function(k){html+='<li>'+esc(k)+'</li>'});
+  html+='</ul><div class="highlight-box" style="margin-top:12px"><div class="highlight-label">Baby Amenity</div>';
+  html+='<div class="highlight-text">'+s.amenities.baby.map(esc).join(' · ')+'</div></div></div></details>';
+
+  html+='<details class="card fade-up" style="animation-delay:0.18s">';
+  html+='<summary><div class="card-top"><span class="card-name">수영장 · BBQ</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='</div><div class="card-sub">온수 풀 · 전기그릴 무료</div></summary>';
+  html+='<div class="card-body">';
+  html+='<div class="place-section"><div class="place-section-label">Pool</div><div class="info-grid">';
+  html+='<span class="info-label">수심</span><span class="info-value">'+esc(s.pool.depth)+'</span>';
+  html+='<span class="info-label">이용</span><span class="info-value">'+esc(s.pool.note)+'</span>';
+  html+='</div></div>';
+  html+='<div class="place-section"><div class="place-section-label">BBQ</div><div class="info-grid">';
+  html+='<span class="info-label">기본</span><span class="info-value">'+esc(s.bbq.note)+'</span>';
+  html+='<span class="info-label">추가</span><span class="info-value">'+esc(s.bbq.extra)+'</span>';
+  html+='</div></div></div></details>';
+
+  html+='<details class="card fade-up" style="animation-delay:0.24s">';
+  html+='<summary><div class="card-top"><span class="card-name">비품 · 어메니티</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='</div><div class="card-sub">주방 · 욕실 · 일반</div></summary>';
+  html+='<div class="card-body">';
+  [{l:'Kitchen',items:s.amenities.kitchen},{l:'Bath',items:s.amenities.bath},{l:'General',items:s.amenities.general}].forEach(function(g){
+    html+='<div class="place-section"><div class="place-section-label">'+g.l+'</div><div class="amenity-tags">';
+    g.items.forEach(function(item){html+='<span class="amenity-tag">'+esc(item)+'</span>'});
+    html+='</div></div>';
+  });
+  html+='</div></details>';
+
+  html+='<details class="card fade-up" style="animation-delay:0.3s">';
+  html+='<summary><div class="card-top"><span class="card-name">이용 규칙</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='</div><div class="card-sub">숙소 이용 시 참고사항</div></summary>';
+  html+='<div class="card-body"><ul class="place-list">';
+  s.rules.forEach(function(r){html+='<li>'+esc(r)+'</li>'});
+  html+='</ul></div></details>';
+
+  html+='<div class="footer"><div class="footer-note">식당 별점·가격은 참고용이며 현장과 다를 수 있습니다</div></div>';
+  return html;
+}
+
+// ═══ TAB NAVIGATION ═══
+function switchTab(tabName){
+  activeTab=tabName;
+  document.querySelectorAll('.section-nav-btn').forEach(function(btn){
+    btn.classList.toggle('active',btn.getAttribute('data-tab')===tabName);
+  });
+  document.getElementById('dayTabs').style.display=tabName==='schedule'?'':'none';
+  document.getElementById('restSubTabsWrap').style.display=tabName==='restaurants'?'':'none';
+  renderContent(tabName);
+}
+
+function renderContent(tabName){
+  if(!travelData) return;
+  patchGuideData(travelData.days);
+  var area=document.getElementById('contentArea');
+  switch(tabName){
+    case 'schedule':renderDayTabs();renderDayContent();break;
+    case 'places':area.innerHTML=renderPlaces(travelData.days);break;
+    case 'restaurants':renderRestSubTabs();area.innerHTML=renderRestaurants(travelData.days);applyRestFilters();break;
+    case 'stay':area.innerHTML=renderStay();break;
+  }
+}
+
+function renderDayTabs(){
+  var tabs=document.getElementById('dayTabs');
+  var days=travelData.days;
+  tabs.innerHTML='';
+  days.forEach(function(day,idx){
+    var tab=document.createElement('div');
+    tab.className='day-tab'+(idx===activeDay?' active':'');
+    tab.innerHTML=day.dayNum+'일차<span class="tab-date">'+formatTabDate(day.date)+'</span>';
+    tab.onclick=function(){activeDay=idx;renderDayTabs();renderDayContent()};
     tabs.appendChild(tab);
   });
-  const activeTab = tabs.querySelector('.active');
-  if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  var activeTabEl=tabs.querySelector('.active');
+  if(activeTabEl) activeTabEl.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
 }
 
-function renderDayContent() {
-  patchGuideData(travelData.days);
-  const area = document.getElementById('contentArea');
-  const day = travelData.days[activeDay];
-  if (!day) { area.innerHTML = '<div class="loading">데이터 없음</div>'; return; }
+function renderRestSubTabs(){
+  var mealCount=0,cafeCount=0;
+  allRestaurants=extractRestaurants(travelData.days);
+  allRestaurants.forEach(function(r){if(r.type==='cafe') cafeCount++;else mealCount++});
 
-  const totalItems = day.items.length;
-  const doneItems = day.items.filter(i => i.status === 'done' || i.status === 'skipped').length;
-  const progress = totalItems > 0 ? (doneItems / totalItems * 100) : 0;
+  var subWrap=document.getElementById('restSubTabs');
+  subWrap.innerHTML='';
+  subWrap.innerHTML+='<button class="rest-sub-tab'+(restTypeFilter==='all'?' active':'')+'" data-type="all" onclick="filterRestType(\'all\')">전체 ('+allRestaurants.length+')</button>';
+  subWrap.innerHTML+='<button class="rest-sub-tab'+(restTypeFilter==='meal'?' active':'')+'" data-type="meal" onclick="filterRestType(\'meal\')">식당 ('+mealCount+')</button>';
+  subWrap.innerHTML+='<button class="rest-sub-tab'+(restTypeFilter==='cafe'?' active':'')+'" data-type="cafe" onclick="filterRestType(\'cafe\')">카페 ('+cafeCount+')</button>';
 
-  let html = '';
+  var sortWrap=document.getElementById('sortBar');
+  sortWrap.innerHTML='';
+  sortWrap.innerHTML+='<button class="sort-btn'+(restSortMode==='rating'?' active':'')+'" onclick="changeRestSort(\'rating\')">별점순</button>';
+  sortWrap.innerHTML+='<button class="sort-btn'+(restSortMode==='distance'?' active':'')+'" onclick="changeRestSort(\'distance\')">'+(userLat?'거리순':'거리순 (위치 필요)')+'</button>';
+}
 
-  // 메인 디스플레이 카드
-  html += '<div class="display-card">';
-  html += '<div class="display-screen">';
-  html += '<div class="display-header">';
-  html += `<span class="display-label">일정</span>`;
-  html += '<div class="display-indicator">';
-  for (let i = 0; i < totalItems; i++) {
-    html += `<span class="${i < doneItems ? 'on' : ''}"></span>`;
-  }
-  html += '</div></div>';
-  html += `<div class="day-title-display">${day.title}</div>`;
-  html += `<div class="day-subtitle">${day.dayNum}일차 / ${doneItems}/${totalItems} 완료</div>`;
-  html += '</div>';
+function filterRestType(type){
+  restTypeFilter=type;
+  document.querySelectorAll('.rest-sub-tab').forEach(function(t){t.classList.toggle('active',t.getAttribute('data-type')===type)});
+  applyRestFilters();
+}
 
-  // 진행 레벨 미터
-  html += '<div class="level-meter">';
-  html += `<div class="meter-bar"><div class="meter-fill" style="width:${progress}%"></div></div>`;
-  html += '<div class="meter-ticks">';
-  html += '<span class="meter-tick">0%</span>';
-  html += `<span class="meter-tick" style="color:var(--accent)">${Math.round(progress)}%</span>`;
-  html += '<span class="meter-tick">100%</span>';
-  html += '</div></div>';
+function changeRestSort(mode){
+  if(mode==='distance'&&!userLat){requestRestLocation();return}
+  restSortMode=mode;
+  allRestaurants=sortRestaurants(allRestaurants);
+  if(activeTab==='restaurants') renderContent('restaurants');
+}
 
-  html += '</div>';
+function requestRestLocation(){
+  if(!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(function(pos){
+    userLat=pos.coords.latitude;userLng=pos.coords.longitude;
+    restSortMode='distance';
+    if(activeTab==='restaurants') renderContent('restaurants');
+  },function(){},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
+}
 
-  // 일정 아이템 카드들
-  html += '<div class="items-list">';
-  day.items.forEach((item) => {
-    html += renderItemCard(item);
+function applyRestFilters(){
+  document.querySelectorAll('.card[data-section="restaurants"]').forEach(function(card){
+    if(restTypeFilter!=='all'&&card.getAttribute('data-type')!==restTypeFilter) card.style.display='none';
+    else card.style.display='';
   });
-  html += '</div>';
+}
+</script>
+<script>
+// ═══ APP INIT ═══
+(function init(){
+  fetchData();
+  pollTimer=setInterval(fetchData,POLL_INTERVAL);
+})();
 
-  // reference 섹션
-  if (activeDay === travelData.days.length - 1 && travelData.reference) {
-    html += renderReference(travelData.reference);
+async function fetchData(){
+  try{
+    var res=await fetch('/api/data');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    var json=await res.json();
+    travelData=json.record;
+    hideError();
+    render();
+  } catch(e){
+    showError('연결 끊김. 다시 시도 중...');
+    console.error('fetch error:',e);
   }
-
-  area.innerHTML = html;
 }
 
-// ═══ 영업 상태 파싱 (guide.html에서 포팅) ═══
-function parseOpenClosed(hoursStr) {
-  if (!hoursStr) return null;
-  var m = hoursStr.match(/(\d{1,2}):?(\d{2})?\s*[~\-]\s*(\d{1,2}):?(\d{2})?/);
-  if (!m) return null;
-  var now = new Date();
-  var nowMin = now.getHours() * 60 + now.getMinutes();
-  var openMin = parseInt(m[1]) * 60 + (m[2] ? parseInt(m[2]) : 0);
-  var closeMin = parseInt(m[3]) * 60 + (m[4] ? parseInt(m[4]) : 0);
-  return nowMin >= openMin && nowMin < closeMin
-    ? { status: 'open', text: '영업중' }
-    : { status: 'closed', text: '영업종료' };
+function render(){
+  if(!travelData) return;
+  updateHeader();
+  renderContent(activeTab);
 }
 
-// ═══ 옵션 카드 렌더링 (enriched data) ═══
-function renderOptionCard(opt, item) {
-  const isChosen = item.chosen && item.chosen === opt.name;
-  const showOptionDist = userLat && !(getItemDistance(item) && getItemDistance(item).km >= 50);
-
-  let html = '<details class="option-card' + (isChosen ? ' chosen' : '') + '"' + (isChosen ? ' open' : '') + '>';
-  html += '<summary>';
-
-  // 상단: 이름 + 별점 + 확정 + chevron
-  html += '<div class="option-top">';
-  html += '<span class="option-name">' + escapeHtml(opt.name) + '</span>';
-  if (opt.rating) html += '<span class="option-rating">' + opt.rating + '</span>';
-  if (isChosen) html += '<span class="chosen-tag">확정</span>';
-  html += '<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
-  html += '</div>';
-
-  // 메타: 메뉴 + 영업상태 + 거리
-  html += '<div class="option-meta">';
-  var brief = opt.menu || opt.desc || '';
-  if (brief) html += '<span class="option-menu-brief">' + escapeHtml(brief) + '</span>';
-  if (opt.hours) {
-    var oc = parseOpenClosed(opt.hours);
-    if (oc) html += '<span class="open-tag ' + oc.status + '">' + oc.text + '</span>';
+function updateHeader(){
+  var meta=travelData.meta;
+  if(meta&&meta.lastUpdated){
+    var d=new Date(meta.lastUpdated);
+    document.getElementById('updateTime').textContent='마지막 업데이트: '+formatDateTime(d);
   }
-  if (showOptionDist && opt.lat && opt.lng) {
-    var km = haversineDistance(userLat, userLng, opt.lat, opt.lng);
-    html += '<span class="option-dist">' + (km < 1 ? km.toFixed(1) : Math.round(km)) + 'km</span>';
+  var urlParams=new URLSearchParams(location.search);
+  var dayParam=urlParams.get('day');
+  if(dayParam&&!window._dayParamApplied){
+    var d2=parseInt(dayParam);
+    if(d2>=1&&d2<=travelData.days.length){activeDay=d2-1;window._dayParamApplied=true}
   }
-  html += '</div>';
-  html += '</summary>';
-
-  // 펼침 영역
-  html += '<div class="option-body">';
-
-  // 메뉴 상세
-  if (opt.menuDetail && opt.menuDetail.length) {
-    opt.menuDetail.forEach(function(m) {
-      html += '<div class="option-info">' + escapeHtml(m.item);
-      if (m.price) html += '<span>' + Number(m.price).toLocaleString() + '원</span>';
-      html += '</div>';
-    });
-  }
-
-  // 가격대
-  if (opt.priceRange) {
-    html += '<div class="option-info"><span class="option-info-label">가격대</span>' + escapeHtml(opt.priceRange) + '</div>';
-  }
-
-  // 영업시간
-  if (opt.hours) {
-    html += '<div class="option-info"><span class="option-info-label">영업시간</span>' + escapeHtml(opt.hours) + '</div>';
-  }
-
-  // 위치
-  if (opt.loc) {
-    html += '<div class="option-info"><span class="option-info-label">위치</span>' + escapeHtml(opt.loc) + '</div>';
-  }
-
-  // 뱃지
-  var badges = [];
-  if (opt.dad === 'good') badges.push('<span class="badge badge-dad-good">아빠 OK</span>');
-  if (opt.dad === 'caution') badges.push('<span class="badge badge-dad-caution">아빠 주의' + (opt.dadNote ? ' · ' + escapeHtml(opt.dadNote) : '') + '</span>');
-  if (opt.hiro === 'good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
-  if (opt.hiro === 'caution') badges.push('<span class="badge badge-hiro-caution">히로 주의' + (opt.hiroNote ? ' · ' + escapeHtml(opt.hiroNote) : '') + '</span>');
-  if (badges.length) html += '<div class="option-badges">' + badges.join('') + '</div>';
-
-  // 지도 링크
-  if (opt.mapUrl) {
-    html += '<a class="option-map-link" href="' + escapeAttr(opt.mapUrl) + '" target="_blank">지도에서 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>';
-  }
-
-  html += '</div></details>';
-  return html;
-}
-
-// ═══ 단순 옵션 렌더링 (non-enriched fallback) ═══
-function renderSimpleOption(opt, item) {
-  const isChosen = item.chosen && item.chosen === opt.name;
-  let html = '<div class="option-simple' + (isChosen ? ' chosen' : '') + '">';
-  html += '<span class="option-name">' + escapeHtml(opt.name) + '</span>';
-  var simpleBrief = opt.menu || opt.desc || '';
-  if (simpleBrief) html += ' <span class="option-menu-brief" style="color:var(--item-text-dim);font-size:13px">— ' + escapeHtml(simpleBrief) + '</span>';
-  if (isChosen) html += ' <span class="chosen-tag">확정</span>';
-
-  // 뱃지
-  var badges = [];
-  if (opt.dad === 'good') badges.push('<span class="badge badge-dad-good">아빠 OK</span>');
-  if (opt.dad === 'caution') badges.push('<span class="badge badge-dad-caution">아빠 주의' + (opt.dadNote ? ' · ' + escapeHtml(opt.dadNote) : '') + '</span>');
-  if (opt.hiro === 'good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
-  if (opt.hiro === 'caution') badges.push('<span class="badge badge-hiro-caution">히로 주의' + (opt.hiroNote ? ' · ' + escapeHtml(opt.hiroNote) : '') + '</span>');
-  if (badges.length) html += '<div class="option-badges">' + badges.join('') + '</div>';
-
-  html += '</div>';
-  return html;
-}
-
-function renderItemCard(item) {
-  const catLabel = { meal: '식사', cafe: '카페', activity: '관광' };
-  const titleClass = item.status === 'skipped' ? ' skipped' : '';
-
-  let html = `<div class="item-card">`;
-  html += '<div class="item-display">';
-
-  // 상단 행
-  html += '<div class="item-top-row">';
-  html += `<span class="item-status-dot ${item.status}"></span>`;
-  html += `<span class="item-time">${item.time || ''}</span>`;
-  html += `<span class="item-cat-label">${catLabel[item.cat] || ''}</span>`;
-  html += '</div>';
-
-  // 제목
-  html += `<div class="item-title${titleClass}">${item.title}</div>`;
-
-  // 장소 상세 카드
-  if (item.cat === 'activity') {
-    html += renderPlaceDetail(item);
-  }
-
-  // 거리 행 (위치 활성화 시)
-  if (userLat && item.options && item.options.length > 0) {
-    const distInfo = getItemDistance(item);
-    if (distInfo && distInfo.km < 50) {
-      const fmt = formatDistance(distInfo.km);
-      html += `<div class="item-distance ${fmt.cls}">${fmt.text}</div>`;
-    } else if (distInfo && distInfo.km >= 50) {
-      html += `<div class="item-distance far-away">${formatDistance(distInfo.km).text}</div>`;
+  var tabParam=urlParams.get('tab');
+  if(tabParam&&!window._tabParamApplied){
+    if(['schedule','places','restaurants','stay'].indexOf(tabParam)!==-1){
+      activeTab=tabParam;window._tabParamApplied=true;
+      document.querySelectorAll('.section-nav-btn').forEach(function(btn){
+        btn.classList.toggle('active',btn.getAttribute('data-tab')===tabParam);
+      });
     }
   }
 
-  // 옵션 목록
-  if (item.options && item.options.length > 0) {
-    html += '<div class="options-list">';
-    item.options.forEach(opt => {
-      const hasRichData = opt.rating || opt.menuDetail || opt.hours || opt.mapUrl;
-      if (hasRichData) {
-        html += renderOptionCard(opt, item);
-      } else {
-        html += renderSimpleOption(opt, item);
-      }
-    });
-    html += '</div>';
+  var now=new Date();
+  var tripStart=new Date('2026-02-19T00:00:00+09:00');
+  var tripEnd=new Date('2026-02-24T23:59:59+09:00');
+  var status='2026.02.19 — 02.24';
+  if(now<tripStart){
+    var diff=Math.ceil((tripStart-now)/86400000);
+    status='D-'+diff+' / 2026.02.19 — 02.24';
+  } else if(now>tripEnd){
+    status='여행 완료';
+  } else {
+    var dayNum=Math.floor((now-tripStart)/86400000)+1;
+    status=dayNum+'일차 진행 중';
+    if(activeDay===0&&!dayParam) activeDay=dayNum-1;
   }
-
-  html += '</div>'; // item-display
-
-  // 메모
-  if (item.note) {
-    html += '<div class="item-note-row">';
-    html += '<div class="item-note-label">메모</div>';
-    html += escapeHtml(item.note);
-    html += '</div>';
-  }
-
-  html += '</div>';
-  return html;
+  document.getElementById('tripStatus').textContent=status;
 }
 
-function renderReference(ref) {
-  let html = '<div class="reference-section"><h3>참고 정보</h3>';
-
-  if (ref.distances && ref.distances.length) {
-    html += '<div class="ref-card"><h4>거리 / 소요시간</h4><ul>';
-    ref.distances.forEach(d => { html += `<li>${typeof d === 'string' ? d : JSON.stringify(d)}</li>`; });
-    html += '</ul></div>';
-  }
-  if (ref.contacts && ref.contacts.length) {
-    html += '<div class="ref-card"><h4>연락처</h4><ul>';
-    ref.contacts.forEach(c => { html += `<li>${typeof c === 'string' ? c : JSON.stringify(c)}</li>`; });
-    html += '</ul></div>';
-  }
-  if (ref.shopping && ref.shopping.length) {
-    html += '<div class="ref-card"><h4>쇼핑</h4><ul>';
-    ref.shopping.forEach(s => { html += `<li>${typeof s === 'string' ? s : JSON.stringify(s)}</li>`; });
-    html += '</ul></div>';
-  }
-
-  html += '</div>';
-  return html;
+// ═══ LOCATION ═══
+function initLocationBanner(){
+  if(location.protocol!=='https:'&&location.hostname!=='localhost') return;
+  if(!navigator.geolocation) return;
+  if(localStorage.getItem('gj_location_dismissed')==='true') return;
+  setTimeout(function(){document.getElementById('locationBanner').style.display=''},1000);
 }
 
-// 유틸
-function formatDateTime(d) {
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  const hh = String(d.getHours()).padStart(2, '0');
-  const mi = String(d.getMinutes()).padStart(2, '0');
-  return `${mm}.${dd} ${hh}:${mi}`;
-}
-
-function formatTabDate(dateStr, dow) {
-  const parts = dateStr.split('-');
-  return `${parseInt(parts[1])}/${parseInt(parts[2])}`;
-}
-
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-function escapeAttr(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function showError(msg) {
-  const el = document.getElementById('errorBanner');
-  el.textContent = msg;
-  el.classList.add('show');
-}
-function hideError() {
-  document.getElementById('errorBanner').classList.remove('show');
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
-
-// ═══ 위치 / 거리 기능 ═══
-
-let userLat = null;
-let userLng = null;
-let locationTimestamp = 0;
-let gpsWarningShown = false;
-
-const GEO_OPTIONS = {
-  enableHighAccuracy: false,
-  timeout: 10000,
-  maximumAge: 300000
-};
-
-// 위치 배너 표시 (페이지 로드 1초 후)
-function initLocationBanner() {
-  // HTTPS 아닌 환경 또는 Geolocation 미지원 시 배너 미표시
-  if (location.protocol !== 'https:' && location.hostname !== 'localhost') return;
-  if (!navigator.geolocation) return;
-  // 이미 거부한 경우 미표시
-  if (localStorage.getItem('gj_location_dismissed') === 'true') return;
-
-  setTimeout(() => {
-    document.getElementById('locationBanner').style.display = '';
-  }, 1000);
-}
-
-// [위치 켜기] 클릭
-function requestLocation() {
-  if (!navigator.geolocation) {
-    showToast('이 브라우저에서 위치를 사용할 수 없습니다');
-    return;
-  }
-
+function requestLocation(){
+  if(!navigator.geolocation){showToast('이 브라우저에서 위치를 사용할 수 없습니다');return}
   navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      userLat = pos.coords.latitude;
-      userLng = pos.coords.longitude;
-      locationTimestamp = Date.now();
-
-      // 배너 숨김
-      document.getElementById('locationBanner').style.display = 'none';
-
-      // 갱신 버튼 표시
+    function(pos){
+      userLat=pos.coords.latitude;userLng=pos.coords.longitude;locationTimestamp=Date.now();
+      document.getElementById('locationBanner').style.display='none';
       document.getElementById('refreshBtn').classList.add('visible');
-
-      // GPS 정확도 경고 (500m 이상, 1회만)
-      if (pos.coords.accuracy > 500 && !gpsWarningShown) {
-        gpsWarningShown = true;
-        showToast('위치가 정확하지 않을 수 있습니다');
-      }
-
-      updateDistances();
+      if(pos.coords.accuracy>500&&!gpsWarningShown){gpsWarningShown=true;showToast('위치가 정확하지 않을 수 있습니다')}
+      if(travelData) renderContent(activeTab);
+      showToast('위치 업데이트됨');
     },
-    (err) => {
-      if (err.code === err.TIMEOUT) {
-        showToast('위치를 가져올 수 없습니다');
-      } else if (err.code === err.PERMISSION_DENIED) {
-        document.getElementById('locationBanner').style.display = 'none';
-      } else {
-        showToast('위치를 가져올 수 없습니다');
-      }
+    function(err){
+      if(err.code===err.PERMISSION_DENIED) document.getElementById('locationBanner').style.display='none';
+      else showToast('위치를 가져올 수 없습니다');
     },
     GEO_OPTIONS
   );
 }
 
-// [괜찮습니다] 클릭
-function dismissLocationBanner() {
-  localStorage.setItem('gj_location_dismissed', 'true');
-  document.getElementById('locationBanner').style.display = 'none';
+function dismissLocationBanner(){
+  localStorage.setItem('gj_location_dismissed','true');
+  document.getElementById('locationBanner').style.display='none';
 }
 
-// Haversine 거리 계산 (km)
-function haversineDistance(lat1, lng1, lat2, lng2) {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLng = (lng2 - lng1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-    + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180)
-    * Math.sin(dLng / 2) * Math.sin(dLng / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-}
-
-// 거리 포맷
-function formatDistance(km) {
-  if (km >= 50) return { text: '현재 경주 근처가 아닙니다', cls: 'far-away' };
-  if (km < 1) {
-    const walkMin = Math.round((km * 1000) / 67);
-    return { text: '도보 약 ' + walkMin + '분 (' + km.toFixed(1) + 'km)', cls: 'nearby' };
-  }
-  const driveMin = Math.round(km / 30 * 60);
-  if (km < 5) return { text: '약 ' + km.toFixed(1) + 'km · 차량 약 ' + driveMin + '분', cls: '' };
-  return { text: '약 ' + Math.round(km) + 'km · 차량 약 ' + driveMin + '분', cls: '' };
-}
-
-// 아이템 대표 거리 계산 (chosen 옵션 우선, 없으면 가장 가까운 옵션)
-function getItemDistance(item) {
-  if (!userLat || !item.options || item.options.length === 0) return null;
-
-  // 좌표가 있는 옵션만 필터
-  const withCoords = item.options.filter(o => o.lat && o.lng);
-  if (withCoords.length === 0) return null;
-
-  // chosen 옵션이 좌표가 있으면 우선
-  if (item.chosen) {
-    const chosen = withCoords.find(o => o.name === item.chosen);
-    if (chosen) {
-      return { km: haversineDistance(userLat, userLng, chosen.lat, chosen.lng), name: chosen.name };
-    }
-  }
-
-  // 가장 가까운 옵션
-  let closest = null;
-  let minKm = Infinity;
-  withCoords.forEach(o => {
-    const km = haversineDistance(userLat, userLng, o.lat, o.lng);
-    if (km < minKm) { minKm = km; closest = o; }
-  });
-  return closest ? { km: minKm, name: closest.name } : null;
-}
-
-// 거리 업데이트 (렌더링 재실행)
-function updateDistances() {
-  if (travelData) renderDayContent();
-  showToast('위치 업데이트됨');
-}
-
-// visibilitychange: 30분 경과 시 자동 갱신
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState !== 'visible') return;
-  if (!userLat) return;
-  if (Date.now() - locationTimestamp > 1800000) {
-    requestLocation();
-  }
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState!=='visible') return;
+  if(!userLat) return;
+  if(Date.now()-locationTimestamp>1800000) requestLocation();
 });
 
-// 테스트 위치 오버라이드 (?testloc=1 → 까사멜로우)
-function applyTestLocation() {
-  const params = new URLSearchParams(location.search);
-  if (params.get('testloc') !== '1') return false;
-
-  userLat = 35.8579382;
-  userLng = 129.262038;
-  locationTimestamp = Date.now();
-
-  document.getElementById('locationBanner').style.display = 'none';
+function applyTestLocation(){
+  var params=new URLSearchParams(location.search);
+  if(params.get('testloc')!=='1') return false;
+  userLat=35.8579382;userLng=129.262038;locationTimestamp=Date.now();
+  document.getElementById('locationBanner').style.display='none';
   document.getElementById('refreshBtn').classList.add('visible');
-
-  const indicator = document.createElement('div');
-  indicator.className = 'update-time';
-  indicator.style.color = 'var(--accent)';
-  indicator.textContent = '테스트 위치: 까사멜로우 (숙소)';
+  var indicator=document.createElement('div');
+  indicator.className='update-time';indicator.style.color='var(--accent)';
+  indicator.textContent='테스트 위치: 까사멜로우 (숙소)';
   document.querySelector('.header').appendChild(indicator);
-
-  if (travelData) renderDayContent();
+  if(travelData) renderContent(activeTab);
   return true;
 }
 
-// 페이지 로드 후 초기화
-document.addEventListener('DOMContentLoaded', () => {
-  if (!applyTestLocation()) initLocationBanner();
+document.addEventListener('DOMContentLoaded',function(){
+  if(!applyTestLocation()) initLocationBanner();
 });
 
-// ═══ CHAT ═══════════════════════════════════════════════════
-var chatOpen = false;
-var chatBusy = false;
-var chatMessages = [];
+// ═══ CHAT (with sessionStorage) ═══
+var chatOpen=false;
+var chatBusy=false;
+var CHAT_STORAGE_KEY='gyeongju_chat_history';
 
-function toggleChat() {
-  chatOpen = !chatOpen;
-  document.getElementById('chatOverlay').classList.toggle('open', chatOpen);
-  document.getElementById('chatSheet').classList.toggle('open', chatOpen);
-  document.getElementById('chatFab').classList.toggle('hidden', chatOpen);
-  if (chatOpen) {
-    setTimeout(function() { document.getElementById('chatInput').focus(); }, 350);
+function saveChatHistory(){
+  var msgs=document.getElementById('chatMessages');
+  var clone=msgs.cloneNode(true);
+  var welcome=clone.querySelector('.chat-welcome');
+  if(welcome) welcome.remove();
+  sessionStorage.setItem(CHAT_STORAGE_KEY,clone.innerHTML);
+}
+
+function loadChatHistory(){
+  var saved=sessionStorage.getItem(CHAT_STORAGE_KEY);
+  if(saved&&saved.trim()){
+    document.getElementById('chatMessages').innerHTML=saved;
+    return true;
+  }
+  return false;
+}
+
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('chatOverlay').classList.toggle('open',chatOpen);
+  document.getElementById('chatSheet').classList.toggle('open',chatOpen);
+  document.getElementById('chatFab').classList.toggle('hidden',chatOpen);
+  if(chatOpen){
+    if(!window._chatHistoryLoaded){
+      var hasHistory=loadChatHistory();
+      window._chatHistoryLoaded=true;
+      if(hasHistory){
+        var welcome=document.querySelector('.chat-welcome');
+        if(welcome) welcome.style.display='none';
+      }
+    }
+    setTimeout(function(){document.getElementById('chatInput').focus()},350);
     scrollChatBottom();
   }
 }
 
-function closeChat() {
-  chatOpen = false;
+function closeChat(){
+  chatOpen=false;
   document.getElementById('chatOverlay').classList.remove('open');
   document.getElementById('chatSheet').classList.remove('open');
   document.getElementById('chatFab').classList.remove('hidden');
 }
 
-function scrollChatBottom() {
-  var el = document.getElementById('chatMessages');
-  if (el) el.scrollTop = el.scrollHeight;
+function scrollChatBottom(){
+  var el=document.getElementById('chatMessages');
+  if(el) el.scrollTop=el.scrollHeight;
 }
 
-function appendChatMsg(role, text) {
-  var container = document.getElementById('chatMessages');
-  var welcome = container.querySelector('.chat-welcome');
-  if (welcome) welcome.style.display = 'none';
-
-  var div = document.createElement('div');
-  div.className = 'chat-msg ' + role;
-  if (role === 'bot') {
-    div.innerHTML = '<div class="msg-label">포저</div>' + escapeHtml(text).replace(/\n/g, '<br>');
-  } else if (role === 'error') {
-    div.textContent = text;
-  } else {
-    div.textContent = text;
-  }
+function appendChatMsg(role,text){
+  var container=document.getElementById('chatMessages');
+  var welcome=container.querySelector('.chat-welcome');
+  if(welcome) welcome.style.display='none';
+  var div=document.createElement('div');
+  div.className='chat-msg '+role;
+  if(role==='bot'){div.innerHTML='<div class="msg-label">포저</div>'+esc(text).replace(/\n/g,'<br>')}
+  else if(role==='error'){div.textContent=text}
+  else {div.textContent=text}
   container.appendChild(div);
   scrollChatBottom();
+  saveChatHistory();
   return div;
 }
 
-function showTyping() {
-  var container = document.getElementById('chatMessages');
-  var div = document.createElement('div');
-  div.className = 'chat-msg bot typing';
-  div.id = 'chatTyping';
-  div.innerHTML = '<div class="msg-label">포저</div><div class="dots"><span></span><span></span><span></span></div>';
-  container.appendChild(div);
-  scrollChatBottom();
+function showTyping(){
+  var container=document.getElementById('chatMessages');
+  var div=document.createElement('div');
+  div.className='chat-msg bot typing';div.id='chatTyping';
+  div.innerHTML='<div class="msg-label">포저</div><div class="dots"><span></span><span></span><span></span></div>';
+  container.appendChild(div);scrollChatBottom();
 }
 
-function removeTyping() {
-  var el = document.getElementById('chatTyping');
-  if (el) el.remove();
-}
+function removeTyping(){var el=document.getElementById('chatTyping');if(el) el.remove()}
 
-async function sendChat() {
-  if (chatBusy) return;
-  var input = document.getElementById('chatInput');
-  var msg = input.value.trim();
-  if (!msg) return;
-
-  input.value = '';
-  appendChatMsg('user', msg);
-  chatBusy = true;
-  document.getElementById('chatSendBtn').disabled = true;
+async function sendChat(){
+  if(chatBusy) return;
+  var input=document.getElementById('chatInput');
+  var msg=input.value.trim();
+  if(!msg) return;
+  input.value='';
+  appendChatMsg('user',msg);
+  chatBusy=true;
+  document.getElementById('chatSendBtn').disabled=true;
   showTyping();
-
-  try {
-    var resp = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg })
-    });
+  try{
+    var resp=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});
     removeTyping();
-    var data = await resp.json();
-    if (!resp.ok) {
-      appendChatMsg('error', data.error || '요청에 실패했습니다');
-    } else {
-      appendChatMsg('bot', data.reply || '응답을 받지 못했어요.');
-      if (data.data_modified) {
+    var data=await resp.json();
+    if(!resp.ok){appendChatMsg('error',data.error||'요청에 실패했습니다')}
+    else{
+      appendChatMsg('bot',data.reply||'응답을 받지 못했어요.');
+      if(data.data_modified){
         showToast('포저가 일정을 수정했어요. 새로고침합니다.');
-        setTimeout(function() { loadTravelData(); }, 1500);
+        setTimeout(function(){fetchData()},1500);
       }
     }
-  } catch (e) {
+  } catch(e){
     removeTyping();
-    appendChatMsg('error', '포저에게 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
+    appendChatMsg('error','포저에게 연결할 수 없습니다. 잠시 후 다시 시도해주세요.');
   }
-  chatBusy = false;
-  document.getElementById('chatSendBtn').disabled = false;
+  chatBusy=false;
+  document.getElementById('chatSendBtn').disabled=false;
 }
 
-function chatHint(text) {
-  document.getElementById('chatInput').value = text;
-  sendChat();
-}
+function chatHint(text){document.getElementById('chatInput').value=text;sendChat()}
 
-// 키보드 Enter 전송
-document.addEventListener('DOMContentLoaded', function() {
-  var chatInput = document.getElementById('chatInput');
-  if (chatInput) {
-    chatInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendChat();
-      }
-    });
-  }
+document.addEventListener('DOMContentLoaded',function(){
+  var chatInput=document.getElementById('chatInput');
+  if(chatInput){chatInput.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat()}})}
 });
 </script>
 
@@ -2079,7 +1861,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="chat-welcome-hints">
         <div class="chat-hint-chip" onclick="chatHint('내일 일정 알려줘')">일정 확인</div>
         <div class="chat-hint-chip" onclick="chatHint('아빠가 먹을 수 있는 식당 추천해줘')">식당 추천</div>
-        <div class="chat-hint-chip" onclick="chatHint('저녁 식사를 온목당으로 확정해줘')">식당 확정</div>
+        <div class="chat-hint-chip" onclick="chatHint('온목당 다녀왔어')">방문 기록</div>
         <div class="chat-hint-chip" onclick="chatHint('교촌마을 일정을 3일차로 옮겨줘')">일정 이동</div>
       </div>
       <div class="chat-welcome-caveat">※ 실시간 날씨·교통, 예약 대행은 지원하지 않습니다</div>

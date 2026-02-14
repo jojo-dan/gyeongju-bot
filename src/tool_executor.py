@@ -337,29 +337,58 @@ def _handle_update_status(ctx: ExecutionContext, inp: dict) -> dict:
     return {"ok": True, "item_id": item_id, "old_status": old_status, "new_status": new_status}
 
 
-@_register("set_chosen")
-def _handle_set_chosen(ctx: ExecutionContext, inp: dict) -> dict:
-    """아이템 선택지 확정."""
+@_register("update_visit")
+def _handle_update_visit(ctx: ExecutionContext, inp: dict) -> dict:
+    """방문 기록 업데이트."""
     item_id = inp.get("item_id", "")
-    chosen_value = inp.get("chosen", "")
+    visited = inp.get("visited", True)
+    option_name = inp.get("option_name", "")
 
     found = ctx.find_item(item_id)
     if found is None:
         return {"error": f"아이템을 찾을 수 없습니다: {item_id}"}
     _day, item = found
 
-    # partial match 로 full option name 결정
-    matched_opt = ctx.find_option(item, chosen_value)
-    if matched_opt is None:
-        available = [o.get("name", "") for o in item.get("options", [])]
-        return {"error": f"일치하는 옵션을 찾을 수 없습니다: '{chosen_value}'. 가능한 옵션: {available}"}
+    item["visited"] = visited
 
-    full_name = matched_opt["name"]
-    item["chosen"] = full_name
-    ctx.mark_modified(f"{item_id} 선택 확정: {full_name}")
-    logger.info("Chosen set: %s -> %s", item_id, full_name)
+    if option_name:
+        matched = ctx.find_option(item, option_name)
+        if matched:
+            item["visitedOption"] = matched["name"]
+        else:
+            available = [o.get("name", "") for o in item.get("options", [])]
+            return {"error": f"옵션을 찾을 수 없습니다: '{option_name}'. 가능한 옵션: {available}"}
 
-    return {"ok": True, "item_id": item_id, "chosen": full_name}
+    # 방문 시 자동으로 status를 done으로 변경
+    if visited and item.get("status") == "planned":
+        item["status"] = "done"
+
+    action = "방문 기록" if visited else "방문 취소"
+    visited_opt = item.get("visitedOption", "")
+    detail = f" ({visited_opt})" if visited_opt else ""
+    ctx.mark_modified(f"{item_id} {action}{detail}")
+    logger.info("Visit updated: %s visited=%s opt=%s", item_id, visited, visited_opt)
+
+    return {"ok": True, "item_id": item_id, "visited": visited,
+            "visitedOption": item.get("visitedOption", "")}
+
+
+@_register("update_review")
+def _handle_update_review(ctx: ExecutionContext, inp: dict) -> dict:
+    """리뷰 기록."""
+    item_id = inp.get("item_id", "")
+    review = inp.get("review", "")
+
+    found = ctx.find_item(item_id)
+    if found is None:
+        return {"error": f"아이템을 찾을 수 없습니다: {item_id}"}
+    _day, item = found
+
+    item["review"] = review
+    ctx.mark_modified(f"{item_id} 리뷰: {review[:30]}")
+    logger.info("Review updated: %s -> %s", item_id, review[:50])
+
+    return {"ok": True, "item_id": item_id, "review": review}
 
 
 @_register("update_note")
