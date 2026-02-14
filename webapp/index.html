@@ -150,7 +150,10 @@ body {
   gap: 6px;
   max-width: 440px;
   margin: 0 auto 20px;
-  padding: 0 110px 0 16px;
+  padding: 0 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -1023,6 +1026,21 @@ body {
   transition: all 0.15s;
 }
 .chat-hint-chip:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+.chat-welcome-section {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+.chat-welcome-caveat {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 16px;
+  line-height: 1.5;
+}
 </style>
 </head>
 <body>
@@ -1181,6 +1199,77 @@ function patchGuideData(days) {
           }
         };
       }
+
+      // 복합 장소 세분화
+      if (item.title === '대릉원(천마총) + 첨성대' && !item.subPlaces) {
+        item.subPlaces = [
+          {
+            name: '대릉원(천마총)',
+            subtitle: '신라 왕릉 23기 거대 고분군 · 유모차 산책 코스',
+            guide: {
+              mustDo: ['천마총 내부 관람 (경주 유일 고분 내부 공개)', '고분 사이 잔디 산책 · 목련나무 포토존', '무료 문화해설 (매시 정각, 10~16시)'],
+              babyTips: {
+                stroller: '전체 평지, 유모차 매우 편리. 정문에서 대여 가능',
+                nursingRoom: '주차장 부근 수유실 (054-750-8655)'
+              },
+              practicalInfo: {
+                fee: '대릉원 무료 / 천마총 3,000원 (만6세 이하 무료)',
+                hours: '09:00~22:00 (매표 21:30)',
+                parking: '쪽샘지구 공영주차장 무료 (추천)',
+                mapUrl: 'https://map.naver.com/p/search/대릉원'
+              }
+            }
+          },
+          {
+            name: '첨성대',
+            subtitle: '동양 최고(最古) 천문대 · 국보 제31호',
+            guide: {
+              mustDo: ['1,300년 원형 유지 신라 천문관측대 감상', '야간 조명도 아름다움'],
+              babyTips: { stroller: '주변 평지, 유모차 이동 편리' },
+              practicalInfo: {
+                fee: '무료',
+                hours: '09:00~22:00',
+                fromAccommodation: '대릉원에서 도보 5분',
+                mapUrl: 'https://map.naver.com/p/search/첨성대'
+              }
+            }
+          }
+        ];
+      }
+
+      if (item.title === '교촌마을 산책' && !item.subPlaces) {
+        item.subPlaces = [
+          {
+            name: '교촌 한옥마을',
+            subtitle: '신라 천년 한옥마을 · 돌담길 산책',
+            guide: {
+              mustDo: ['한옥 골목 산책 + 돌담길 포토존', '월정교 야경 (도보 5분)'],
+              babyTips: {
+                stroller: '대부분 평지, 일부 돌길. 바퀴 큰 유모차 권장'
+              },
+              practicalInfo: {
+                fee: '무료',
+                hours: '마을 24시간 개방',
+                parking: '월정교 공영주차장 무료 (교동 153-5)',
+                mapUrl: 'https://map.naver.com/p/search/교촌한옥마을'
+              }
+            }
+          },
+          {
+            name: '경주 최부자댁',
+            subtitle: '12대 만석꾼 명문가 · 중요민속문화재',
+            guide: {
+              mustDo: ['6가지 가훈으로 유명한 명문가 탐방', '교동법주 시음 (최부자댁 옆)'],
+              babyTips: { stroller: '내부 마당 평탄, 유모차 가능' },
+              practicalInfo: {
+                fee: '무료',
+                hours: '~17:00',
+                mapUrl: 'https://map.naver.com/p/search/경주최부자댁'
+              }
+            }
+          }
+        ];
+      }
     });
   });
 }
@@ -1193,22 +1282,33 @@ function isStayItem(item) {
 
 function renderPlaceDetail(item) {
   if (isStayItem(item)) return renderStayDetail();
+
+  // subPlaces가 있으면 각각 개별 카드로 렌더링
+  if (item.subPlaces && item.subPlaces.length) {
+    var html = '';
+    item.subPlaces.forEach(function(sp) {
+      html += renderSinglePlaceCard(sp.name, sp.subtitle, sp.guide);
+    });
+    return html;
+  }
+
   var g = item.guide;
   if (!g) return '';
+  return renderSinglePlaceCard(item.title, g.subtitle, g);
+}
 
+function renderSinglePlaceCard(name, subtitle, g) {
   var html = '<details class="place-detail">';
   html += '<summary>';
   html += '<div class="place-detail-top">';
   html += '<span class="place-detail-icon">\uD83D\uDCCD</span>';
-  var placeName = item.title;
-  html += '<span class="place-detail-name">' + escapeHtml(placeName) + '</span>';
+  html += '<span class="place-detail-name">' + escapeHtml(name) + '</span>';
   html += '<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
   html += '</div>';
-  if (g.subtitle) {
-    html += '<div class="place-detail-sub">' + escapeHtml(g.subtitle) + '</div>';
+  if (subtitle) {
+    html += '<div class="place-detail-sub">' + escapeHtml(subtitle) + '</div>';
   }
-
-  // summary 태그들
+  // tags
   var tags = [];
   if (g.practicalInfo && g.practicalInfo.parking) tags.push('주차 가능');
   if (g.babyTips && g.babyTips.stroller) tags.push({text: '유모차 OK', cls: 'baby'});
@@ -1222,17 +1322,14 @@ function renderPlaceDetail(item) {
     html += '</div>';
   }
   html += '</summary>';
-
   html += '<div class="place-detail-body">';
-
-  // 필수 체험
+  // mustDo
   if (g.mustDo && g.mustDo.length) {
     html += '<div class="place-body-label">꼭 할 것</div><ul class="place-list">';
     g.mustDo.forEach(function(m) { html += '<li>' + escapeHtml(m) + '</li>'; });
     html += '</ul>';
   }
-
-  // 아기 팁
+  // babyTips
   if (g.babyTips && Object.keys(g.babyTips).length) {
     html += '<div class="place-body-label">아기 동반 팁</div>';
     var bt = g.babyTips;
@@ -1244,8 +1341,7 @@ function renderPlaceDetail(item) {
     }
     if (bt.recommendedRoute) html += '<div class="place-info-row"><span class="place-info-label">추천 동선</span>' + escapeHtml(bt.recommendedRoute) + '</div>';
   }
-
-  // 실용 정보
+  // practicalInfo
   if (g.practicalInfo) {
     html += '<div class="place-body-label">실용 정보</div>';
     var pi = g.practicalInfo;
@@ -1258,14 +1354,11 @@ function renderPlaceDetail(item) {
     if (pi.closedDays) html += '<div class="place-info-row"><span class="place-info-label">휴무</span>' + escapeHtml(pi.closedDays) + '</div>';
     if (pi.fromAccommodation) html += '<div class="place-info-row"><span class="place-info-label">숙소에서</span>' + escapeHtml(pi.fromAccommodation) + '</div>';
   }
-
-  // 지도 링크
+  // mapUrl
   var mapUrl = (g.practicalInfo && g.practicalInfo.mapUrl) || '';
-  if (!mapUrl && item.options && item.options[0] && item.options[0].mapUrl) mapUrl = item.options[0].mapUrl;
   if (mapUrl) {
     html += '<a class="option-map-link" href="' + escapeAttr(mapUrl) + '" target="_blank">지도에서 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>';
   }
-
   html += '</div></details>';
   return html;
 }
@@ -1474,7 +1567,8 @@ function renderOptionCard(opt, item) {
 
   // 메타: 메뉴 + 영업상태 + 거리
   html += '<div class="option-meta">';
-  if (opt.menu) html += '<span class="option-menu-brief">' + escapeHtml(opt.menu) + '</span>';
+  var brief = opt.menu || opt.desc || '';
+  if (brief) html += '<span class="option-menu-brief">' + escapeHtml(brief) + '</span>';
   if (opt.hours) {
     var oc = parseOpenClosed(opt.hours);
     if (oc) html += '<span class="open-tag ' + oc.status + '">' + oc.text + '</span>';
@@ -1535,7 +1629,8 @@ function renderSimpleOption(opt, item) {
   const isChosen = item.chosen && item.chosen === opt.name;
   let html = '<div class="option-simple' + (isChosen ? ' chosen' : '') + '">';
   html += '<span class="option-name">' + escapeHtml(opt.name) + '</span>';
-  if (opt.menu) html += ' <span class="option-menu-brief" style="color:var(--item-text-dim);font-size:13px">— ' + escapeHtml(opt.menu) + '</span>';
+  var simpleBrief = opt.menu || opt.desc || '';
+  if (simpleBrief) html += ' <span class="option-menu-brief" style="color:var(--item-text-dim);font-size:13px">— ' + escapeHtml(simpleBrief) + '</span>';
   if (isChosen) html += ' <span class="chosen-tag">확정</span>';
 
   // 뱃지
@@ -1978,13 +2073,16 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="chat-messages" id="chatMessages">
     <div class="chat-welcome">
       <div class="chat-welcome-icon">&#x1F9ED;</div>
-      <div class="chat-welcome-title">안녕하세요, 포저입니다</div>
-      <div class="chat-welcome-desc">경주 여행에 대해 무엇이든 물어보세요.<br>일정 변경, 맛집 추천, 관광 정보 등<br>무엇이든 도와드릴게요.</div>
+      <div class="chat-welcome-title">포저 — AI 여행 보좌관</div>
+      <div class="chat-welcome-desc">일정 확인 · 식당 추천 · 일정 변경까지<br>경주 여행의 모든 것을 도와드려요.</div>
+      <div class="chat-welcome-section">이런 걸 물어보세요</div>
       <div class="chat-welcome-hints">
-        <div class="chat-hint-chip" onclick="chatHint('내일 일정 알려줘')">내일 일정</div>
-        <div class="chat-hint-chip" onclick="chatHint('근처 맛집 추천해줘')">맛집 추천</div>
-        <div class="chat-hint-chip" onclick="chatHint('아이랑 갈만한 곳')">아이와 함께</div>
+        <div class="chat-hint-chip" onclick="chatHint('내일 일정 알려줘')">일정 확인</div>
+        <div class="chat-hint-chip" onclick="chatHint('아빠가 먹을 수 있는 식당 추천해줘')">식당 추천</div>
+        <div class="chat-hint-chip" onclick="chatHint('저녁 식사를 온목당으로 확정해줘')">식당 확정</div>
+        <div class="chat-hint-chip" onclick="chatHint('교촌마을 일정을 3일차로 옮겨줘')">일정 이동</div>
       </div>
+      <div class="chat-welcome-caveat">※ 실시간 날씨·교통, 예약 대행은 지원하지 않습니다</div>
     </div>
   </div>
   <div class="chat-input-row">
