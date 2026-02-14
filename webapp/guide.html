@@ -48,8 +48,14 @@
   --shadow-hero:0 4px 32px rgba(60,46,31,0.12);
 }
 
-:root[data-fontsize="small"] { --base-font: 14px; }
-:root[data-fontsize="large"] { --base-font: 18px; }
+:root[data-fontsize="small"] { --base-font: 14px; --delta: -2px; }
+:root[data-fontsize="large"] { --base-font: 18px; --delta: 2px; }
+.card-sub { font-size: calc(13px + var(--delta, 0px)); }
+.rest-menu-brief { font-size: calc(13px + var(--delta, 0px)); }
+.info-value { font-size: calc(13px + var(--delta, 0px)); }
+.place-section-label, .place-list li { font-size: calc(13px + var(--delta, 0px)); }
+.section-subtitle { font-size: calc(13px + var(--delta, 0px)); }
+.chat-msg { font-size: calc(14px + var(--delta, 0px)); }
 
 html{scroll-behavior:smooth}
 
@@ -353,6 +359,7 @@ body::before{
   color:var(--text-light);
   margin-top:3px;
   line-height:1.4;
+  padding-right:32px;
 }
 .card-body{
   border-top:1px solid var(--border);
@@ -493,9 +500,7 @@ body::before{
 .rest-sub-tabs {
   display: flex;
   gap: 6px;
-  padding: 0 16px 12px;
-  max-width: 440px;
-  margin: 0 auto;
+  margin-bottom: 12px;
 }
 .rest-sub-tab {
   font-family: var(--mono);
@@ -556,6 +561,12 @@ body::before{
   font-size:calc(var(--base-font, 16px) - 3px);color:var(--text-light);margin-top:4px;
 }
 .rest-menu-brief{color:var(--text-mid)}
+.rest-status-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:4px;
+}
 .open-tag{
   font-family:var(--mono);
   font-size:10px;
@@ -749,28 +760,6 @@ body::before{
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ═══ SEARCH TRIGGER ═══ */
-.search-trigger {
-  position: fixed;
-  top: 12px;
-  right: 104px;
-  z-index: 200;
-  width: 36px; height: 36px; border-radius: 50%;
-  border: 1.5px solid var(--border-strong);
-  background: var(--card);
-  color: var(--text-mid);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.2s;
-}
-.search-trigger:active { transform: scale(0.9); }
-.search-trigger.active {
-  background: var(--hero);
-  color: var(--hero-text);
-  border-color: var(--hero);
-}
-.search-trigger svg { width: 16px; height: 16px; }
 
 /* ═══ FONT SIZE TRIGGER ═══ */
 .font-size-trigger {
@@ -792,119 +781,6 @@ body::before{
 }
 .font-size-trigger:active { transform: scale(0.9); }
 
-/* ═══ SEARCH BAR ═══ */
-.search-bar-wrapper {
-  max-width: 440px;
-  margin: 0 auto;
-  padding: 0 16px;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1),
-              opacity 0.25s ease;
-}
-.search-bar-wrapper.open {
-  max-height: 120px;
-  opacity: 1;
-  padding-bottom: 4px;
-}
-
-.search-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--card);
-  border: 1.5px solid var(--border-strong);
-  border-radius: 20px;
-  padding: 12px 18px;
-  box-shadow: var(--shadow-card);
-}
-.search-bar input {
-  flex: 1; border: none; outline: none; background: transparent;
-  font-family: var(--serif);
-  font-size: 16px;
-  color: var(--text);
-  opacity: 0.4;
-  pointer-events: none;
-}
-.search-bar input::placeholder {
-  color: var(--text-muted);
-  font-style: italic;
-  font-weight: 300;
-}
-
-/* ═══ FILTER CHIPS ═══ */
-.search-filters {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding: 8px 16px 12px;
-  max-width: 440px;
-  margin: 0 auto;
-}
-.search-filters::-webkit-scrollbar { display: none; }
-
-.filter-chip {
-  flex-shrink: 0;
-  font-family: var(--mono);
-  font-size: 11px; font-weight: 500;
-  letter-spacing: 0.3px;
-  padding: 8px 14px;
-  border-radius: 12px;
-  border: 1.5px solid var(--border);
-  background: transparent;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-  white-space: nowrap;
-}
-.filter-chip.active {
-  background: var(--hero);
-  color: var(--hero-text);
-  border-color: var(--hero);
-  box-shadow: 0 2px 8px rgba(61,46,31,0.15);
-}
-
-/* ═══ FILTER RESULT COUNT ═══ */
-.filter-result-count {
-  max-width: 440px;
-  margin: 0 auto;
-  padding: 0 16px 8px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text-muted);
-  letter-spacing: 0.3px;
-  display: none;
-}
-.filter-result-count.visible { display: block; }
-
-/* ═══ SEARCH EMPTY STATE ═══ */
-.search-empty {
-  text-align: center;
-  padding: 48px 24px;
-  display: none;
-}
-.search-empty.visible { display: block; }
-.search-empty::before {
-  content: '';
-  display: block; width: 40px; height: 2px;
-  background: var(--accent);
-  margin: 0 auto 20px; border-radius: 1px;
-}
-.search-empty-title {
-  font-family: var(--serif);
-  font-size: 20px; font-weight: 600;
-  color: var(--text);
-  font-style: italic;
-  margin-bottom: 8px;
-}
-.search-empty-desc {
-  font-size: 14px;
-  color: var(--text-light);
-  line-height: 1.6;
-}
 
 /* ═══ CHAT BUBBLE & SHEET ═══ */
 .chat-fab {
@@ -1052,9 +928,6 @@ body::before{
 </head>
 <body>
 
-<button class="search-trigger" id="searchTrigger" onclick="toggleSearch()" aria-label="검색/필터">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-</button>
 
 <button class="font-size-trigger" id="fontSizeTrigger" onclick="cycleFontSize()" aria-label="글자 크기">가</button>
 
@@ -1078,22 +951,6 @@ body::before{
   <button class="section-nav-btn" onclick="scrollToSection('stay')">숙소</button>
 </div>
 
-<div class="search-bar-wrapper" id="searchBarWrapper">
-  <div class="search-bar">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <input type="text" placeholder="검색은 2차에 추가 예정..." disabled>
-  </div>
-  <div class="search-filters" id="searchFilters">
-    <button class="filter-chip" data-filter="hiro" onclick="toggleFilter(this)">아이 OK</button>
-    <button class="filter-chip" data-filter="dad" onclick="toggleFilter(this)">아빠 OK</button>
-    <button class="filter-chip" data-filter="cafe" onclick="toggleFilter(this)">카페</button>
-    <button class="filter-chip" data-filter="korean" onclick="toggleFilter(this)">한식</button>
-    <button class="filter-chip" data-filter="nursing" onclick="toggleFilter(this)">수유실</button>
-    <button class="filter-chip" data-filter="stroller" onclick="toggleFilter(this)">유모차</button>
-    <button class="filter-chip" data-filter="open" onclick="toggleFilter(this)">영업중</button>
-  </div>
-</div>
-<div class="filter-result-count" id="filterResultCount"></div>
 
 <div class="container">
   <div id="contentArea">
@@ -1407,7 +1264,7 @@ function parseOpenClosed(hoursStr) {
   var closeMin = parseInt(m[3])*60 + (m[4]?parseInt(m[4]):0);
   return nowMin >= openMin && nowMin < closeMin
     ? { status: 'open', label: '영업 중' }
-    : { status: 'closed', label: '영업 종료' };
+    : { status: 'closed', label: '오늘 마감' };
 }
 
 function renderRestaurants(days) {
@@ -1464,6 +1321,8 @@ function renderRestCards(list) {
     html += '</div>';
     html += '<div class="rest-meta">';
     if (r.menu) html += '<span class="rest-menu-brief">' + esc(r.menu) + '</span>';
+    html += '</div>';
+    html += '<div class="rest-status-row">';
     if (oc.status !== 'unknown') html += '<span class="open-tag ' + oc.status + '">' + oc.label + '</span>';
     if (r.distKm !== null && r.distKm < 100) html += '<span class="rest-dist">' + (r.distKm < 1 ? r.distKm.toFixed(1) : Math.round(r.distKm)) + 'km</span>';
     html += '</div>';
@@ -1774,212 +1633,18 @@ function formatPrice(n) { return n ? n.toLocaleString() + '원' : ''; }
 function esc(s) { if(!s) return ''; var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 function escAttr(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ═══ SEARCH / FILTER ═══
-var activeFilters = new Set();
-
-function toggleSearch() {
-  var wrapper = document.getElementById('searchBarWrapper');
-  var trigger = document.getElementById('searchTrigger');
-  var isOpen = wrapper.classList.toggle('open');
-  trigger.classList.toggle('active', isOpen);
-
-  if (!isOpen) {
-    // 검색 바 닫을 때 모든 필터 해제
-    activeFilters.clear();
-    document.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.remove('active'); });
-    applyFilters();
-  }
-}
-
-function toggleFilter(chip) {
-  var filter = chip.getAttribute('data-filter');
-  chip.classList.toggle('active');
-
-  if (activeFilters.has(filter)) {
-    activeFilters.delete(filter);
-  } else {
-    activeFilters.add(filter);
-  }
-  applyFilters();
-}
-
+// ═══ FILTER (restTypeFilter only) ═══
 function applyFilters() {
-  var countEl = document.getElementById('filterResultCount');
-
-  // 필터 없으면 전부 보이기 (restTypeFilter는 별도 적용)
-  if (activeFilters.size === 0) {
-    document.querySelectorAll('.card[data-section="places"]').forEach(function(card) {
-      card.style.display = '';
-    });
-    document.querySelectorAll('.card[data-section="restaurants"]').forEach(function(card) {
-      if (restTypeFilter !== 'all' && card.getAttribute('data-type') !== restTypeFilter) {
-        card.style.display = 'none';
-      } else {
-        card.style.display = '';
-      }
-    });
-    // empty state 숨기기
-    document.querySelectorAll('.search-empty').forEach(function(el) { el.classList.remove('visible'); });
-    if (countEl) { countEl.classList.remove('visible'); countEl.textContent = ''; }
-    return;
-  }
-
-  var totalVisible = 0;
-  var sectionCounts = { restaurants: 0, places: 0 };
-
-  // 식당 카드 필터링
-  document.querySelectorAll('.card[data-section="restaurants"]').forEach(function(card) {
-    var match = true;
-    activeFilters.forEach(function(f) {
-      switch(f) {
-        case 'hiro':
-          if (card.getAttribute('data-hiro') !== 'good') match = false;
-          break;
-        case 'dad':
-          if (card.getAttribute('data-dad') !== 'good') match = false;
-          break;
-        case 'cafe':
-          var cat = (card.getAttribute('data-category') || '').toLowerCase();
-          if (cat.indexOf('cafe') === -1 && cat.indexOf('dessert') === -1) match = false;
-          break;
-        case 'korean':
-          var catK = (card.getAttribute('data-category') || '').toLowerCase();
-          if (catK.indexOf('korean') === -1) match = false;
-          break;
-        case 'open':
-          if (card.getAttribute('data-hours') !== 'open') match = false;
-          break;
-        case 'nursing':
-          // 식당에는 수유실 정보 없음 → 필터 무시 (식당 카드 hide 하지 않음)
-          break;
-        case 'stroller':
-          // 식당에는 유모차 정보 없음 → 필터 무시 (식당 카드 hide 하지 않음)
-          break;
-      }
-    });
-
-    // 장소 전용 필터만 선택된 경우 식당은 모두 숨김
-    var hasPlaceOnlyFilter = false;
-    var hasNonPlaceFilter = false;
-    activeFilters.forEach(function(f) {
-      if (f === 'nursing' || f === 'stroller') hasPlaceOnlyFilter = true;
-      else hasNonPlaceFilter = true;
-    });
-    if (hasPlaceOnlyFilter && !hasNonPlaceFilter) match = false;
-
-    // 식당/카페 서브탭 필터 적용
-    if (restTypeFilter !== 'all' && card.getAttribute('data-type') !== restTypeFilter) match = false;
-
-    card.style.display = match ? '' : 'none';
-    if (match) { sectionCounts.restaurants++; totalVisible++; }
-  });
-
-  // 장소 카드 필터링
   document.querySelectorAll('.card[data-section="places"]').forEach(function(card) {
-    var match = true;
-    activeFilters.forEach(function(f) {
-      switch(f) {
-        case 'hiro':
-          // 장소: babyTips 존재 여부로 판단
-          if (card.getAttribute('data-babytips') !== '1') match = false;
-          break;
-        case 'nursing':
-          if (card.getAttribute('data-nursing') !== '1') match = false;
-          break;
-        case 'stroller':
-          if (card.getAttribute('data-stroller') !== '1') match = false;
-          break;
-        case 'dad':
-          // 장소에는 아빠 정보 없음 → 필터 무시
-          break;
-        case 'cafe':
-          // 장소에는 카페 카테고리 없음 → 필터 무시
-          break;
-        case 'korean':
-          // 장소에는 한식 카테고리 없음 → 필터 무시
-          break;
-        case 'open':
-          // 장소에는 영업시간 정보 없음 → 필터 무시
-          break;
-      }
-    });
-
-    // 식당 전용 필터만 선택된 경우 장소는 모두 숨김
-    var hasRestOnlyFilter = false;
-    var hasNonRestFilter = false;
-    activeFilters.forEach(function(f) {
-      if (f === 'dad' || f === 'cafe' || f === 'korean' || f === 'open') hasRestOnlyFilter = true;
-      else hasNonRestFilter = true;
-    });
-    if (hasRestOnlyFilter && !hasNonRestFilter) match = false;
-
-    card.style.display = match ? '' : 'none';
-    if (match) { sectionCounts.places++; totalVisible++; }
+    card.style.display = '';
   });
-
-  // 어떤 필터가 어떤 섹션에 관련되는지 파악
-  var hasRestRelevant = false;
-  var hasPlaceRelevant = false;
-  activeFilters.forEach(function(f) {
-    if (f === 'hiro' || f === 'dad' || f === 'cafe' || f === 'korean' || f === 'open') hasRestRelevant = true;
-    if (f === 'hiro' || f === 'nursing' || f === 'stroller') hasPlaceRelevant = true;
-  });
-
-  // 결과 카운트 표시
-  if (countEl) {
-    var parts = [];
-    if (hasRestRelevant) parts.push('식당 ' + sectionCounts.restaurants + '곳');
-    if (hasPlaceRelevant) parts.push('장소 ' + sectionCounts.places + '곳');
-    if (parts.length > 0) {
-      countEl.textContent = parts.join(' · ') + ' 일치';
-      countEl.classList.add('visible');
+  document.querySelectorAll('.card[data-section="restaurants"]').forEach(function(card) {
+    if (restTypeFilter !== 'all' && card.getAttribute('data-type') !== restTypeFilter) {
+      card.style.display = 'none';
     } else {
-      countEl.classList.remove('visible');
+      card.style.display = '';
     }
-  }
-
-  // 섹션별 empty state 관리 (해당 섹션에 관련 필터가 있을 때만)
-  manageEmptyState('restaurants', hasRestRelevant ? sectionCounts.restaurants : -1);
-  manageEmptyState('places', hasPlaceRelevant ? sectionCounts.places : -1);
-
-  // 매칭 섹션이 1개면 section nav 자동 활성화
-  var activeSections = [];
-  if (sectionCounts.restaurants > 0) activeSections.push('restaurants');
-  if (sectionCounts.places > 0) activeSections.push('places');
-  if (activeSections.length === 1) {
-    var targetId = activeSections[0];
-    document.querySelectorAll('.section-nav-btn').forEach(function(btn) { btn.classList.remove('active'); });
-    var sectionIdx = ['places', 'restaurants', 'stay'].indexOf(targetId);
-    if (sectionIdx >= 0) {
-      document.querySelectorAll('.section-nav-btn')[sectionIdx].classList.add('active');
-    }
-    // 해당 섹션으로 스크롤
-    var sectionEl = document.getElementById(targetId);
-    if (sectionEl) {
-      var y = sectionEl.getBoundingClientRect().top + window.pageYOffset - 100;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  }
-}
-
-function manageEmptyState(sectionId, count) {
-  var sectionEl = document.getElementById(sectionId);
-  if (!sectionEl) return;
-
-  var emptyEl = sectionEl.querySelector('.search-empty');
-  // count === -1: 해당 섹션에 관련 필터 없음 → empty state 숨김
-  if (count === 0 && activeFilters.size > 0) {
-    if (!emptyEl) {
-      emptyEl = document.createElement('div');
-      emptyEl.className = 'search-empty';
-      emptyEl.innerHTML = '<div class="search-empty-title">아직 찾지 못했어요</div>' +
-        '<div class="search-empty-desc">다른 필터를 선택하거나, 필터를 줄여 보세요.</div>';
-      sectionEl.appendChild(emptyEl);
-    }
-    emptyEl.classList.add('visible');
-  } else if (emptyEl) {
-    emptyEl.classList.remove('visible');
-  }
+  });
 }
 
 // ═══ CHAT ═══════════════════════════════════════════════════

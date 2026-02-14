@@ -150,7 +150,7 @@ body {
   gap: 6px;
   max-width: 440px;
   margin: 0 auto 20px;
-  padding: 0 16px;
+  padding: 0 110px 0 16px;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -800,6 +800,13 @@ body {
   color: var(--text-muted);
   flex-shrink: 0;
 }
+.place-detail-sub {
+  font-size: 13px;
+  color: var(--item-text-mid);
+  margin-top: 4px;
+  line-height: 1.4;
+  padding-right: 28px;
+}
 .place-detail-tags {
   display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap;
 }
@@ -864,8 +871,15 @@ body {
 }
 .font-size-trigger:active { transform: scale(0.9); }
 
-:root[data-fontsize="small"] { --base-font: 14px; }
-:root[data-fontsize="large"] { --base-font: 18px; }
+:root[data-fontsize="small"] { --base-font: 14px; --delta: -2px; }
+:root[data-fontsize="large"] { --base-font: 18px; --delta: 2px; }
+.item-title { font-size: calc(18px + var(--delta, 0px)); }
+.item-time, .item-cat-label { font-size: calc(12px + var(--delta, 0px)); }
+.place-detail-name { font-size: calc(15px + var(--delta, 0px)); }
+.place-info-row { font-size: calc(13px + var(--delta, 0px)); }
+.option-name { font-size: calc(14px + var(--delta, 0px)); }
+.option-info { font-size: calc(13px + var(--delta, 0px)); }
+.chat-msg { font-size: calc(14px + var(--delta, 0px)); }
 
 /* ═══ CHAT BUBBLE & SHEET ═══ */
 .chat-fab {
@@ -1186,12 +1200,13 @@ function renderPlaceDetail(item) {
   html += '<summary>';
   html += '<div class="place-detail-top">';
   html += '<span class="place-detail-icon">\uD83D\uDCCD</span>';
-  html += '<span class="place-detail-name">' + escapeHtml(g.subtitle || item.title) + '</span>';
-  if (g.practicalInfo && g.practicalInfo.hours) {
-    html += '<span class="place-detail-hours">' + escapeHtml(g.practicalInfo.hours) + '</span>';
-  }
+  var placeName = item.title;
+  html += '<span class="place-detail-name">' + escapeHtml(placeName) + '</span>';
   html += '<div class="option-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>';
   html += '</div>';
+  if (g.subtitle) {
+    html += '<div class="place-detail-sub">' + escapeHtml(g.subtitle) + '</div>';
+  }
 
   // summary 태그들
   var tags = [];
