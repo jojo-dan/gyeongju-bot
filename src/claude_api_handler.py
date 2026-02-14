@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 MODEL = "claude-sonnet-4-5-20250929"
 MAX_TOOL_ROUNDS = 10
-MAX_TOKENS = 1024
+MAX_TOKENS = 2048
 
 KST = timezone(timedelta(hours=9))
 TRIP_START = datetime(2026, 2, 19, tzinfo=KST)
@@ -168,7 +168,7 @@ class ApiResponse:
 
 # ── 메인 처리 함수 ────────────────────────────────────────────
 
-async def process_message_api(json_data: dict, user_message: str) -> ApiResponse:
+async def process_message_api(json_data: dict, user_message: str, history: list | None = None) -> ApiResponse:
     """Anthropic API로 사용자 메시지를 처리한다.
 
     시스템 프롬프트에 일정 개요를 포함하고, Tool Use 루프를 통해
@@ -177,6 +177,7 @@ async def process_message_api(json_data: dict, user_message: str) -> ApiResponse
     Args:
         json_data: jsonbin에서 가져온 현재 여행 데이터
         user_message: 사용자가 텔레그램에 보낸 메시지
+        history: 이전 대화 히스토리 [{role, content}, ...]
 
     Returns:
         ApiResponse 객체 (텍스트, 데이터 변경 여부, 변경된 데이터)
@@ -196,8 +197,13 @@ async def process_message_api(json_data: dict, user_message: str) -> ApiResponse
     client = AsyncAnthropic()
     ctx = ExecutionContext(json_data)
 
-    # 3. 초기 메시지
-    messages = [{"role": "user", "content": user_message}]
+    # 3. 초기 메시지 (대화 히스토리 포함)
+    messages = []
+    if history:
+        for msg in history[:-1]:  # 마지막은 현재 메시지이므로 제외
+            if msg.get("role") in ("user", "assistant") and msg.get("content"):
+                messages.append({"role": msg["role"], "content": msg["content"]})
+    messages.append({"role": "user", "content": user_message})
 
     response = None
 

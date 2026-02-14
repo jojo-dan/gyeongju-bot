@@ -16,6 +16,7 @@ export default async function handler(req, res) {
     const body = req.body || {};
     const payload = {
       message: body.message || '',
+      history: body.history || [],
       secret: CHAT_SECRET,
     };
 

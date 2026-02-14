@@ -1735,6 +1735,9 @@ document.addEventListener('DOMContentLoaded',function(){
 var chatOpen=false;
 var chatBusy=false;
 var CHAT_STORAGE_KEY='gyeongju_chat_history';
+var CHAT_MESSAGES_KEY='gyeongju_chat_messages';
+var chatHistory=[];  // [{role:'user',content:''}, {role:'assistant',content:''}, ...]
+var MAX_HISTORY=20;  // 최근 20개 메시지 (10턴)
 
 function saveChatHistory(){
   var msgs=document.getElementById('chatMessages');
@@ -1742,10 +1745,12 @@ function saveChatHistory(){
   var welcome=clone.querySelector('.chat-welcome');
   if(welcome) welcome.remove();
   sessionStorage.setItem(CHAT_STORAGE_KEY,clone.innerHTML);
+  try{sessionStorage.setItem(CHAT_MESSAGES_KEY,JSON.stringify(chatHistory))}catch(e){}
 }
 
 function loadChatHistory(){
   var saved=sessionStorage.getItem(CHAT_STORAGE_KEY);
+  try{var savedMessages=sessionStorage.getItem(CHAT_MESSAGES_KEY);if(savedMessages) chatHistory=JSON.parse(savedMessages)}catch(e){chatHistory=[]}
   if(saved&&saved.trim()){
     document.getElementById('chatMessages').innerHTML=saved;
     return true;
@@ -1815,16 +1820,18 @@ async function sendChat(){
   var msg=input.value.trim();
   if(!msg) return;
   input.value='';
+  chatHistory.push({role:'user',content:msg});
   appendChatMsg('user',msg);
   chatBusy=true;
   document.getElementById('chatSendBtn').disabled=true;
   showTyping();
   try{
-    var resp=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});
+    var resp=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,history:chatHistory.slice(-MAX_HISTORY)})});
     removeTyping();
     var data=await resp.json();
     if(!resp.ok){appendChatMsg('error',data.error||'요청에 실패했습니다')}
     else{
+      chatHistory.push({role:'assistant',content:data.reply||''});
       appendChatMsg('bot',data.reply||'응답을 받지 못했어요.');
       if(data.data_modified){
         showToast('포저가 일정을 수정했어요. 새로고침합니다.');

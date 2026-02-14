@@ -126,6 +126,7 @@ async def chat_handler(request: web.Request) -> web.Response:
         return web.json_response({"error": "잘못된 요청 형식"}, status=400)
 
     message = body.get("message", "").strip()
+    history = body.get("history", [])
     secret = body.get("secret", "")
 
     if not message:
@@ -153,7 +154,7 @@ async def chat_handler(request: web.Request) -> web.Response:
 
     # AI 처리
     try:
-        response = await process_message_api(json_data, message)
+        response = await process_message_api(json_data, message, history=history)
     except Exception as e:
         logger.error("AI 처리 중 에러: %s", e, exc_info=True)
         return web.json_response(

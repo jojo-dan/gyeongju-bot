@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate=20');
+    res.setHeader('Cache-Control', 'no-store');
     return res.status(200).json(data);
   } catch (err) {
     return res.status(500).json({ error: '데이터를 가져올 수 없습니다.' });
