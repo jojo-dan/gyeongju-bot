@@ -11,42 +11,115 @@
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/earlyaccess/kopubbatang.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=Noto+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --bg:#FAF7F2;
-  --bg-warm:#F3EDE4;
-  --card:#FFFFFF;
-  --card-hover:#FDFCFA;
-  --hero:#3D2E1F;
-  --hero-text:#FAF7F2;
-  --hero-dim:rgba(250,247,242,0.55);
-  --accent:#C45D3E;
-  --accent-soft:#E8896E;
-  --accent-bg:rgba(196,93,62,0.08);
-  --sage:#7B8F6B;
-  --sage-bg:rgba(123,143,107,0.1);
-  --blue:#4A6FA5;
-  --blue-bg:rgba(74,111,165,0.08);
-  --text:#2C2218;
-  --text-mid:#5C4F42;
-  --text-light:#8C7E72;
-  --text-muted:#A89E94;
-  --border:rgba(60,46,31,0.1);
-  --border-strong:rgba(60,46,31,0.18);
-  --serif:'Spectral','KoPub Batang',Georgia,serif;
-  --body:'Spectral','KoPub Batang',Georgia,serif;
-  --mono:'DM Mono','SF Mono',monospace;
-  --r-card:20px;
-  --r-btn:12px;
-  --r-tag:6px;
-  --shadow-card:0 1px 3px rgba(60,46,31,0.06),0 8px 24px rgba(60,46,31,0.04);
-  --shadow-card-hover:0 2px 8px rgba(60,46,31,0.1),0 12px 32px rgba(60,46,31,0.06);
-  --shadow-hero:0 4px 32px rgba(60,46,31,0.12);
-  --shadow-btn:0 1px 3px rgba(0,0,0,0.1),inset 0 1px 0 rgba(255,255,255,0.8);
+  /* ── Background ── */
+  --bg: #F7F7F7;
+  --bg-card: #FFFFFF;
+
+  /* ── Text ── */
+  --text-primary: #111111;
+  --text-secondary: #999999;
+  --text-tertiary: #555555;
+
+  /* ── Border & Divider ── */
+  --border: #E5E5E5;
+  --divider: #EEEEEE;
+
+  /* ── Accent ── */
+  --accent-red: #C41E3A;
+  --accent-red-bg: rgba(196, 30, 58, 0.08);
+  --accent-blue: #0066CC;
+  --accent-blue-bg: rgba(0, 102, 204, 0.08);
+  --accent-green: #1A8754;
+  --accent-green-bg: rgba(26, 135, 84, 0.10);
+  --accent-green-border: #1A8754;
+
+  /* ── Typography ── */
+  --font-serif: 'Noto Serif KR', Georgia, serif;
+  --font-mono: 'Noto Sans Mono', 'SF Mono', monospace;
+
+  /* ── Type Scale: Serif ── */
+  --type-section-title-size: 24px;
+  --type-section-title-weight: 700;
+  --type-section-title-ls: -0.5px;
+  --type-restaurant-name-size: 20px;
+  --type-restaurant-name-weight: 700;
+  --type-alt-heading-size: 16px;
+  --type-alt-heading-weight: 500;
+  --type-menu-name-size: 14px;
+  --type-menu-name-weight: 400;
+
+  /* ── Type Scale: Mono ── */
+  --type-score-size: 16px;
+  --type-score-weight: 600;
+  --type-price-size: 13px;
+  --type-price-weight: 500;
+  --type-badge-size: 12px;
+  --type-badge-weight: 600;
+  --type-label-size: 12px;
+  --type-label-weight: 500;
+  --type-info-value-size: 12px;
+  --type-info-value-weight: 400;
+  --type-tag-size: 11px;
+  --type-tag-weight: 400;
+
+  /* ── Spacing ── */
+  --card-padding: 24px;
+  --card-inner-gap: 16px;
+  --header-padding-v: 16px;
+  --header-padding-h: 24px;
+  --section-title-padding: 20px 24px 24px 24px;
+  --tag-padding: 4px 10px;
+  --tag-gap: 8px;
+  --badge-padding: 3px 8px;
+  --info-row-gap: 8px;
+  --menu-row-padding: 8px 0;
+  --container-max-width: 440px;
+
+  /* ── Card ── */
+  --card-radius: 16px;
+  --card-border: 1px solid var(--border);
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
+  --card-shadow-hover: 0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.05);
+
+  /* ── Badge & Tag ── */
+  --badge-radius: 4px;
+  --tag-radius: 6px;
+
+  /* ── (v1 호환용 alias) ── */
+  --text: var(--text-primary);
+  --text-mid: var(--text-tertiary);
+  --text-light: var(--text-secondary);
+  --text-muted: var(--text-secondary);
+  --card: var(--bg-card);
+  --accent: var(--accent-red);
+  --accent-bg: var(--accent-red-bg);
+  --sage: var(--accent-green);
+  --sage-bg: var(--accent-green-bg);
+  --blue: var(--accent-blue);
+  --blue-bg: var(--accent-blue-bg);
+  --serif: var(--font-serif);
+  --body: var(--font-serif);
+  --mono: var(--font-mono);
+  --r-card: var(--card-radius);
+  --r-btn: 12px;
+  --r-tag: var(--tag-radius);
+  --border-strong: var(--border);
+  --shadow-card: var(--card-shadow);
+  --shadow-card-hover: var(--card-shadow-hover);
+  --bg-warm: var(--bg);
+  --card-hover: #F0F0F0;
+  --hero: #333333;
+  --hero-text: #FFFFFF;
+  --hero-dim: rgba(255,255,255,0.45);
+  --accent-soft: var(--accent-red);
+  --shadow-hero: var(--card-shadow);
+  --shadow-btn: none;
 }
 
 :root[data-fontsize="small"] { --base-font: 14px; --delta: -2px; }
@@ -64,38 +137,66 @@ body{
   overflow-x:hidden;
 }
 
-/* grain */
+/* grain — v2에서 비활성화 */
 body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.03;
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat:repeat;background-size:256px;
 }
 
 /* dark mode */
 [data-theme="dark"]{
-  --bg:#1A1714;--bg-warm:#242019;--card:#2C261F;--card-hover:#332D25;
-  --hero:#2C261F;--hero-text:#E8E0D6;--hero-dim:rgba(232,224,214,0.45);
-  --accent:#E8896E;--accent-soft:#C45D3E;--accent-bg:rgba(232,137,110,0.15);
-  --sage:#9AB089;--sage-bg:rgba(154,176,137,0.15);
-  --blue:#7DA0CC;--blue-bg:rgba(125,160,204,0.12);
-  --text:#E8E0D6;--text-mid:#B5AA9E;--text-light:#8C7E72;--text-muted:#6B5F54;
-  --border:rgba(250,247,242,0.08);--border-strong:rgba(250,247,242,0.15);
-  --shadow-card:0 1px 3px rgba(0,0,0,0.3),0 8px 24px rgba(0,0,0,0.2);
-  --shadow-card-hover:0 2px 8px rgba(0,0,0,0.4),0 12px 32px rgba(0,0,0,0.25);
-  --shadow-hero:0 4px 32px rgba(0,0,0,0.4);
+  --bg: #111111;
+  --bg-card: #1A1A1A;
+  --text-primary: #FFFFFF;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --border: #2E2E2E;
+  --divider: #2E2E2E;
+  --accent-red: #FF5C33;
+  --accent-red-bg: rgba(255, 92, 51, 0.12);
+  --accent-blue: #4D9AFF;
+  --accent-blue-bg: rgba(77, 154, 255, 0.12);
+  --accent-green: #2ECC71;
+  --accent-green-bg: rgba(46, 204, 113, 0.12);
+  --accent-green-border: #2ECC71;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.15);
+  --card-shadow-hover: 0 2px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2);
+
+  /* v1 alias 자동 상속됨 */
+  --bg-warm: #1A1A1A;
+  --card-hover: #222222;
+  --hero: #1A1A1A;
+  --hero-text: #FFFFFF;
+  --hero-dim: rgba(255,255,255,0.45);
+  --accent-soft: #FF7755;
 }
 @media(prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#1A1714;--bg-warm:#242019;--card:#2C261F;--card-hover:#332D25;
-    --hero:#2C261F;--hero-text:#E8E0D6;--hero-dim:rgba(232,224,214,0.45);
-    --accent:#E8896E;--accent-soft:#C45D3E;--accent-bg:rgba(232,137,110,0.15);
-    --sage:#9AB089;--sage-bg:rgba(154,176,137,0.15);
-    --blue:#7DA0CC;--blue-bg:rgba(125,160,204,0.12);
-    --text:#E8E0D6;--text-mid:#B5AA9E;--text-light:#8C7E72;--text-muted:#6B5F54;
-    --border:rgba(250,247,242,0.08);--border-strong:rgba(250,247,242,0.15);
-    --shadow-card:0 1px 3px rgba(0,0,0,0.3),0 8px 24px rgba(0,0,0,0.2);
-    --shadow-card-hover:0 2px 8px rgba(0,0,0,0.4),0 12px 32px rgba(0,0,0,0.25);
-    --shadow-hero:0 4px 32px rgba(0,0,0,0.4);
+    --bg: #111111;
+    --bg-card: #1A1A1A;
+    --text-primary: #FFFFFF;
+    --text-secondary: #666666;
+    --text-tertiary: #999999;
+    --border: #2E2E2E;
+    --divider: #2E2E2E;
+    --accent-red: #FF5C33;
+    --accent-red-bg: rgba(255, 92, 51, 0.12);
+    --accent-blue: #4D9AFF;
+    --accent-blue-bg: rgba(77, 154, 255, 0.12);
+    --accent-green: #2ECC71;
+    --accent-green-bg: rgba(46, 204, 113, 0.12);
+    --accent-green-border: #2ECC71;
+    --card-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.15);
+    --card-shadow-hover: 0 2px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2);
+
+    /* v1 alias 자동 상속됨 */
+    --bg-warm: #1A1A1A;
+    --card-hover: #222222;
+    --hero: #1A1A1A;
+    --hero-text: #FFFFFF;
+    --hero-dim: rgba(255,255,255,0.45);
+    --accent-soft: #FF7755;
   }
 }
 
@@ -115,9 +216,9 @@ body::before{
 .header{
   padding:40px 24px 28px;text-align:center;position:relative;
 }
+/* v2: 헤더 액센트 라인 제거 */
 .header::after{
-  content:'';display:block;width:40px;height:2px;
-  background:var(--accent);margin:20px auto 0;border-radius:1px;
+  display:none;
 }
 .header h1{
   font-family:var(--serif);font-size:34px;font-weight:700;
@@ -238,10 +339,9 @@ body::before{
   background:var(--hero);border-radius:var(--r-card);box-shadow:var(--shadow-hero);
   overflow:hidden;margin-bottom:16px;position:relative;
 }
+/* v2: 장식 원형 제거 */
 .display-card::before{
-  content:'';position:absolute;top:-20px;right:-20px;
-  width:120px;height:120px;border-radius:50%;
-  background:rgba(196,93,62,0.12);pointer-events:none;
+  display:none;
 }
 .display-screen{padding:28px 22px;position:relative}
 .display-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
