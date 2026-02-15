@@ -11,117 +11,42 @@
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=Noto+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/earlyaccess/kopubbatang.css" rel="stylesheet">
 <style>
-/* ═══ RESET & BASE ═══ */
 *{margin:0;padding:0;box-sizing:border-box}
 
-/* ═══ DESIGN TOKENS ═══ */
 :root{
-  /* ── Background ── */
-  --bg: #F7F7F7;
-  --bg-card: #FFFFFF;
-
-  /* ── Text ── */
-  --text-primary: #111111;
-  --text-secondary: #999999;
-  --text-tertiary: #555555;
-
-  /* ── Border & Divider ── */
-  --border: #E5E5E5;
-  --divider: #EEEEEE;
-
-  /* ── Accent ── */
-  --accent-red: #C41E3A;
-  --accent-red-bg: rgba(196, 30, 58, 0.08);
-  --accent-blue: #0066CC;
-  --accent-blue-bg: rgba(0, 102, 204, 0.08);
-  --accent-green: #1A8754;
-  --accent-green-bg: rgba(26, 135, 84, 0.10);
-  --accent-green-border: #1A8754;
-
-  /* ── Typography ── */
-  --font-serif: 'Noto Serif KR', Georgia, serif;
-  --font-mono: 'Noto Sans Mono', 'SF Mono', monospace;
-
-  /* ── Type Scale: Serif ── */
-  --type-section-title-size: 24px;
-  --type-section-title-weight: 700;
-  --type-section-title-ls: -0.5px;
-  --type-restaurant-name-size: 20px;
-  --type-restaurant-name-weight: 700;
-  --type-alt-heading-size: 16px;
-  --type-alt-heading-weight: 500;
-  --type-menu-name-size: 14px;
-  --type-menu-name-weight: 400;
-
-  /* ── Type Scale: Mono ── */
-  --type-score-size: 16px;
-  --type-score-weight: 600;
-  --type-price-size: 13px;
-  --type-price-weight: 500;
-  --type-badge-size: 12px;
-  --type-badge-weight: 600;
-  --type-label-size: 12px;
-  --type-label-weight: 500;
-  --type-info-value-size: 12px;
-  --type-info-value-weight: 400;
-  --type-tag-size: 11px;
-  --type-tag-weight: 400;
-
-  /* ── Spacing ── */
-  --card-padding: 24px;
-  --card-inner-gap: 16px;
-  --header-padding-v: 16px;
-  --header-padding-h: 24px;
-  --section-title-padding: 20px 24px 24px 24px;
-  --tag-padding: 4px 10px;
-  --tag-gap: 8px;
-  --badge-padding: 3px 8px;
-  --info-row-gap: 8px;
-  --menu-row-padding: 8px 0;
-  --container-max-width: 440px;
-
-  /* ── Card ── */
-  --card-radius: 16px;
-  --card-border: 1px solid var(--border);
-  --card-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03);
-  --card-shadow-hover: 0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.05);
-
-  /* ── Badge & Tag ── */
-  --badge-radius: 4px;
-  --tag-radius: 6px;
-
-  /* ── (v1 호환용 alias) ── */
-  --text: var(--text-primary);
-  --text-mid: var(--text-tertiary);
-  --text-light: var(--text-secondary);
-  --text-muted: var(--text-secondary);
-  --card: var(--bg-card);
-  --accent: var(--accent-red);
-  --accent-bg: var(--accent-red-bg);
-  --sage: var(--accent-green);
-  --sage-bg: var(--accent-green-bg);
-  --blue: var(--accent-blue);
-  --blue-bg: var(--accent-blue-bg);
-  --serif: var(--font-serif);
-  --body: var(--font-serif);
-  --mono: var(--font-mono);
-  --r-card: var(--card-radius);
-  --r-btn: 12px;
-  --r-tag: var(--tag-radius);
-  --border-strong: var(--border);
-  --shadow-card: var(--card-shadow);
-  --shadow-card-hover: var(--card-shadow-hover);
-  --bg-warm: var(--bg);
-  --card-hover: #F0F0F0;
-  --hero: #333333;
-  --hero-text: #FFFFFF;
-  --hero-dim: rgba(255,255,255,0.45);
-  --accent-soft: var(--accent-red);
-  --shadow-hero: var(--card-shadow);
-  --shadow-btn: none;
+  --bg:#FAF7F2;
+  --bg-warm:#F3EDE4;
+  --card:#FFFFFF;
+  --card-hover:#FDFCFA;
+  --hero:#3D2E1F;
+  --hero-text:#FAF7F2;
+  --hero-dim:rgba(250,247,242,0.55);
+  --accent:#C45D3E;
+  --accent-soft:#E8896E;
+  --accent-bg:rgba(196,93,62,0.08);
+  --sage:#7B8F6B;
+  --sage-bg:rgba(123,143,107,0.1);
+  --blue:#4A6FA5;
+  --blue-bg:rgba(74,111,165,0.08);
+  --text:#2C2218;
+  --text-mid:#5C4F42;
+  --text-light:#8C7E72;
+  --text-muted:#A89E94;
+  --border:rgba(60,46,31,0.1);
+  --border-strong:rgba(60,46,31,0.18);
+  --serif:'Spectral','KoPub Batang',Georgia,serif;
+  --body:'Spectral','KoPub Batang',Georgia,serif;
+  --mono:'DM Mono','SF Mono',monospace;
+  --r-card:20px;
+  --r-btn:12px;
+  --r-tag:6px;
+  --shadow-card:0 1px 3px rgba(60,46,31,0.06),0 8px 24px rgba(60,46,31,0.04);
+  --shadow-card-hover:0 2px 8px rgba(60,46,31,0.1),0 12px 32px rgba(60,46,31,0.06);
+  --shadow-hero:0 4px 32px rgba(60,46,31,0.12);
+  --shadow-btn:0 1px 3px rgba(0,0,0,0.1),inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
 :root[data-fontsize="small"] { --base-font: 14px; --delta: -2px; }
@@ -139,63 +64,40 @@ body{
   overflow-x:hidden;
 }
 
+/* grain */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:256px;
+}
+
 /* dark mode */
 [data-theme="dark"]{
-  --bg: #111111;
-  --bg-card: #1A1A1A;
-  --text-primary: #FFFFFF;
-  --text-secondary: #666666;
-  --text-tertiary: #999999;
-  --border: #2E2E2E;
-  --divider: #2E2E2E;
-  --accent-red: #FF5C33;
-  --accent-red-bg: rgba(255, 92, 51, 0.12);
-  --accent-blue: #4D9AFF;
-  --accent-blue-bg: rgba(77, 154, 255, 0.12);
-  --accent-green: #2ECC71;
-  --accent-green-bg: rgba(46, 204, 113, 0.12);
-  --accent-green-border: #2ECC71;
-  --card-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.15);
-  --card-shadow-hover: 0 2px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2);
-
-  /* v1 alias 자동 상속됨 */
-  --bg-warm: #1A1A1A;
-  --card-hover: #222222;
-  --hero: #1A1A1A;
-  --hero-text: #FFFFFF;
-  --hero-dim: rgba(255,255,255,0.45);
-  --accent-soft: #FF7755;
+  --bg:#1A1714;--bg-warm:#242019;--card:#2C261F;--card-hover:#332D25;
+  --hero:#2C261F;--hero-text:#E8E0D6;--hero-dim:rgba(232,224,214,0.45);
+  --accent:#E8896E;--accent-soft:#C45D3E;--accent-bg:rgba(232,137,110,0.15);
+  --sage:#9AB089;--sage-bg:rgba(154,176,137,0.15);
+  --blue:#7DA0CC;--blue-bg:rgba(125,160,204,0.12);
+  --text:#E8E0D6;--text-mid:#B5AA9E;--text-light:#8C7E72;--text-muted:#6B5F54;
+  --border:rgba(250,247,242,0.08);--border-strong:rgba(250,247,242,0.15);
+  --shadow-card:0 1px 3px rgba(0,0,0,0.3),0 8px 24px rgba(0,0,0,0.2);
+  --shadow-card-hover:0 2px 8px rgba(0,0,0,0.4),0 12px 32px rgba(0,0,0,0.25);
+  --shadow-hero:0 4px 32px rgba(0,0,0,0.4);
 }
 @media(prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg: #111111;
-    --bg-card: #1A1A1A;
-    --text-primary: #FFFFFF;
-    --text-secondary: #666666;
-    --text-tertiary: #999999;
-    --border: #2E2E2E;
-    --divider: #2E2E2E;
-    --accent-red: #FF5C33;
-    --accent-red-bg: rgba(255, 92, 51, 0.12);
-    --accent-blue: #4D9AFF;
-    --accent-blue-bg: rgba(77, 154, 255, 0.12);
-    --accent-green: #2ECC71;
-    --accent-green-bg: rgba(46, 204, 113, 0.12);
-    --accent-green-border: #2ECC71;
-    --card-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.15);
-    --card-shadow-hover: 0 2px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2);
-
-    /* v1 alias 자동 상속됨 */
-    --bg-warm: #1A1A1A;
-    --card-hover: #222222;
-    --hero: #1A1A1A;
-    --hero-text: #FFFFFF;
-    --hero-dim: rgba(255,255,255,0.45);
-    --accent-soft: #FF7755;
+    --bg:#1A1714;--bg-warm:#242019;--card:#2C261F;--card-hover:#332D25;
+    --hero:#2C261F;--hero-text:#E8E0D6;--hero-dim:rgba(232,224,214,0.45);
+    --accent:#E8896E;--accent-soft:#C45D3E;--accent-bg:rgba(232,137,110,0.15);
+    --sage:#9AB089;--sage-bg:rgba(154,176,137,0.15);
+    --blue:#7DA0CC;--blue-bg:rgba(125,160,204,0.12);
+    --text:#E8E0D6;--text-mid:#B5AA9E;--text-light:#8C7E72;--text-muted:#6B5F54;
+    --border:rgba(250,247,242,0.08);--border-strong:rgba(250,247,242,0.15);
+    --shadow-card:0 1px 3px rgba(0,0,0,0.3),0 8px 24px rgba(0,0,0,0.2);
+    --shadow-card-hover:0 2px 8px rgba(0,0,0,0.4),0 12px 32px rgba(0,0,0,0.25);
+    --shadow-hero:0 4px 32px rgba(0,0,0,0.4);
   }
 }
-
-/* ═══ LAYOUT ═══ */
 
 /* theme toggle */
 .theme-toggle{
@@ -212,6 +114,10 @@ body{
 /* header */
 .header{
   padding:40px 24px 28px;text-align:center;position:relative;
+}
+.header::after{
+  content:'';display:block;width:40px;height:2px;
+  background:var(--accent);margin:20px auto 0;border-radius:1px;
 }
 .header h1{
   font-family:var(--serif);font-size:34px;font-weight:700;
@@ -299,12 +205,43 @@ body{
 }
 </style>
 <style>
-/* ═══ LEGACY COMPONENTS ═══ */
+/* section hero */
+.section-hero{
+  background:var(--hero);border-radius:var(--r-card);box-shadow:var(--shadow-hero);
+  padding:28px 22px;margin-bottom:16px;position:relative;overflow:hidden;
+}
+.section-hero::before{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(196,93,62,0.12);pointer-events:none;
+}
+.section-hero::after{
+  content:'';position:absolute;bottom:-30px;left:-10px;
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(123,143,107,0.08);pointer-events:none;
+}
+.section-label{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  color:var(--accent-soft);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;
+}
+.section-title{
+  font-family:var(--serif);font-size:26px;font-weight:700;
+  color:var(--hero-text);letter-spacing:-0.3px;line-height:1.25;
+}
+.section-subtitle{
+  font-family:var(--body);font-size:calc(13px + var(--delta, 0px));
+  color:var(--hero-dim);margin-top:6px;font-weight:400;
+}
 
 /* display card (schedule) */
 .display-card{
   background:var(--hero);border-radius:var(--r-card);box-shadow:var(--shadow-hero);
   overflow:hidden;margin-bottom:16px;position:relative;
+}
+.display-card::before{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(196,93,62,0.12);pointer-events:none;
 }
 .display-screen{padding:28px 22px;position:relative}
 .display-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
@@ -359,8 +296,6 @@ body{
   color:var(--text-light);margin-top:3px;line-height:1.4;padding-right:32px;
 }
 .card-body{border-top:1px solid var(--border);margin:0 20px;padding:16px 0 18px}
-
-/* ═══ UTILITIES ═══ */
 
 /* fade animation */
 .fade-up{opacity:0;transform:translateY(16px);animation:fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) forwards}
@@ -652,428 +587,6 @@ body{
 /* footer */
 .footer{text-align:center;padding:24px 16px 48px}
 .footer-note{font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:14px;letter-spacing:0.3px}
-
-/* ═══ ATOMIC COMPONENTS (v2) ═══ */
-
-/* ContextHeader */
-.ctx-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--header-padding-v) var(--header-padding-h);
-  border-bottom: 1px solid var(--border);
-}
-.ctx-header__left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.ctx-header__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.ctx-header__label {
-  font-family: var(--font-mono);
-  font-size: var(--type-info-value-size);
-  font-weight: var(--type-info-value-weight);
-  color: var(--text-tertiary);
-}
-.ctx-header__badge {
-  font-family: var(--font-mono);
-  font-size: var(--type-badge-size);
-  font-weight: var(--type-badge-weight);
-}
-.ctx-header__badge--meal { color: var(--accent-red); }
-.ctx-header__badge--cafe { color: var(--accent-blue); }
-.ctx-header__badge--activity { color: var(--accent-green); }
-
-/* SectionTitle */
-.sec-title {
-  font-family: var(--font-serif);
-  font-size: var(--type-section-title-size);
-  font-weight: var(--type-section-title-weight);
-  letter-spacing: var(--type-section-title-ls);
-  color: var(--text-primary);
-  padding: var(--section-title-padding);
-}
-
-/* MenuTable */
-.menu-table { display: flex; flex-direction: column; width: 100%; }
-.menu-table__row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: var(--menu-row-padding);
-}
-.menu-table__row + .menu-table__row {
-  border-top: 1px solid var(--divider);
-}
-.menu-table__name {
-  font-family: var(--font-serif);
-  font-size: var(--type-menu-name-size);
-  font-weight: var(--type-menu-name-weight);
-  color: var(--text-primary);
-}
-.menu-table__price {
-  font-family: var(--font-mono);
-  font-size: var(--type-price-size);
-  font-weight: var(--type-price-weight);
-  color: var(--text-primary);
-  flex-shrink: 0;
-  margin-left: 12px;
-}
-
-/* InfoTable */
-.info-table { display: flex; flex-direction: column; gap: var(--info-row-gap); width: 100%; }
-.info-table__row {
-  display: flex;
-  align-items: baseline;
-  gap: 16px;
-}
-.info-table__label {
-  font-family: var(--font-mono);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
-  color: var(--text-secondary);
-  flex-shrink: 0;
-  min-width: 52px;
-}
-.info-table__value {
-  font-family: var(--font-mono);
-  font-size: var(--type-info-value-size);
-  font-weight: var(--type-info-value-weight);
-  color: var(--text-primary);
-}
-
-/* TagRow */
-.tag-row { display: flex; flex-wrap: wrap; gap: var(--tag-gap); }
-.tag-row__chip {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--tag-padding);
-  border-radius: var(--tag-radius);
-  border: 1px solid var(--border);
-  font-family: var(--font-mono);
-  font-size: var(--type-tag-size);
-  font-weight: var(--type-tag-weight);
-  color: var(--text-tertiary);
-  background: transparent;
-}
-
-/* Badge */
-.badge-v2 {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--badge-padding);
-  border-radius: var(--badge-radius);
-  font-family: var(--font-mono);
-  font-size: var(--type-badge-size);
-  font-weight: var(--type-badge-weight);
-}
-.badge-v2--open { background: var(--accent-green-bg); color: var(--accent-green); border: 1px solid var(--accent-green-border); }
-.badge-v2--closed { background: rgba(153,153,153,0.1); color: var(--text-secondary); border: 1px solid var(--border); }
-.badge-v2--category { background: var(--accent-red-bg); color: var(--accent-red); }
-.badge-v2--dad-good { background: var(--accent-green-bg); color: var(--accent-green); }
-.badge-v2--dad-caution { background: var(--accent-red-bg); color: var(--accent-red); }
-.badge-v2--hiro-good { background: var(--accent-blue-bg); color: var(--accent-blue); }
-.badge-v2--hiro-caution { background: var(--accent-red-bg); color: var(--accent-red); }
-
-/* MapLink */
-.map-link-v2 {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: var(--font-mono);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-label-weight);
-  color: var(--accent-blue);
-  text-decoration: none;
-  cursor: pointer;
-}
-.map-link-v2:hover { text-decoration: underline; }
-.map-link-v2 svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
-
-/* Chevron (v2) */
-.chevron-v2 {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-family: var(--font-mono);
-  font-size: var(--type-tag-size);
-  font-weight: var(--type-tag-weight);
-  color: var(--text-secondary);
-}
-.chevron-v2 svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
-details[open] .chevron-v2 svg { transform: rotate(90deg); }
-
-/* ═══ COMPOUND COMPONENTS (v2) ═══ */
-
-/* SectionHero */
-.sec-hero {
-  padding: 32px 24px 24px;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border);
-}
-.sec-hero__label {
-  font-family: var(--font-mono);
-  font-size: var(--type-tag-size);
-  font-weight: var(--type-label-weight);
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-.sec-hero__title {
-  font-family: var(--font-serif);
-  font-size: var(--type-section-title-size);
-  font-weight: var(--type-section-title-weight);
-  letter-spacing: var(--type-section-title-ls);
-  color: var(--text-primary);
-  margin-bottom: 4px;
-}
-.sec-hero__subtitle {
-  font-family: var(--font-mono);
-  font-size: var(--type-info-value-size);
-  color: var(--text-secondary);
-}
-
-/* RestaurantCard (v2) */
-.rest-card-v2 {
-  background: var(--bg-card);
-  border: var(--card-border);
-  border-radius: var(--card-radius);
-  overflow: hidden;
-  margin-bottom: 12px;
-  box-shadow: var(--card-shadow);
-}
-.rest-card-v2 summary {
-  list-style: none;
-  cursor: pointer;
-  padding: var(--card-padding);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.rest-card-v2 summary::-webkit-details-marker { display: none; }
-.rest-card-v2__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-.rest-card-v2__name {
-  font-family: var(--font-serif);
-  font-size: var(--type-restaurant-name-size);
-  font-weight: var(--type-restaurant-name-weight);
-  color: var(--text-primary);
-}
-.rest-card-v2__right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.rest-card-v2__score {
-  font-family: var(--font-mono);
-  font-size: var(--type-score-size);
-  font-weight: var(--type-score-weight);
-  color: var(--text-primary);
-}
-.rest-card-v2__sub {
-  font-family: var(--font-mono);
-  font-size: var(--type-info-value-size);
-  color: var(--text-secondary);
-}
-.rest-card-v2__body {
-  padding: 0 var(--card-padding) var(--card-padding);
-  display: flex;
-  flex-direction: column;
-  gap: var(--card-inner-gap);
-}
-.rest-card-v2__divider {
-  height: 1px;
-  background: var(--border);
-  margin: 0;
-}
-.rest-card-v2[data-visited="true"] {
-  border-left: 3px solid var(--accent-green);
-}
-
-/* PlaceCard (v2) */
-.place-card-v2 {
-  background: var(--bg-card);
-  border: var(--card-border);
-  border-radius: var(--card-radius);
-  overflow: hidden;
-  margin-bottom: 12px;
-  box-shadow: var(--card-shadow);
-}
-.place-card-v2 summary {
-  list-style: none;
-  cursor: pointer;
-  padding: var(--card-padding);
-}
-.place-card-v2 summary::-webkit-details-marker { display: none; }
-.place-card-v2__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.place-card-v2__name {
-  font-family: var(--font-serif);
-  font-size: var(--type-restaurant-name-size);
-  font-weight: var(--type-restaurant-name-weight);
-  color: var(--text-primary);
-}
-.place-card-v2__sub {
-  font-family: var(--font-mono);
-  font-size: var(--type-info-value-size);
-  color: var(--text-secondary);
-  margin-top: 4px;
-}
-.place-card-v2__body {
-  padding: 0 var(--card-padding) var(--card-padding);
-  display: flex;
-  flex-direction: column;
-  gap: var(--card-inner-gap);
-}
-.place-card-v2__section-label {
-  font-family: var(--font-mono);
-  font-size: var(--type-label-size);
-  font-weight: var(--type-badge-weight);
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 8px;
-}
-.place-card-v2__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.place-card-v2__list li {
-  font-family: var(--font-mono);
-  font-size: var(--type-info-value-size);
-  color: var(--text-primary);
-  padding: 4px 0;
-  padding-left: 16px;
-  position: relative;
-}
-.place-card-v2__list li::before {
-  content: '·';
-  position: absolute;
-  left: 4px;
-  color: var(--text-secondary);
-}
-.place-card-v2[data-visited="true"] {
-  border-left: 3px solid var(--accent-green);
-}
-
-/* DayHeroCard */
-.day-hero {
-  background: var(--bg-card);
-  border: var(--card-border);
-  border-radius: var(--card-radius);
-  margin: 12px 16px;
-  padding: var(--card-padding);
-  box-shadow: var(--card-shadow);
-}
-.day-hero__title {
-  font-family: var(--font-serif);
-  font-size: var(--type-section-title-size);
-  font-weight: var(--type-section-title-weight);
-  letter-spacing: var(--type-section-title-ls);
-  color: var(--text-primary);
-  margin-bottom: 8px;
-}
-.day-hero__keyword {
-  font-family: var(--font-mono);
-  font-size: var(--type-info-value-size);
-  color: var(--text-secondary);
-  margin-bottom: 16px;
-}
-.day-hero__progress {
-  background: var(--border);
-  border-radius: 4px;
-  height: 4px;
-  overflow: hidden;
-}
-.day-hero__progress-bar {
-  height: 100%;
-  border-radius: 4px;
-  background: var(--accent-green);
-  transition: width 0.3s ease;
-}
-.day-hero__progress-text {
-  font-family: var(--font-mono);
-  font-size: var(--type-tag-size);
-  color: var(--text-secondary);
-  margin-top: 6px;
-}
-
-/* ScheduleItemCard (v2 병행) */
-.sched-item {
-  background: var(--bg-card);
-  border: var(--card-border);
-  border-radius: var(--card-radius);
-  padding: 16px var(--card-padding);
-  margin-bottom: 8px;
-  box-shadow: var(--card-shadow);
-  transition: opacity 0.3s ease;
-}
-.sched-item--visited { opacity: 0.65; }
-.sched-item--skipped { opacity: 0.4; }
-.sched-item__title {
-  font-family: var(--font-serif);
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-primary);
-}
-.sched-item__time {
-  font-family: var(--font-mono);
-  font-size: var(--type-info-value-size);
-  color: var(--text-secondary);
-}
-.sched-item__distance {
-  font-family: var(--font-mono);
-  font-size: var(--type-tag-size);
-  color: var(--accent-blue);
-  margin-top: 4px;
-}
-
-/* AltSection */
-.alt-section {
-  background: var(--bg-card);
-  border: var(--card-border);
-  border-radius: var(--card-radius);
-  padding: var(--card-padding);
-  margin-bottom: 12px;
-  box-shadow: var(--card-shadow);
-}
-.alt-section__header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.alt-section__title {
-  font-family: var(--font-serif);
-  font-size: var(--type-alt-heading-size);
-  font-weight: var(--type-alt-heading-weight);
-  color: var(--text-primary);
-}
-.alt-section__dash {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--border);
-}
-.alt-section__desc {
-  font-family: var(--font-mono);
-  font-size: var(--type-info-value-size);
-  color: var(--text-secondary);
-}
-.alt-section__tags { margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -1129,7 +642,7 @@ details[open] .chevron-v2 svg { transform: rotate(90deg); }
 
 <div class="toast" id="toast"></div>
 <script>
-// ═══ THEME & FONT SIZE ═══
+// ═══ THEME ═══
 function initTheme(){
   var saved=localStorage.getItem('gj_theme');
   document.documentElement.setAttribute('data-theme',saved||'light');
@@ -1153,7 +666,7 @@ function updateThemeIcon(){
 }
 initTheme();
 
-// ── FONT SIZE ──
+// ═══ FONT SIZE ═══
 var fontSizes=['medium','large','small'];
 function initFontSize(){
   var saved=localStorage.getItem('gj_fontsize')||'large';
@@ -1196,7 +709,7 @@ function showError(msg){var el=document.getElementById('errorBanner');el.textCon
 function hideError(){document.getElementById('errorBanner').classList.remove('show')}
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000)}
 
-// ═══ STATIC DATA ═══
+// ═══ GLOBALS ═══
 var travelData=null;
 var activeDay=0;
 var activeTab='schedule';
@@ -1363,136 +876,7 @@ function parseOpenClosed(hoursStr){
 }
 </script>
 <script>
-// ═══ ATOMIC RENDERERS (v2) ═══
-
-function renderContextHeader(data) {
-  // data: { dotColor?, label?, badgeText?, badgeType? }
-  var html = '<div class="ctx-header">';
-  html += '<div class="ctx-header__left">';
-  if (data.dotColor) html += '<span class="ctx-header__dot" style="background:' + data.dotColor + '"></span>';
-  if (data.label) html += '<span class="ctx-header__label">' + esc(data.label) + '</span>';
-  html += '</div>';
-  if (data.badgeText) html += '<span class="ctx-header__badge ctx-header__badge--' + (data.badgeType || 'meal') + '">' + esc(data.badgeText) + '</span>';
-  html += '</div>';
-  return html;
-}
-
-function renderSectionTitle(text, sub) {
-  var html = '<div class="sec-title">';
-  html += esc(text);
-  if (sub) html += '<div style="font-family:var(--font-mono);font-size:var(--type-info-value-size);font-weight:var(--type-info-value-weight);color:var(--text-secondary);margin-top:4px;">' + esc(sub) + '</div>';
-  html += '</div>';
-  return html;
-}
-
-function renderMenuTable(menuDetail) {
-  // menuDetail: [{ item, price }]
-  if (!menuDetail || !menuDetail.length) return '';
-  var html = '<div class="menu-table">';
-  for (var i = 0; i < menuDetail.length; i++) {
-    var m = menuDetail[i];
-    html += '<div class="menu-table__row">';
-    html += '<span class="menu-table__name">' + esc(m.item || m.name || '') + '</span>';
-    html += '<span class="menu-table__price">' + esc(m.price || '') + '</span>';
-    html += '</div>';
-  }
-  html += '</div>';
-  return html;
-}
-
-function renderInfoTable(entries) {
-  // entries: [{ label, value }]
-  if (!entries || !entries.length) return '';
-  var html = '<div class="info-table">';
-  for (var i = 0; i < entries.length; i++) {
-    var e = entries[i];
-    if (!e.value) continue;
-    html += '<div class="info-table__row">';
-    html += '<span class="info-table__label">' + esc(e.label) + '</span>';
-    html += '<span class="info-table__value">' + esc(e.value) + '</span>';
-    html += '</div>';
-  }
-  html += '</div>';
-  return html;
-}
-
-function renderTagRow(tags) {
-  // tags: [{ text, type? }] or ["text", ...]
-  if (!tags || !tags.length) return '';
-  var html = '<div class="tag-row">';
-  for (var i = 0; i < tags.length; i++) {
-    var t = typeof tags[i] === 'string' ? { text: tags[i] } : tags[i];
-    html += '<span class="tag-row__chip">' + esc(t.text) + '</span>';
-  }
-  html += '</div>';
-  return html;
-}
-
-function renderBadgeV2(text, type) {
-  // type: 'open'|'closed'|'category'|'dad-good'|'dad-caution'|'hiro-good'|'hiro-caution'
-  return '<span class="badge-v2 badge-v2--' + (type || 'category') + '">' + esc(text) + '</span>';
-}
-
-function renderMapLinkV2(latOrUrl, lng, text) {
-  // 오버로드: renderMapLinkV2(url, text) 또는 renderMapLinkV2(lat, lng, text)
-  var url, label;
-  if (typeof latOrUrl === 'string' && !lng) {
-    // renderMapLinkV2(url) 형태
-    url = latOrUrl; label = text || '지도에서 보기';
-  } else if (typeof latOrUrl === 'string' && typeof lng === 'string') {
-    // renderMapLinkV2(mapUrl, text) 형태 — lng가 text
-    url = latOrUrl; label = lng || '지도에서 보기';
-  } else if (latOrUrl && lng && typeof lng === 'number') {
-    // renderMapLinkV2(lat, lng, text) 형태
-    url = 'https://map.naver.com/v5/search/' + latOrUrl + ',' + lng;
-    label = text || '지도에서 보기';
-  } else {
-    return '';
-  }
-  if (!url) return '';
-  var html = '<a class="map-link-v2" href="' + escAttr(url) + '" target="_blank" rel="noopener">';
-  html += '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
-  html += esc(label);
-  html += '</a>';
-  return html;
-}
-
-function renderChevronV2(text) {
-  var label = text || '상세보기';
-  var html = '<div class="chevron-v2">';
-  html += '<svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  html += '<span>' + esc(label) + '</span>';
-  html += '</div>';
-  return html;
-}
-
-// ═══ COMPOUND RENDERERS (v2) ═══
-
-function renderSectionHero(label, title, subtitle) {
-  var html = '<div class="sec-hero">';
-  html += '<div class="sec-hero__label">' + esc(label) + '</div>';
-  html += '<div class="sec-hero__title">' + esc(title) + '</div>';
-  if (subtitle) html += '<div class="sec-hero__subtitle">' + esc(subtitle) + '</div>';
-  html += '</div>';
-  return html;
-}
-
-function renderAltSection(data) {
-  // data: { title, desc, tags[] }
-  var html = '<div class="alt-section">';
-  html += '<div class="alt-section__header">';
-  html += '<span class="alt-section__title">' + esc(data.title) + '</span>';
-  if (data.desc) {
-    html += '<span class="alt-section__dash">—</span>';
-    html += '<span class="alt-section__desc">' + esc(data.desc) + '</span>';
-  }
-  html += '</div>';
-  if (data.tags && data.tags.length) html += '<div class="alt-section__tags">' + renderTagRow(data.tags) + '</div>';
-  html += '</div>';
-  return html;
-}
-
-// ═══ PAGE RENDERERS ═══
+// ═══ SCHEDULE RENDERING ═══
 
 function isStayItem(item){
   if(!item.title) return false;
@@ -1610,17 +994,15 @@ function renderOptionCard(opt,item){
   if(showOptionDist&&opt.lat&&opt.lng){var km=haversineKm(userLat,userLng,opt.lat,opt.lng);html+='<span class="option-dist">'+(km<1?km.toFixed(1):Math.round(km))+'km</span>'}
   html+='</div></summary>';
   html+='<div class="option-body">';
-  if(opt.menuDetail&&opt.menuDetail.length){var fmtMenu=opt.menuDetail.map(function(m){return{item:m.item,price:m.price?Number(m.price).toLocaleString()+'원':''}});html+=renderMenuTable(fmtMenu)}
-  var optInfoEntries=[];
-  if(opt.priceRange) optInfoEntries.push({label:'가격대',value:opt.priceRange});
-  if(opt.hours) optInfoEntries.push({label:'영업시간',value:opt.hours});
-  if(opt.loc) optInfoEntries.push({label:'위치',value:opt.loc});
-  html+=renderInfoTable(optInfoEntries);
+  if(opt.menuDetail&&opt.menuDetail.length){opt.menuDetail.forEach(function(m){html+='<div class="option-info">'+esc(m.item);if(m.price) html+='<span>'+Number(m.price).toLocaleString()+'원</span>';html+='</div>'})}
+  if(opt.priceRange) html+='<div class="option-info"><span class="option-info-label">가격대</span>'+esc(opt.priceRange)+'</div>';
+  if(opt.hours) html+='<div class="option-info"><span class="option-info-label">영업시간</span>'+esc(opt.hours)+'</div>';
+  if(opt.loc) html+='<div class="option-info"><span class="option-info-label">위치</span>'+esc(opt.loc)+'</div>';
   var badges=[];
-  if(opt.dad==='good') badges.push(renderBadgeV2('아빠 OK','dad-good'));
-  if(opt.dad==='caution') badges.push(renderBadgeV2('아빠 주의'+(opt.dadNote?' · '+opt.dadNote:''),'dad-caution'));
-  if(opt.hiro==='good') badges.push(renderBadgeV2('히로 OK','hiro-good'));
-  if(opt.hiro==='caution') badges.push(renderBadgeV2('히로 주의'+(opt.hiroNote?' · '+opt.hiroNote:''),'hiro-caution'));
+  if(opt.dad==='good') badges.push('<span class="badge badge-dad-good">아빠 OK</span>');
+  if(opt.dad==='caution') badges.push('<span class="badge badge-dad-caution">아빠 주의'+(opt.dadNote?' · '+esc(opt.dadNote):'')+'</span>');
+  if(opt.hiro==='good') badges.push('<span class="badge badge-hiro-good">히로 OK</span>');
+  if(opt.hiro==='caution') badges.push('<span class="badge badge-hiro-caution">히로 주의'+(opt.hiroNote?' · '+esc(opt.hiroNote):'')+'</span>');
   if(badges.length) html+='<div class="option-badges">'+badges.join('')+'</div>';
   if(opt.mapUrl) html+='<a class="option-map-link" href="'+escAttr(opt.mapUrl)+'" target="_blank">지도에서 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>';
   html+='</div></details>';
@@ -1647,7 +1029,7 @@ function renderItemCard(item){
   var isVisited=item.visited===true;
   var isSkipped=item.status==='skipped';
   var titleClass=isSkipped?' skipped':'';
-  var cardClass='item-card sched-item'+(isVisited?' visited sched-item--visited':'')+(isSkipped?' skipped sched-item--skipped':'');
+  var cardClass='item-card'+(isVisited?' visited':'')+(isSkipped?' skipped':'');
 
   var html='<div class="'+cardClass+'">';
   html+='<div class="item-display">';
@@ -1702,11 +1084,19 @@ function renderDayContent(){
   var progress=totalItems>0?(doneItems/totalItems*100):0;
 
   var html='';
-  html+='<div class="day-hero">';
-  html+='<div class="day-hero__title">'+esc(day.title)+'</div>';
-  html+='<div class="day-hero__keyword">'+day.dayNum+'일차 · '+doneItems+'/'+totalItems+' 완료</div>';
-  html+='<div class="day-hero__progress"><div class="day-hero__progress-bar" style="width:'+progress+'%"></div></div>';
-  html+='<div class="day-hero__progress-text">'+Math.round(progress)+'% 진행</div>';
+  html+='<div class="display-card">';
+  html+='<div class="display-screen">';
+  html+='<div class="display-header">';
+  html+='<span class="display-label">일정</span>';
+  html+='<div class="display-indicator">';
+  for(var i=0;i<totalItems;i++){html+='<span class="'+(i<doneItems?'on':'')+'"></span>'}
+  html+='</div></div>';
+  html+='<div class="day-title-display">'+esc(day.title)+'</div>';
+  html+='<div class="day-subtitle">'+day.dayNum+'일차 / '+doneItems+'/'+totalItems+' 완료</div>';
+  html+='</div>';
+  html+='<div class="level-meter">';
+  html+='<div class="meter-bar"><div class="meter-fill" style="width:'+progress+'%"></div></div>';
+  html+='<div class="meter-ticks"><span class="meter-tick">0%</span><span class="meter-tick" style="color:var(--accent)">'+Math.round(progress)+'%</span><span class="meter-tick">100%</span></div></div>';
   html+='</div>';
 
   html+='<div class="items-list">';
@@ -1720,7 +1110,11 @@ function renderDayContent(){
 // ═══ PLACES TAB ═══
 function renderPlaces(days){
   var html='';
-  html+=renderSectionHero('Places', '장소 가이드', '주요 관광지 · 아이 동반 팁');
+  html+='<div class="section-hero fade-up">';
+  html+='<div class="section-label">Places</div>';
+  html+='<div class="section-title">장소 가이드</div>';
+  html+='<div class="section-subtitle">주요 관광지 · 아이 동반 팁</div>';
+  html+='</div>';
 
   var seen={};var places=[];
   days.forEach(function(day){
@@ -1778,33 +1172,24 @@ function renderGuidePlace(sp,idx,days){
   var g=sp.guide;if(!g) return '';
   var visited=isPlaceVisited(sp.name,days);
   var review=getPlaceReview(sp.name,days);
-
-  var html='<details class="place-card-v2 fade-up" data-section="places"';
-  if(visited) html+=' data-visited="true"';
+  var html='<details class="card fade-up'+(visited?' visited':'')+'" data-section="places"';
   html+=' style="animation-delay:'+(idx*0.05)+'s">';
-
-  // summary
   html+='<summary>';
-  html+='<div class="place-card-v2__header">';
-  html+='<span class="place-card-v2__name">'+esc(sp.name)+'</span>';
-  html+='<div style="display:flex;align-items:center;gap:8px">';
-  if(visited) html+=renderBadgeV2('방문','open');
-  html+=renderChevronV2();
+  html+='<div class="card-top">';
+  html+='<span class="card-name">'+esc(sp.name)+'</span>';
+  if(visited) html+='<span class="visit-badge">&#10003;</span>';
+  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
   html+='</div>';
-  html+='</div>';
-  if(sp.subtitle) html+='<div class="place-card-v2__sub">'+esc(sp.subtitle)+'</div>';
+  if(sp.subtitle) html+='<div class="card-sub">'+esc(sp.subtitle)+'</div>';
   var placeDistKm=getPlaceDistKm(sp.name);
   if(placeDistKm!==null&&placeDistKm<100){
-    html+='<div style="font-family:var(--font-mono);font-size:var(--type-tag-size);color:var(--accent-blue);margin-top:4px">'+(placeDistKm<1?placeDistKm.toFixed(1):Math.round(placeDistKm))+'km</div>';
+    html+='<div class="rest-status-row"><span class="rest-dist">'+(placeDistKm<1?placeDistKm.toFixed(1):Math.round(placeDistKm))+'km</span></div>';
   }
   if(review) html+='<div class="review-text">"'+esc(review)+'"</div>';
   html+='</summary>';
-
-  // body
-  html+='<div class="place-card-v2__body">';
+  html+='<div class="card-body">';
   if(g.mustDo&&g.mustDo.length>0){
-    html+='<div><div class="place-card-v2__section-label">Must-Do</div>';
-    html+='<ul class="place-card-v2__list">';
+    html+='<div class="place-section"><div class="place-section-label">Must-Do</div><ul class="place-list">';
     g.mustDo.forEach(function(m){html+='<li>'+esc(m)+'</li>'});
     html+='</ul></div>';
   }
@@ -1812,31 +1197,28 @@ function renderGuidePlace(sp,idx,days){
     var bt=g.babyTips;
     var hasBt=bt.stroller||bt.nursingRoom||bt.restroom||(bt.restSpots&&bt.restSpots.length)||bt.recommendedRoute;
     if(hasBt){
-      html+='<div><div class="place-card-v2__section-label">아이 동반 팁</div>';
-      var btEntries=[];
-      if(bt.stroller) btEntries.push({label:'유모차',value:bt.stroller});
-      if(bt.nursingRoom) btEntries.push({label:'수유실',value:bt.nursingRoom});
-      if(bt.restroom) btEntries.push({label:'화장실',value:bt.restroom});
-      if(bt.restSpots&&bt.restSpots.length) btEntries.push({label:'쉴 곳',value:bt.restSpots.join(', ')});
-      if(bt.recommendedRoute) btEntries.push({label:'추천 동선',value:bt.recommendedRoute});
-      html+=renderInfoTable(btEntries);
+      html+='<div class="place-section"><div class="place-section-label">아이 동반 팁</div>';
+      if(bt.stroller){html+='<div class="baby-tip"><div class="baby-tip-label">유모차</div><div class="baby-tip-text">'+esc(bt.stroller)+'</div></div>'}
+      if(bt.nursingRoom){html+='<div class="baby-tip"><div class="baby-tip-label">수유실</div><div class="baby-tip-text">'+esc(bt.nursingRoom)+'</div></div>'}
+      if(bt.restroom){html+='<div class="baby-tip"><div class="baby-tip-label">화장실</div><div class="baby-tip-text">'+esc(bt.restroom)+'</div></div>'}
+      if(bt.restSpots&&bt.restSpots.length){html+='<div class="baby-tip"><div class="baby-tip-label">쉴 곳</div><div class="baby-tip-text">'+bt.restSpots.map(esc).join(', ')+'</div></div>'}
+      if(bt.recommendedRoute){html+='<div class="baby-tip"><div class="baby-tip-label">추천 동선</div><div class="baby-tip-text">'+esc(bt.recommendedRoute)+'</div></div>'}
       html+='</div>';
     }
   }
   if(g.practicalInfo){
-    html+='<div><div class="place-card-v2__section-label">실용 정보</div>';
+    html+='<div class="place-section"><div class="place-section-label">실용 정보</div><div class="info-grid">';
     var pi=g.practicalInfo;
-    var piEntries=[];
-    if(pi.address) piEntries.push({label:'주소',value:pi.address});
-    if(pi.hours) piEntries.push({label:'운영',value:pi.hours});
-    if(pi.fee) piEntries.push({label:'요금',value:pi.fee});
-    if(pi.phone) piEntries.push({label:'전화',value:pi.phone});
-    if(pi.parking) piEntries.push({label:'주차',value:pi.parking});
-    if(pi.timeNeeded) piEntries.push({label:'소요',value:pi.timeNeeded});
-    if(pi.closedDays) piEntries.push({label:'휴무',value:pi.closedDays});
-    if(pi.fromAccommodation) piEntries.push({label:'숙소에서',value:pi.fromAccommodation});
-    html+=renderInfoTable(piEntries);
-    if(pi.mapUrl) html+=renderMapLinkV2(pi.mapUrl,'지도 보기');
+    if(pi.address) html+='<div class="info-label">주소</div><div class="info-value">'+esc(pi.address)+'</div>';
+    if(pi.hours) html+='<div class="info-label">운영</div><div class="info-value">'+esc(pi.hours)+'</div>';
+    if(pi.fee) html+='<div class="info-label">요금</div><div class="info-value">'+esc(pi.fee)+'</div>';
+    if(pi.phone) html+='<div class="info-label">전화</div><div class="info-value">'+esc(pi.phone)+'</div>';
+    if(pi.parking) html+='<div class="info-label">주차</div><div class="info-value">'+esc(pi.parking)+'</div>';
+    if(pi.timeNeeded) html+='<div class="info-label">소요</div><div class="info-value">'+esc(pi.timeNeeded)+'</div>';
+    if(pi.closedDays) html+='<div class="info-label">휴무</div><div class="info-value">'+esc(pi.closedDays)+'</div>';
+    if(pi.fromAccommodation) html+='<div class="info-label">숙소에서</div><div class="info-value">'+esc(pi.fromAccommodation)+'</div>';
+    html+='</div>';
+    if(pi.mapUrl) html+='<a href="'+escAttr(pi.mapUrl)+'" target="_blank" class="rest-map-link"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>지도 보기</a>';
     html+='</div>';
   }
   html+='</div></details>';
@@ -1922,7 +1304,11 @@ function renderRestaurants(days){
   allRestaurants=extractRestaurants(days);
   allRestaurants=sortRestaurants(allRestaurants);
   var html='';
-  html+=renderSectionHero('Restaurants', '식당 · 카페 가이드', allRestaurants.length+'곳 · 메뉴 · 알레르기 정보');
+  html+='<div class="section-hero fade-up">';
+  html+='<div class="section-label">Restaurants</div>';
+  html+='<div class="section-title">식당 · 카페 가이드</div>';
+  html+='<div class="section-subtitle">'+allRestaurants.length+'곳 · 메뉴 · 알레르기 정보</div>';
+  html+='</div>';
   html+='<div id="restList">'+renderRestCards(allRestaurants,days)+'</div>';
   return html;
 }
@@ -1934,59 +1320,34 @@ function renderRestCards(list,days){
     var oc=parseOpenClosed(r.hours);
     var visited=isRestVisited(r.name,days);
     var review=getRestReview(r.name,days);
-
-    html+='<details class="rest-card-v2 fade-up" data-section="restaurants"';
+    html+='<details class="card fade-up'+(visited?' visited':'')+'" data-section="restaurants"';
     html+=' data-type="'+escAttr(r.type||r.cat||'meal')+'"';
-    if(visited) html+=' data-visited="true"';
     html+=' style="animation-delay:'+(i*0.04)+'s">';
-
-    // summary
     html+='<summary>';
-    html+='<div class="rest-card-v2__header">';
-    html+='<span class="rest-card-v2__name">'+esc(r.name)+'</span>';
-    html+='<div class="rest-card-v2__right">';
-    if(r.rating) html+='<span class="rest-card-v2__score">'+r.rating.toFixed(1)+'</span>';
-    if(oc&&oc.status!=='unknown') html+=renderBadgeV2(oc.label||oc.text,oc.status);
-    if(visited) html+=renderBadgeV2('방문','open');
-    html+=renderChevronV2();
+    html+='<div class="card-top">';
+    html+='<span class="card-name">'+esc(r.name)+'</span>';
+    if(r.rating) html+='<span class="rest-rating">'+r.rating.toFixed(1)+'</span>';
+    if(visited) html+='<span class="visit-badge">&#10003;</span>';
+    html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
     html+='</div>';
+    html+='<div class="rest-meta">';
+    if(r.menu) html+='<span class="rest-menu-brief">'+esc(r.menu)+'</span>';
     html+='</div>';
-    // sub line
-    var subParts=[];
-    if(r.menu) subParts.push(esc(r.menu));
-    if(r.distKm!==null&&r.distKm<100) subParts.push((r.distKm<1?r.distKm.toFixed(1):Math.round(r.distKm))+'km');
-    if(subParts.length) html+='<div class="rest-card-v2__sub">'+subParts.join(' · ')+'</div>';
+    html+='<div class="rest-status-row">';
+    if(oc&&oc.status!=='unknown') html+='<span class="open-tag '+oc.status+'">'+(oc.label||oc.text)+'</span>';
+    if(r.distKm!==null&&r.distKm<100) html+='<span class="rest-dist">'+(r.distKm<1?r.distKm.toFixed(1):Math.round(r.distKm))+'km</span>';
+    html+='</div>';
     if(review) html+='<div class="review-text">"'+esc(review)+'"</div>';
     html+='</summary>';
-
-    // body
-    html+='<div class="rest-card-v2__body">';
-    // MenuTable
-    if(r.menuDetail&&r.menuDetail.length>0){
-      var fmtMenu=r.menuDetail.map(function(m){return{item:m.item,price:m.price?Number(m.price).toLocaleString()+'원':''}});
-      html+=renderMenuTable(fmtMenu);
-      html+='<div class="rest-card-v2__divider"></div>';
-    }
-    // InfoTable
-    var infoEntries=[];
-    if(r.hours) infoEntries.push({label:'영업시간',value:r.hours});
-    if(r.loc) infoEntries.push({label:'위치',value:r.loc});
-    if(r.priceRange) infoEntries.push({label:'가격대',value:r.priceRange});
-    if(infoEntries.length){
-      html+=renderInfoTable(infoEntries);
-      html+='<div class="rest-card-v2__divider"></div>';
-    }
-    // TagRow (badges)
-    var tagItems=[];
-    if(r.dad==='good') tagItems.push({text:'아빠 OK'});
-    if(r.dad==='caution') tagItems.push({text:'아빠 주의'+(r.dadNote?' · '+r.dadNote:'')});
-    if(r.hiro==='good') tagItems.push({text:'히로 OK'});
-    if(r.hiro==='caution') tagItems.push({text:'히로 주의'+(r.hiroNote?' · '+r.hiroNote:'')});
-    if(tagItems.length) html+=renderTagRow(tagItems);
-    // Meals info
-    if(r.meals.length>0){var um=[];r.meals.forEach(function(m){if(um.indexOf(m)===-1) um.push(m)});html+='<div style="font-family:var(--font-mono);font-size:var(--type-tag-size);color:var(--text-secondary);letter-spacing:0.3px">'+um.join(' / ')+'</div>'}
-    // MapLink
-    if(r.mapUrl) html+=renderMapLinkV2(r.mapUrl,'지도에서 보기');
+    html+='<div class="card-body">';
+    if(r.menuDetail&&r.menuDetail.length>0){r.menuDetail.forEach(function(m){html+='<div class="rest-info">'+esc(m.item);if(m.price) html+=' <span style="color:var(--text-light)">'+formatPrice(m.price)+'</span>';html+='</div>'})}
+    else if(r.menu){html+='<div class="rest-info"><span class="rest-info-label">메뉴</span>'+esc(r.menu)+'</div>'}
+    if(r.priceRange) html+='<div class="rest-info"><span class="rest-info-label">가격대</span>'+esc(r.priceRange)+'</div>';
+    if(r.hours) html+='<div class="rest-info"><span class="rest-info-label">영업시간</span>'+esc(r.hours)+'</div>';
+    if(r.loc) html+='<div class="rest-info"><span class="rest-info-label">위치</span>'+esc(r.loc)+'</div>';
+    var badges=buildBadges(r);if(badges) html+='<div class="badges">'+badges+'</div>';
+    if(r.meals.length>0){var um=[];r.meals.forEach(function(m){if(um.indexOf(m)===-1) um.push(m)});html+='<div class="rest-meals">'+um.join(' / ')+'</div>'}
+    if(r.mapUrl){html+='<a class="rest-map-link" href="'+escAttr(r.mapUrl)+'" target="_blank" rel="noopener">지도에서 보기<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>'}
     html+='</div></details>';
   });
   return html;
@@ -1997,7 +1358,11 @@ function renderRestCards(list,days){
 function renderStay(){
   var s=STAY_DATA;
   var html='';
-  html+=renderSectionHero('Stay', '숙소 안내', s.name+' · 5박');
+  html+='<div class="section-hero fade-up">';
+  html+='<div class="section-label">Stay</div>';
+  html+='<div class="section-title">숙소 안내</div>';
+  html+='<div class="section-subtitle">'+esc(s.name)+' · 5박</div>';
+  html+='</div>';
 
   html+='<details class="card fade-up" open>';
   html+='<summary><div class="card-top"><span class="card-name">'+esc(s.name)+'</span>';
@@ -2156,14 +1521,14 @@ function requestRestLocation(){
 }
 
 function applyRestFilters(){
-  document.querySelectorAll('[data-section="restaurants"]').forEach(function(card){
+  document.querySelectorAll('.card[data-section="restaurants"]').forEach(function(card){
     if(restTypeFilter!=='all'&&card.getAttribute('data-type')!==restTypeFilter) card.style.display='none';
     else card.style.display='';
   });
 }
 </script>
 <script>
-// ═══ DATA FETCH & INIT ═══
+// ═══ APP INIT ═══
 (function init(){
   fetchData();
 })();
