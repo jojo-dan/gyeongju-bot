@@ -14,8 +14,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&family=Noto+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ═══ RESET & BASE ═══ */
 *{margin:0;padding:0;box-sizing:border-box}
 
+/* ═══ DESIGN TOKENS ═══ */
 :root{
   /* ── Background ── */
   --bg: #F7F7F7;
@@ -137,13 +139,6 @@ body{
   overflow-x:hidden;
 }
 
-/* grain — v2에서 비활성화 */
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat:repeat;background-size:256px;
-}
-
 /* dark mode */
 [data-theme="dark"]{
   --bg: #111111;
@@ -200,6 +195,8 @@ body::before{
   }
 }
 
+/* ═══ LAYOUT ═══ */
+
 /* theme toggle */
 .theme-toggle{
   position:fixed;top:12px;right:16px;z-index:200;
@@ -215,10 +212,6 @@ body::before{
 /* header */
 .header{
   padding:40px 24px 28px;text-align:center;position:relative;
-}
-/* v2: 헤더 액센트 라인 제거 */
-.header::after{
-  display:none;
 }
 .header h1{
   font-family:var(--serif);font-size:34px;font-weight:700;
@@ -306,42 +299,12 @@ body::before{
 }
 </style>
 <style>
-/* section hero */
-.section-hero{
-  background:var(--hero);border-radius:var(--r-card);box-shadow:var(--shadow-hero);
-  padding:28px 22px;margin-bottom:16px;position:relative;overflow:hidden;
-}
-.section-hero::before{
-  content:'';position:absolute;top:-20px;right:-20px;
-  width:120px;height:120px;border-radius:50%;
-  background:rgba(196,93,62,0.12);pointer-events:none;
-}
-.section-hero::after{
-  content:'';position:absolute;bottom:-30px;left:-10px;
-  width:80px;height:80px;border-radius:50%;
-  background:rgba(123,143,107,0.08);pointer-events:none;
-}
-.section-label{
-  font-family:var(--mono);font-size:11px;font-weight:500;
-  color:var(--accent-soft);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;
-}
-.section-title{
-  font-family:var(--serif);font-size:26px;font-weight:700;
-  color:var(--hero-text);letter-spacing:-0.3px;line-height:1.25;
-}
-.section-subtitle{
-  font-family:var(--body);font-size:calc(13px + var(--delta, 0px));
-  color:var(--hero-dim);margin-top:6px;font-weight:400;
-}
+/* ═══ LEGACY COMPONENTS ═══ */
 
 /* display card (schedule) */
 .display-card{
   background:var(--hero);border-radius:var(--r-card);box-shadow:var(--shadow-hero);
   overflow:hidden;margin-bottom:16px;position:relative;
-}
-/* v2: 장식 원형 제거 */
-.display-card::before{
-  display:none;
 }
 .display-screen{padding:28px 22px;position:relative}
 .display-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
@@ -396,6 +359,8 @@ body::before{
   color:var(--text-light);margin-top:3px;line-height:1.4;padding-right:32px;
 }
 .card-body{border-top:1px solid var(--border);margin:0 20px;padding:16px 0 18px}
+
+/* ═══ UTILITIES ═══ */
 
 /* fade animation */
 .fade-up{opacity:0;transform:translateY(16px);animation:fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) forwards}
@@ -1164,7 +1129,7 @@ details[open] .chevron-v2 svg { transform: rotate(90deg); }
 
 <div class="toast" id="toast"></div>
 <script>
-// ═══ THEME ═══
+// ═══ THEME & FONT SIZE ═══
 function initTheme(){
   var saved=localStorage.getItem('gj_theme');
   document.documentElement.setAttribute('data-theme',saved||'light');
@@ -1188,7 +1153,7 @@ function updateThemeIcon(){
 }
 initTheme();
 
-// ═══ FONT SIZE ═══
+// ── FONT SIZE ──
 var fontSizes=['medium','large','small'];
 function initFontSize(){
   var saved=localStorage.getItem('gj_fontsize')||'large';
@@ -1231,7 +1196,7 @@ function showError(msg){var el=document.getElementById('errorBanner');el.textCon
 function hideError(){document.getElementById('errorBanner').classList.remove('show')}
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000)}
 
-// ═══ GLOBALS ═══
+// ═══ STATIC DATA ═══
 var travelData=null;
 var activeDay=0;
 var activeTab='schedule';
@@ -1527,7 +1492,7 @@ function renderAltSection(data) {
   return html;
 }
 
-// ═══ SCHEDULE RENDERING ═══
+// ═══ PAGE RENDERERS ═══
 
 function isStayItem(item){
   if(!item.title) return false;
@@ -2198,7 +2163,7 @@ function applyRestFilters(){
 }
 </script>
 <script>
-// ═══ APP INIT ═══
+// ═══ DATA FETCH & INIT ═══
 (function init(){
   fetchData();
 })();
