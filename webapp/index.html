@@ -842,6 +842,273 @@ body::before{
 }
 .chevron-v2 svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
 details[open] .chevron-v2 svg { transform: rotate(90deg); }
+
+/* ═══ COMPOUND COMPONENTS (v2) ═══ */
+
+/* SectionHero */
+.sec-hero {
+  padding: 32px 24px 24px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+}
+.sec-hero__label {
+  font-family: var(--font-mono);
+  font-size: var(--type-tag-size);
+  font-weight: var(--type-label-weight);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+.sec-hero__title {
+  font-family: var(--font-serif);
+  font-size: var(--type-section-title-size);
+  font-weight: var(--type-section-title-weight);
+  letter-spacing: var(--type-section-title-ls);
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.sec-hero__subtitle {
+  font-family: var(--font-mono);
+  font-size: var(--type-info-value-size);
+  color: var(--text-secondary);
+}
+
+/* RestaurantCard (v2) */
+.rest-card-v2 {
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  margin-bottom: 12px;
+  box-shadow: var(--card-shadow);
+}
+.rest-card-v2 summary {
+  list-style: none;
+  cursor: pointer;
+  padding: var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.rest-card-v2 summary::-webkit-details-marker { display: none; }
+.rest-card-v2__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.rest-card-v2__name {
+  font-family: var(--font-serif);
+  font-size: var(--type-restaurant-name-size);
+  font-weight: var(--type-restaurant-name-weight);
+  color: var(--text-primary);
+}
+.rest-card-v2__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.rest-card-v2__score {
+  font-family: var(--font-mono);
+  font-size: var(--type-score-size);
+  font-weight: var(--type-score-weight);
+  color: var(--text-primary);
+}
+.rest-card-v2__sub {
+  font-family: var(--font-mono);
+  font-size: var(--type-info-value-size);
+  color: var(--text-secondary);
+}
+.rest-card-v2__body {
+  padding: 0 var(--card-padding) var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-inner-gap);
+}
+.rest-card-v2__divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0;
+}
+.rest-card-v2[data-visited="true"] {
+  border-left: 3px solid var(--accent-green);
+}
+
+/* PlaceCard (v2) */
+.place-card-v2 {
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  margin-bottom: 12px;
+  box-shadow: var(--card-shadow);
+}
+.place-card-v2 summary {
+  list-style: none;
+  cursor: pointer;
+  padding: var(--card-padding);
+}
+.place-card-v2 summary::-webkit-details-marker { display: none; }
+.place-card-v2__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.place-card-v2__name {
+  font-family: var(--font-serif);
+  font-size: var(--type-restaurant-name-size);
+  font-weight: var(--type-restaurant-name-weight);
+  color: var(--text-primary);
+}
+.place-card-v2__sub {
+  font-family: var(--font-mono);
+  font-size: var(--type-info-value-size);
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.place-card-v2__body {
+  padding: 0 var(--card-padding) var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-inner-gap);
+}
+.place-card-v2__section-label {
+  font-family: var(--font-mono);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-badge-weight);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.place-card-v2__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.place-card-v2__list li {
+  font-family: var(--font-mono);
+  font-size: var(--type-info-value-size);
+  color: var(--text-primary);
+  padding: 4px 0;
+  padding-left: 16px;
+  position: relative;
+}
+.place-card-v2__list li::before {
+  content: '·';
+  position: absolute;
+  left: 4px;
+  color: var(--text-secondary);
+}
+.place-card-v2[data-visited="true"] {
+  border-left: 3px solid var(--accent-green);
+}
+
+/* DayHeroCard */
+.day-hero {
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  margin: 12px 16px;
+  padding: var(--card-padding);
+  box-shadow: var(--card-shadow);
+}
+.day-hero__title {
+  font-family: var(--font-serif);
+  font-size: var(--type-section-title-size);
+  font-weight: var(--type-section-title-weight);
+  letter-spacing: var(--type-section-title-ls);
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.day-hero__keyword {
+  font-family: var(--font-mono);
+  font-size: var(--type-info-value-size);
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+.day-hero__progress {
+  background: var(--border);
+  border-radius: 4px;
+  height: 4px;
+  overflow: hidden;
+}
+.day-hero__progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--accent-green);
+  transition: width 0.3s ease;
+}
+.day-hero__progress-text {
+  font-family: var(--font-mono);
+  font-size: var(--type-tag-size);
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+/* ScheduleItemCard (v2 병행) */
+.sched-item {
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  padding: 16px var(--card-padding);
+  margin-bottom: 8px;
+  box-shadow: var(--card-shadow);
+  transition: opacity 0.3s ease;
+}
+.sched-item--visited { opacity: 0.65; }
+.sched-item--skipped { opacity: 0.4; }
+.sched-item__title {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.sched-item__time {
+  font-family: var(--font-mono);
+  font-size: var(--type-info-value-size);
+  color: var(--text-secondary);
+}
+.sched-item__distance {
+  font-family: var(--font-mono);
+  font-size: var(--type-tag-size);
+  color: var(--accent-blue);
+  margin-top: 4px;
+}
+
+/* AltSection */
+.alt-section {
+  background: var(--bg-card);
+  border: var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  margin-bottom: 12px;
+  box-shadow: var(--card-shadow);
+}
+.alt-section__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.alt-section__title {
+  font-family: var(--font-serif);
+  font-size: var(--type-alt-heading-size);
+  font-weight: var(--type-alt-heading-weight);
+  color: var(--text-primary);
+}
+.alt-section__dash {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--border);
+}
+.alt-section__desc {
+  font-family: var(--font-mono);
+  font-size: var(--type-info-value-size);
+  color: var(--text-secondary);
+}
+.alt-section__tags { margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -1201,11 +1468,24 @@ function renderBadgeV2(text, type) {
   return '<span class="badge-v2 badge-v2--' + (type || 'category') + '">' + esc(text) + '</span>';
 }
 
-function renderMapLinkV2(lat, lng, text) {
-  if (!lat || !lng) return '';
-  var url = 'https://map.naver.com/v5/search/' + lat + ',' + lng;
-  var label = text || '지도에서 보기';
-  var html = '<a class="map-link-v2" href="' + url + '" target="_blank" rel="noopener">';
+function renderMapLinkV2(latOrUrl, lng, text) {
+  // 오버로드: renderMapLinkV2(url, text) 또는 renderMapLinkV2(lat, lng, text)
+  var url, label;
+  if (typeof latOrUrl === 'string' && !lng) {
+    // renderMapLinkV2(url) 형태
+    url = latOrUrl; label = text || '지도에서 보기';
+  } else if (typeof latOrUrl === 'string' && typeof lng === 'string') {
+    // renderMapLinkV2(mapUrl, text) 형태 — lng가 text
+    url = latOrUrl; label = lng || '지도에서 보기';
+  } else if (latOrUrl && lng && typeof lng === 'number') {
+    // renderMapLinkV2(lat, lng, text) 형태
+    url = 'https://map.naver.com/v5/search/' + latOrUrl + ',' + lng;
+    label = text || '지도에서 보기';
+  } else {
+    return '';
+  }
+  if (!url) return '';
+  var html = '<a class="map-link-v2" href="' + escAttr(url) + '" target="_blank" rel="noopener">';
   html += '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
   html += esc(label);
   html += '</a>';
@@ -1217,6 +1497,32 @@ function renderChevronV2(text) {
   var html = '<div class="chevron-v2">';
   html += '<svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   html += '<span>' + esc(label) + '</span>';
+  html += '</div>';
+  return html;
+}
+
+// ═══ COMPOUND RENDERERS (v2) ═══
+
+function renderSectionHero(label, title, subtitle) {
+  var html = '<div class="sec-hero">';
+  html += '<div class="sec-hero__label">' + esc(label) + '</div>';
+  html += '<div class="sec-hero__title">' + esc(title) + '</div>';
+  if (subtitle) html += '<div class="sec-hero__subtitle">' + esc(subtitle) + '</div>';
+  html += '</div>';
+  return html;
+}
+
+function renderAltSection(data) {
+  // data: { title, desc, tags[] }
+  var html = '<div class="alt-section">';
+  html += '<div class="alt-section__header">';
+  html += '<span class="alt-section__title">' + esc(data.title) + '</span>';
+  if (data.desc) {
+    html += '<span class="alt-section__dash">—</span>';
+    html += '<span class="alt-section__desc">' + esc(data.desc) + '</span>';
+  }
+  html += '</div>';
+  if (data.tags && data.tags.length) html += '<div class="alt-section__tags">' + renderTagRow(data.tags) + '</div>';
   html += '</div>';
   return html;
 }
@@ -1376,7 +1682,7 @@ function renderItemCard(item){
   var isVisited=item.visited===true;
   var isSkipped=item.status==='skipped';
   var titleClass=isSkipped?' skipped':'';
-  var cardClass='item-card'+(isVisited?' visited':'')+(isSkipped?' skipped':'');
+  var cardClass='item-card sched-item'+(isVisited?' visited sched-item--visited':'')+(isSkipped?' skipped sched-item--skipped':'');
 
   var html='<div class="'+cardClass+'">';
   html+='<div class="item-display">';
@@ -1431,19 +1737,11 @@ function renderDayContent(){
   var progress=totalItems>0?(doneItems/totalItems*100):0;
 
   var html='';
-  html+='<div class="display-card">';
-  html+='<div class="display-screen">';
-  html+='<div class="display-header">';
-  html+='<span class="display-label">일정</span>';
-  html+='<div class="display-indicator">';
-  for(var i=0;i<totalItems;i++){html+='<span class="'+(i<doneItems?'on':'')+'"></span>'}
-  html+='</div></div>';
-  html+='<div class="day-title-display">'+esc(day.title)+'</div>';
-  html+='<div class="day-subtitle">'+day.dayNum+'일차 / '+doneItems+'/'+totalItems+' 완료</div>';
-  html+='</div>';
-  html+='<div class="level-meter">';
-  html+='<div class="meter-bar"><div class="meter-fill" style="width:'+progress+'%"></div></div>';
-  html+='<div class="meter-ticks"><span class="meter-tick">0%</span><span class="meter-tick" style="color:var(--accent)">'+Math.round(progress)+'%</span><span class="meter-tick">100%</span></div></div>';
+  html+='<div class="day-hero">';
+  html+='<div class="day-hero__title">'+esc(day.title)+'</div>';
+  html+='<div class="day-hero__keyword">'+day.dayNum+'일차 · '+doneItems+'/'+totalItems+' 완료</div>';
+  html+='<div class="day-hero__progress"><div class="day-hero__progress-bar" style="width:'+progress+'%"></div></div>';
+  html+='<div class="day-hero__progress-text">'+Math.round(progress)+'% 진행</div>';
   html+='</div>';
 
   html+='<div class="items-list">';
@@ -1457,11 +1755,7 @@ function renderDayContent(){
 // ═══ PLACES TAB ═══
 function renderPlaces(days){
   var html='';
-  html+='<div class="section-hero fade-up">';
-  html+='<div class="section-label">Places</div>';
-  html+='<div class="section-title">장소 가이드</div>';
-  html+='<div class="section-subtitle">주요 관광지 · 아이 동반 팁</div>';
-  html+='</div>';
+  html+=renderSectionHero('Places', '장소 가이드', '주요 관광지 · 아이 동반 팁');
 
   var seen={};var places=[];
   days.forEach(function(day){
@@ -1519,24 +1813,33 @@ function renderGuidePlace(sp,idx,days){
   var g=sp.guide;if(!g) return '';
   var visited=isPlaceVisited(sp.name,days);
   var review=getPlaceReview(sp.name,days);
-  var html='<details class="card fade-up'+(visited?' visited':'')+'" data-section="places"';
+
+  var html='<details class="place-card-v2 fade-up" data-section="places"';
+  if(visited) html+=' data-visited="true"';
   html+=' style="animation-delay:'+(idx*0.05)+'s">';
+
+  // summary
   html+='<summary>';
-  html+='<div class="card-top">';
-  html+='<span class="card-name">'+esc(sp.name)+'</span>';
-  if(visited) html+='<span class="visit-badge">&#10003;</span>';
-  html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+  html+='<div class="place-card-v2__header">';
+  html+='<span class="place-card-v2__name">'+esc(sp.name)+'</span>';
+  html+='<div style="display:flex;align-items:center;gap:8px">';
+  if(visited) html+=renderBadgeV2('방문','open');
+  html+=renderChevronV2();
   html+='</div>';
-  if(sp.subtitle) html+='<div class="card-sub">'+esc(sp.subtitle)+'</div>';
+  html+='</div>';
+  if(sp.subtitle) html+='<div class="place-card-v2__sub">'+esc(sp.subtitle)+'</div>';
   var placeDistKm=getPlaceDistKm(sp.name);
   if(placeDistKm!==null&&placeDistKm<100){
-    html+='<div class="rest-status-row"><span class="rest-dist">'+(placeDistKm<1?placeDistKm.toFixed(1):Math.round(placeDistKm))+'km</span></div>';
+    html+='<div style="font-family:var(--font-mono);font-size:var(--type-tag-size);color:var(--accent-blue);margin-top:4px">'+(placeDistKm<1?placeDistKm.toFixed(1):Math.round(placeDistKm))+'km</div>';
   }
   if(review) html+='<div class="review-text">"'+esc(review)+'"</div>';
   html+='</summary>';
-  html+='<div class="card-body">';
+
+  // body
+  html+='<div class="place-card-v2__body">';
   if(g.mustDo&&g.mustDo.length>0){
-    html+='<div class="place-section"><div class="place-section-label">Must-Do</div><ul class="place-list">';
+    html+='<div><div class="place-card-v2__section-label">Must-Do</div>';
+    html+='<ul class="place-card-v2__list">';
     g.mustDo.forEach(function(m){html+='<li>'+esc(m)+'</li>'});
     html+='</ul></div>';
   }
@@ -1544,17 +1847,19 @@ function renderGuidePlace(sp,idx,days){
     var bt=g.babyTips;
     var hasBt=bt.stroller||bt.nursingRoom||bt.restroom||(bt.restSpots&&bt.restSpots.length)||bt.recommendedRoute;
     if(hasBt){
-      html+='<div class="place-section"><div class="place-section-label">아이 동반 팁</div>';
-      if(bt.stroller){html+='<div class="baby-tip"><div class="baby-tip-label">유모차</div><div class="baby-tip-text">'+esc(bt.stroller)+'</div></div>'}
-      if(bt.nursingRoom){html+='<div class="baby-tip"><div class="baby-tip-label">수유실</div><div class="baby-tip-text">'+esc(bt.nursingRoom)+'</div></div>'}
-      if(bt.restroom){html+='<div class="baby-tip"><div class="baby-tip-label">화장실</div><div class="baby-tip-text">'+esc(bt.restroom)+'</div></div>'}
-      if(bt.restSpots&&bt.restSpots.length){html+='<div class="baby-tip"><div class="baby-tip-label">쉴 곳</div><div class="baby-tip-text">'+bt.restSpots.map(esc).join(', ')+'</div></div>'}
-      if(bt.recommendedRoute){html+='<div class="baby-tip"><div class="baby-tip-label">추천 동선</div><div class="baby-tip-text">'+esc(bt.recommendedRoute)+'</div></div>'}
+      html+='<div><div class="place-card-v2__section-label">아이 동반 팁</div>';
+      var btEntries=[];
+      if(bt.stroller) btEntries.push({label:'유모차',value:bt.stroller});
+      if(bt.nursingRoom) btEntries.push({label:'수유실',value:bt.nursingRoom});
+      if(bt.restroom) btEntries.push({label:'화장실',value:bt.restroom});
+      if(bt.restSpots&&bt.restSpots.length) btEntries.push({label:'쉴 곳',value:bt.restSpots.join(', ')});
+      if(bt.recommendedRoute) btEntries.push({label:'추천 동선',value:bt.recommendedRoute});
+      html+=renderInfoTable(btEntries);
       html+='</div>';
     }
   }
   if(g.practicalInfo){
-    html+='<div class="place-section"><div class="place-section-label">실용 정보</div>';
+    html+='<div><div class="place-card-v2__section-label">실용 정보</div>';
     var pi=g.practicalInfo;
     var piEntries=[];
     if(pi.address) piEntries.push({label:'주소',value:pi.address});
@@ -1566,7 +1871,7 @@ function renderGuidePlace(sp,idx,days){
     if(pi.closedDays) piEntries.push({label:'휴무',value:pi.closedDays});
     if(pi.fromAccommodation) piEntries.push({label:'숙소에서',value:pi.fromAccommodation});
     html+=renderInfoTable(piEntries);
-    if(pi.mapUrl) html+='<a href="'+escAttr(pi.mapUrl)+'" target="_blank" class="rest-map-link"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>지도 보기</a>';
+    if(pi.mapUrl) html+=renderMapLinkV2(pi.mapUrl,'지도 보기');
     html+='</div>';
   }
   html+='</div></details>';
@@ -1652,11 +1957,7 @@ function renderRestaurants(days){
   allRestaurants=extractRestaurants(days);
   allRestaurants=sortRestaurants(allRestaurants);
   var html='';
-  html+='<div class="section-hero fade-up">';
-  html+='<div class="section-label">Restaurants</div>';
-  html+='<div class="section-title">식당 · 카페 가이드</div>';
-  html+='<div class="section-subtitle">'+allRestaurants.length+'곳 · 메뉴 · 알레르기 정보</div>';
-  html+='</div>';
+  html+=renderSectionHero('Restaurants', '식당 · 카페 가이드', allRestaurants.length+'곳 · 메뉴 · 알레르기 정보');
   html+='<div id="restList">'+renderRestCards(allRestaurants,days)+'</div>';
   return html;
 }
@@ -1668,34 +1969,59 @@ function renderRestCards(list,days){
     var oc=parseOpenClosed(r.hours);
     var visited=isRestVisited(r.name,days);
     var review=getRestReview(r.name,days);
-    html+='<details class="card fade-up'+(visited?' visited':'')+'" data-section="restaurants"';
+
+    html+='<details class="rest-card-v2 fade-up" data-section="restaurants"';
     html+=' data-type="'+escAttr(r.type||r.cat||'meal')+'"';
+    if(visited) html+=' data-visited="true"';
     html+=' style="animation-delay:'+(i*0.04)+'s">';
+
+    // summary
     html+='<summary>';
-    html+='<div class="card-top">';
-    html+='<span class="card-name">'+esc(r.name)+'</span>';
-    if(r.rating) html+='<span class="rest-rating">'+r.rating.toFixed(1)+'</span>';
-    if(visited) html+='<span class="visit-badge">&#10003;</span>';
-    html+='<div class="card-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></div>';
+    html+='<div class="rest-card-v2__header">';
+    html+='<span class="rest-card-v2__name">'+esc(r.name)+'</span>';
+    html+='<div class="rest-card-v2__right">';
+    if(r.rating) html+='<span class="rest-card-v2__score">'+r.rating.toFixed(1)+'</span>';
+    if(oc&&oc.status!=='unknown') html+=renderBadgeV2(oc.label||oc.text,oc.status);
+    if(visited) html+=renderBadgeV2('방문','open');
+    html+=renderChevronV2();
     html+='</div>';
-    html+='<div class="rest-meta">';
-    if(r.menu) html+='<span class="rest-menu-brief">'+esc(r.menu)+'</span>';
     html+='</div>';
-    html+='<div class="rest-status-row">';
-    if(oc&&oc.status!=='unknown') html+='<span class="open-tag '+oc.status+'">'+(oc.label||oc.text)+'</span>';
-    if(r.distKm!==null&&r.distKm<100) html+='<span class="rest-dist">'+(r.distKm<1?r.distKm.toFixed(1):Math.round(r.distKm))+'km</span>';
-    html+='</div>';
+    // sub line
+    var subParts=[];
+    if(r.menu) subParts.push(esc(r.menu));
+    if(r.distKm!==null&&r.distKm<100) subParts.push((r.distKm<1?r.distKm.toFixed(1):Math.round(r.distKm))+'km');
+    if(subParts.length) html+='<div class="rest-card-v2__sub">'+subParts.join(' · ')+'</div>';
     if(review) html+='<div class="review-text">"'+esc(review)+'"</div>';
     html+='</summary>';
-    html+='<div class="card-body">';
-    if(r.menuDetail&&r.menuDetail.length>0){r.menuDetail.forEach(function(m){html+='<div class="rest-info">'+esc(m.item);if(m.price) html+=' <span style="color:var(--text-light)">'+formatPrice(m.price)+'</span>';html+='</div>'})}
-    else if(r.menu){html+='<div class="rest-info"><span class="rest-info-label">메뉴</span>'+esc(r.menu)+'</div>'}
-    if(r.priceRange) html+='<div class="rest-info"><span class="rest-info-label">가격대</span>'+esc(r.priceRange)+'</div>';
-    if(r.hours) html+='<div class="rest-info"><span class="rest-info-label">영업시간</span>'+esc(r.hours)+'</div>';
-    if(r.loc) html+='<div class="rest-info"><span class="rest-info-label">위치</span>'+esc(r.loc)+'</div>';
-    var badges=buildBadges(r);if(badges) html+='<div class="badges">'+badges+'</div>';
-    if(r.meals.length>0){var um=[];r.meals.forEach(function(m){if(um.indexOf(m)===-1) um.push(m)});html+='<div class="rest-meals">'+um.join(' / ')+'</div>'}
-    if(r.mapUrl){html+='<a class="rest-map-link" href="'+escAttr(r.mapUrl)+'" target="_blank" rel="noopener">지도에서 보기<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>'}
+
+    // body
+    html+='<div class="rest-card-v2__body">';
+    // MenuTable
+    if(r.menuDetail&&r.menuDetail.length>0){
+      var fmtMenu=r.menuDetail.map(function(m){return{item:m.item,price:m.price?Number(m.price).toLocaleString()+'원':''}});
+      html+=renderMenuTable(fmtMenu);
+      html+='<div class="rest-card-v2__divider"></div>';
+    }
+    // InfoTable
+    var infoEntries=[];
+    if(r.hours) infoEntries.push({label:'영업시간',value:r.hours});
+    if(r.loc) infoEntries.push({label:'위치',value:r.loc});
+    if(r.priceRange) infoEntries.push({label:'가격대',value:r.priceRange});
+    if(infoEntries.length){
+      html+=renderInfoTable(infoEntries);
+      html+='<div class="rest-card-v2__divider"></div>';
+    }
+    // TagRow (badges)
+    var tagItems=[];
+    if(r.dad==='good') tagItems.push({text:'아빠 OK'});
+    if(r.dad==='caution') tagItems.push({text:'아빠 주의'+(r.dadNote?' · '+r.dadNote:'')});
+    if(r.hiro==='good') tagItems.push({text:'히로 OK'});
+    if(r.hiro==='caution') tagItems.push({text:'히로 주의'+(r.hiroNote?' · '+r.hiroNote:'')});
+    if(tagItems.length) html+=renderTagRow(tagItems);
+    // Meals info
+    if(r.meals.length>0){var um=[];r.meals.forEach(function(m){if(um.indexOf(m)===-1) um.push(m)});html+='<div style="font-family:var(--font-mono);font-size:var(--type-tag-size);color:var(--text-secondary);letter-spacing:0.3px">'+um.join(' / ')+'</div>'}
+    // MapLink
+    if(r.mapUrl) html+=renderMapLinkV2(r.mapUrl,'지도에서 보기');
     html+='</div></details>';
   });
   return html;
@@ -1706,11 +2032,7 @@ function renderRestCards(list,days){
 function renderStay(){
   var s=STAY_DATA;
   var html='';
-  html+='<div class="section-hero fade-up">';
-  html+='<div class="section-label">Stay</div>';
-  html+='<div class="section-title">숙소 안내</div>';
-  html+='<div class="section-subtitle">'+esc(s.name)+' · 5박</div>';
-  html+='</div>';
+  html+=renderSectionHero('Stay', '숙소 안내', s.name+' · 5박');
 
   html+='<details class="card fade-up" open>';
   html+='<summary><div class="card-top"><span class="card-name">'+esc(s.name)+'</span>';
@@ -1869,7 +2191,7 @@ function requestRestLocation(){
 }
 
 function applyRestFilters(){
-  document.querySelectorAll('.card[data-section="restaurants"]').forEach(function(card){
+  document.querySelectorAll('[data-section="restaurants"]').forEach(function(card){
     if(restTypeFilter!=='all'&&card.getAttribute('data-type')!==restTypeFilter) card.style.display='none';
     else card.style.display='';
   });
